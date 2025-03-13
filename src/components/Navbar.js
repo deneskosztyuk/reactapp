@@ -40,7 +40,7 @@ const NavItem = ({ to, label }) => (
   <Link
     to={to}
     smooth={true}
-    duration={400}
+    duration={300}
     className="cursor-pointer text-white px-4 py-2 bg-gray-800/40 rounded-lg shadow-lg transition-all hover:bg-gray-600/60"
   >
     {label}
