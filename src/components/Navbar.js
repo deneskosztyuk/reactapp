@@ -6,7 +6,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (isWaving) {
-      const timer = setTimeout(() => setIsWaving(false), 3000); // Stop after 3s
+      const timer = setTimeout(() => setIsWaving(false), 2000); // Stop after 3s
       return () => clearTimeout(timer);
     }
   }, [isWaving]);
@@ -40,7 +40,7 @@ const NavItem = ({ to, label }) => (
   <Link
     to={to}
     smooth={true}
-    duration={300}
+    duration={600}
     className="cursor-pointer text-white px-4 py-2 bg-gray-800/40 rounded-lg shadow-lg transition-all hover:bg-gray-600/60"
   >
     {label}
