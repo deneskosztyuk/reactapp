@@ -55,7 +55,7 @@ export default function Hero() {
           Software & Fullstack Developer
         </h2>
         <p className="text-md md:text-lg text-center text-gray-400 mt-4">
-          With hands-on software development experience, including 1 year of commercial work with Java Spring, React, Node.js, and Python, I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
+          With hands-on software development experience, including 1 year of commercial work with Java Spring🍃, React⚛️, Node.js🟩, and Python🐍, I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
         </p>
         <p className="text-md md:text-sm text-center text-gray-100 mt-3">
           Got a web project in mind? Hire me! ✅
