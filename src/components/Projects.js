@@ -69,9 +69,9 @@ export default function Projects() {
 const TechIcon = ({ icon, label }) => (
   <div className="group flex flex-col items-center">
     <div className="p-2 bg-gray-500/40 rounded-lg transition-all duration-100 
-                    group-hover:rounded-3xl group-hover:bg-purple-700 shadow-lg">
+                    group-hover:rounded-3xl group-hover:bg-slate-800 shadow-lg">
       <div className="text-5xl text-white transition-all duration-300 animate-float 
-                      group-hover:text-slate-400">
+                      group-hover:text-slate-100">
         {icon}
       </div>
     </div>
