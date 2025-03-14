@@ -29,7 +29,7 @@ const Navbar = () => {
         <div className="flex space-x-6">
           <NavItem to="hero" label="Home" />
           <NavItem to="projects" label="Projects" />
-          <NavItem to="freelance" label="Hire Me" />
+          <NavItem to="freelance" label="Freelance Hire" />
           <NavItem to="contact" label="Contact Me" />
         </div>
       </div>
