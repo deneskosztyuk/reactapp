@@ -44,13 +44,24 @@ export default function Hero() {
 
       {/* Left Side - Hero Text */}
       <div className="text-left max-w-2xl">
-        <h1 className="text-4xl text-center md:text-4xl font-bold text-white">
-          Hi, I'm{" "}
-          <span className="bg-gradient-to-r from-blue-600 via-purple-400 to-pink-600 text-transparent bg-clip-text">
-            Denes Kosztyuk
-          </span>
-        </h1>
-
+      <h1 className="text-4xl text-center md:text-4xl font-bold text-white relative">
+        Hi, I'm{" "}
+        <span className="bg-gradient-to-r from-blue-600 via-purple-400 to-pink-600 text-transparent bg-clip-text relative 
+          before:content-[''] 
+          before:absolute 
+          before:top-1/2 
+          before:left-[40%]  /* Move glow left */
+          before:-translate-x-[60%]  /* Adjust offset */
+          before:-translate-y-1/2 
+          before:w-[200%] 
+          before:h-[300%] 
+          before:bg-white 
+          before:opacity-10 
+          before:rounded-full 
+          before:blur-3xl">
+          Denes Kosztyuk
+        </span>
+      </h1>
         <h2 className="text-xl text-center md:text-1xl text-gray-300 mt-2">
           Software & Fullstack Developer
         </h2>
