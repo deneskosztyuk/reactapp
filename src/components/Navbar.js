@@ -16,7 +16,7 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto flex justify-between items-center">
         {/* Left Side - Welcome Text with Waving Emoji */}
         <div
-          className="text-white text-lg font-semibold px-4 py-2 bg-gray-800/40 rounded-lg shadow-lg"
+          className="text-white text-lg font-semibold px-1 py-1"
           onMouseEnter={() => setIsWaving(true)}
         >
           Welcome{" "}
@@ -29,6 +29,7 @@ const Navbar = () => {
         <div className="flex space-x-6">
           <NavItem to="hero" label="Home" />
           <NavItem to="projects" label="Projects" />
+          <NavItem to="freelance" label="Hire Me" />
           <NavItem to="contact" label="Contact Me" />
         </div>
       </div>
@@ -41,7 +42,7 @@ const NavItem = ({ to, label }) => (
     to={to}
     smooth={true}
     duration={600}
-    className="cursor-pointer text-white px-4 py-2 bg-gray-800/40 rounded-lg shadow-lg transition-all hover:bg-gray-600/60"
+    className="cursor-pointer text-white px-4 py-2 bg-slate-800 rounded-lg shadow-lg transition-all hover:bg-purple-600/60"
   >
     {label}
   </Link>
