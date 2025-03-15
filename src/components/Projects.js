@@ -65,12 +65,12 @@ export default function Projects() {
   );
 }
 
-/* ✅ Reusable Tech Icon Component */
+
 const TechIcon = ({ icon, label }) => (
   <div className="group flex flex-col items-center">
     <div className="p-2 bg-gray-500/40 rounded-lg transition-all duration-100 
                     group-hover:rounded-3xl group-hover:bg-slate-800 shadow-lg">
-      <div className="text-5xl text-white transition-all duration-300 animate-float 
+      <div className="text-3xl text-white transition-all duration-300 animate-float 
                       group-hover:text-slate-100">
         {icon}
       </div>
@@ -81,7 +81,7 @@ const TechIcon = ({ icon, label }) => (
   </div>
 );
 
-/* ✅ Reusable Project Card Component */
+
 const ProjectCard = ({ project }) => (
   <div className="relative bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-all transform hover:scale-105 hover:shadow-xl">
     

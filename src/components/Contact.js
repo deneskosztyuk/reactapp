@@ -41,7 +41,7 @@ export default function Contact() {
         </div>
       </form>
 
-      {/* 🔗 Direct Contact Links */}
+      {/* Direct Contact Links */}
       <div className="mt-8 flex space-x-6">
         <ContactLink icon={<FaEnvelope />} label="Email" href="mailto:your-email@example.com" />
         <ContactLink icon={<FaLinkedin />} label="LinkedIn" href="https://www.linkedin.com/in/denes-kosztyuk-766889198/" />
@@ -51,7 +51,7 @@ export default function Contact() {
   );
 }
 
-/* ✅ Reusable Contact Link Component */
+/* Reusable Contact Link Component */
 const ContactLink = ({ icon, label, href }) => (
   <a href={href} target="_blank" rel="noopener noreferrer"
     className="flex items-center space-x-2 text-gray-300 hover:text-white transition-all">
