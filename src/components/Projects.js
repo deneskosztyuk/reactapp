@@ -30,7 +30,7 @@ export default function Projects() {
   ];
 
   return (
-    <section id="projects" className="min-h-screen flex flex-col justify-center items-center px-8 md:px-20 bg-gradient-to-b from-purple-900 to-purple-700 text-white">
+    <section id="projects" className="min-h-screen flex flex-col justify-center items-center px-8 md:px-20 bg-slate-950 text-white">
       
       {/* Section Title */}
       <div className="text-center mb-12">

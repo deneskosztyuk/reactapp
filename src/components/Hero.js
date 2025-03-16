@@ -44,7 +44,7 @@ export default function Hero() {
 
       {/* Left Side - Hero Text */}
       <div className="text-left max-w-2xl">
-      <h1 className="text-4xl text-center md:text-4xl font-bold text-white relative">
+      <h1 className="text-4xl text-center md:text-5xl font-bold text-white relative">
         Hi, I'm{" "}
         <span className="bg-gradient-to-r from-blue-600 via-purple-400 to-pink-600 text-transparent bg-clip-text relative 
           before:content-[''] 
@@ -75,7 +75,7 @@ export default function Hero() {
 
       {/* Right Side - 3D Model */}
       <div className="w-1/2 h-full flex items-center justify-center">
-        <div className="w-[500px] h-[500px]">
+        <div className="w-[1000px] h-[1000px]">
           <AstronautModel />
         </div>
       </div>

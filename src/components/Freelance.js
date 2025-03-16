@@ -4,7 +4,8 @@ import { GrMysql } from "react-icons/gr";
 
 export default function Freelance() {
   return (
-    <section id="freelance" className="h-screen flex flex-col justify-center items-center px-10 md:px-20 bg-gradient-to-b from-purple-800 to-purple-600 text-white">
+    <section id="freelance" className="h-screen flex flex-col justify-center items-center px-10 md:px-20 bg-slate-950 text-white">
+      
       
       {/* 🔥 Intro Section */}
       <div className="max-w-4xl text-center">
@@ -42,7 +43,7 @@ export default function Freelance() {
   );
 }
 
-/* ✅ Service Card Component */
+/* Service Card Component */
 const ServiceCard = ({ icon, title, description }) => (
   <div className="p-6 bg-gray-800/50 rounded-lg shadow-lg flex flex-col items-center">
     <div className="text-4xl">{icon}</div>
@@ -51,7 +52,7 @@ const ServiceCard = ({ icon, title, description }) => (
   </div>
 );
 
-/* ✅ Tech Icon Component */
+/* Tech Icon Component */
 const TechIcon = ({ icon, label }) => (
   <div className="group flex flex-col items-center">
     <div className="p-3 bg-gray-600/40 rounded-lg transition-all duration-200 group-hover:bg-gray-800">

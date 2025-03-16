@@ -8,7 +8,7 @@ import Contact from "./components/Contact";
 
 export default function App() {
   return (
-    <div className="bg-gradient-to-b from-purple-950 to-purple-500 min-h-screen">
+    <div className="bg-slate-950 min-h-screen">
       <Navbar />
       <section id="hero"><Hero /></section>
       <section id="projects"><Projects /></section>
