@@ -37,7 +37,7 @@ export default function Projects() {
     },
     {
       title: "3-link Robotic Arm",
-      description: "A robotic arm made of 3 links, that performs inverse and forward kinematics with an attached end-effector.",
+      description: "A robotic arm simulation made of 3 links, that perform inverse and forward kinematics with an attached end-effector.",
       technologies: ["Python 3", "Numpy", "CoppeliaSim", "Electrical Engineering", "IoT"],
       github: "https://github.com/deneskosztyuk/3-Link-Robotic-Arm---CoppeliaSim",
     },
