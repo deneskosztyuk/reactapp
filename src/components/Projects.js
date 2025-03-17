@@ -23,25 +23,23 @@ export default function Projects() {
   // Project Data
   const projectList = [
     {
-      title: "Portfolio Website",
+      title: "Current Portfolio Website",
       description: "A modern personal portfolio built with React, Tailwind, and Three.js.",
       technologies: ["React", "TailwindCSS", "Three.js", "Java", "Spring"],
-      link: "https://www.example.com",
-      github: "https://github.com/example",
+      link: "https://www.denesk.co.uk",
+      github: "https://github.com/deneskosztyuk/reactapp",
     },
     {
       title: "Satellite Probe Simulator",
       description: "Encapsulates both hardware & software for data transfer over long distances.",
       technologies: ["Python", "Flask", "C", "C++", "ESP32", "RF Communication"],
-      link: "https://www.example.com",
-      github: "https://github.com/example",
+      github: "https://github.com/deneskosztyuk/DSPS_Guide-Deep-Space-Probe-Simulator",
     },
     {
-      title: "AI Warehouse Worker",
-      description: "Trained a Neural Network for an AI Agent in a simulated warehouse environment.",
-      technologies: ["C#", "TensorFlow", "Unity", "ML Agents", "Neural Network"],
-      link: "https://www.example.com",
-      github: "https://github.com/example",
+      title: "3-link Robotic Arm",
+      description: "A robotic arm made of 3 links, that performs inverse and forward kinematics with an attached end-effector.",
+      technologies: ["Python 3", "Numpy", "CoppeliaSim", "Electrical Engineering", "IoT"],
+      github: "https://github.com/deneskosztyuk/3-Link-Robotic-Arm---CoppeliaSim",
     },
   ];
 
@@ -150,14 +148,6 @@ const ProjectCard = ({ project }) => (
 
     {/* 🔗 Buttons */}
     <div className="mt-3 sm:mt-4 flex flex-wrap gap-2">
-      <a
-        href={project.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-purple-400 hover:text-purple-300 flex items-center gap-1 text-xs sm:text-sm"
-      >
-        Live Demo <FaReact />
-      </a>
       <a
         href={project.github}
         target="_blank"
