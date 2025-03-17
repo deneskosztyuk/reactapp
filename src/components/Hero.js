@@ -70,7 +70,7 @@ export default function Hero() {
     const timer = setTimeout(() => {
       setLoading(false);
       setFadeIn(true);
-    }, 3000); // Adjust the duration as needed
+    }, 3000); 
 
     return () => clearTimeout(timer);
   }, []);
@@ -146,7 +146,7 @@ export default function Hero() {
                 With hands-on software development experience, including 1 year of commercial work with Java Spring🍃, React⚛️, Node.js🟩, and Python🐍, I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
               </p>
               <p className="text-sm sm:text-md md:text-lg text-gray-100 fade-in-stage-5">
-                Got a web project in mind? Hire me! ✅
+                Got a project in mind? Connect with me! ✅
               </p>
             </div>
 
