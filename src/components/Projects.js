@@ -4,6 +4,42 @@ import { BiLogoPostgresql } from "react-icons/bi";
 import { SiTailwindcss, SiJavascript, SiSpring } from "react-icons/si";
 import { GrMysql } from "react-icons/gr";
 
+/* ✅ Responsive Tech Icon Component (Fixed) */
+const TechIcon = ({ icon, label }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    if (showTooltip) {
+      const timer = setTimeout(() => setShowTooltip(false), 1000); 
+      return () => clearTimeout(timer); 
+    }
+  }, [showTooltip]);
+
+  return (
+    <div className="relative flex flex-col items-center">
+      {/* Tech Icon */}
+      <button
+        className="p-2 sm:p-4 bg-gray-500/40 rounded-lg transition-all duration-100 
+                    hover:rounded-3xl hover:bg-slate-800 shadow-lg"
+        onClick={() => setShowTooltip(true)}
+      >
+        <div className="text-xl sm:text-xl text-white transition-all duration-300">
+          {icon}
+        </div>
+      </button>
+
+      {/* Tooltip Popup with Fade-out */}
+      <div
+        className={`absolute bottom-[-35px] sm:bottom-[-30px] bg-gray-800 text-white text-xs sm:text-sm px-2 py-1 rounded-md shadow-lg transition-opacity duration-300 z-50 ${
+          showTooltip ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {label}
+      </div>
+    </div>
+  );
+};
+
 export default function Projects() {
   const [staticStars, setStaticStars] = useState([]);
 
@@ -46,7 +82,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="min-h-screen flex flex-col justify-center items-center px-3 sm:px-6 md:px-8 lg:px-10 bg-slate-950 text-white relative overflow-hidden"
+      className="min-h-screen flex flex-col justify-center items-center px-2 sm:px-6 md:px-8 lg:px-10 bg-slate-950 text-white relative overflow-hidden"
     >
       {/* Static Starry Background */}
       <div className="absolute inset-0">
@@ -90,7 +126,7 @@ export default function Projects() {
       </div>
 
       {/* Projects Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-6xl relative z-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6 w-full max-w-6xl relative z-10 mt-3 sm:mt-12 md:mt-1">
         {projectList.map((project, index) => (
           <ProjectCard key={index} project={project} />
         ))}
@@ -113,24 +149,7 @@ export default function Projects() {
   );
 }
 
-/* Responsive Tech Icon Component */
-const TechIcon = ({ icon, label }) => (
-  <div className="group flex flex-col items-center">
-    <div
-      className="p-1.5 sm:p-2 md:p-3 bg-gray-500/40 rounded-lg transition-all duration-100 
-                    group-hover:rounded-3xl group-hover:bg-slate-800 shadow-lg"
-    >
-      <div className="text-xl sm:text-2xl md:text-3xl text-white transition-all duration-300 animate-float">
-        {icon}
-      </div>
-    </div>
-    <span className="text-xs sm:text-sm mt-1 sm:mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      {label}
-    </span>
-  </div>
-);
-
-/* Responsive Project Card */
+/* ✅ Responsive Project Card */
 const ProjectCard = ({ project }) => (
   <div className="relative bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-all transform hover:scale-105 hover:shadow-xl p-3 sm:p-4">
     {/* Project Title & Description */}

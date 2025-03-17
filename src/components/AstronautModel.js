@@ -16,7 +16,7 @@ function AnimatedAstronaut() {
       if (screenWidth < 481) baseYPosition = -1; // Mobile phones
       if (screenWidth < 376) baseYPosition = -0.4; // Smallest screens
 
-      astronautRef.current.position.y = baseYPosition + Math.sin(clock.elapsedTime) * 0.5; // Floating effect
+      astronautRef.current.position.y = baseYPosition + Math.sin(clock.elapsedTime) * 0.2; // Floating effect
       astronautRef.current.rotation.y += 0.002; // Smooth rotation
     }
   });
@@ -25,7 +25,7 @@ function AnimatedAstronaut() {
     <primitive
       ref={astronautRef}
       object={scene}
-      scale={[1.0, 1.0, 1.0]} // Slightly larger for better visibility
+      scale={[1.1, 1.1, 1.1]} // Slightly larger for better visibility
       position={[0, 0, 0]} // Keep centered
     />
   );
@@ -34,12 +34,12 @@ function AnimatedAstronaut() {
 // ✅ Main Astronaut Model Component
 export default function AstronautModel() {
   return (
-    <div className="translate-x-14 w-[30vh] md:w-[30vh] h-[60vh] md:h-[60vh] flex items-center justify-center">
-      <Canvas camera={{ position: [-2, 3, 7], fov: 60 }} className="w-full h-full">
+    <div className="translate-x-12 w-[30vh] md:w-[30vh] h-[60vh] md:h-[60vh] flex items-center justify-center">
+      <Canvas camera={{ position: [-2, 3, 7], fov: 70 }} className="w-full h-full">
         {/* Lighting */}
-        <ambientLight intensity={1.2} />
+        <ambientLight intensity={1.6} />
         <directionalLight position={[5, 5, 5]} intensity={2} />
-        <spotLight position={[15, 15, 15]} angle={0.2} intensity={2} />
+        <spotLight position={[15, 10, 15]} angle={0.4} intensity={2} />
 
         {/* ✅ Floating & Rotating Model */}
         <AnimatedAstronaut />
