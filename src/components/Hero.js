@@ -132,7 +132,7 @@ export default function Hero() {
           <div className="flex flex-col md:flex-row mt-48 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8">
             {/* Hero Text */}
             <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 fade-in-stage-2">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4 fade-in-stage-2">
                 Hi, I'm <TypewriterText text="Denes Kosztyuk.." />
               </h1>
               <h2 className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-4 fade-in-stage-3">
