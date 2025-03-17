@@ -133,7 +133,7 @@ export default function Hero() {
             {/* Hero Text */}
             <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1">
               <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4 fade-in-stage-2">
-                Hi, I'm <TypewriterText text="Denes Kosztyuk.." />
+                Hi, I'm <TypewriterText text="Denes Kosztyuk" />
               </h1>
               <h2 className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-4 fade-in-stage-3">
                 Software & Fullstack Developer
