@@ -74,7 +74,7 @@ export default function Projects() {
         </p>
       </div>
 
-      {/* 🔥 Tech Stack Icons Row */}
+      {/* Tech Stack Icons Row */}
       <div className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 relative z-10">
         <TechIcon icon={<FaJava />} label="Java" />
         <TechIcon icon={<FaPython />} label="Python" />
@@ -89,7 +89,7 @@ export default function Projects() {
         <TechIcon icon={<FaAws />} label="AWS" />
       </div>
 
-      {/* 🏗️ Projects Grid */}
+      {/* Projects Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-6xl relative z-10">
         {projectList.map((project, index) => (
           <ProjectCard key={index} project={project} />
@@ -113,7 +113,7 @@ export default function Projects() {
   );
 }
 
-/* ✅ Responsive Tech Icon Component */
+/* Responsive Tech Icon Component */
 const TechIcon = ({ icon, label }) => (
   <div className="group flex flex-col items-center">
     <div
@@ -130,7 +130,7 @@ const TechIcon = ({ icon, label }) => (
   </div>
 );
 
-/* ✅ Responsive Project Card */
+/* Responsive Project Card */
 const ProjectCard = ({ project }) => (
   <div className="relative bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-all transform hover:scale-105 hover:shadow-xl p-3 sm:p-4">
     {/* Project Title & Description */}
@@ -146,7 +146,7 @@ const ProjectCard = ({ project }) => (
       ))}
     </div>
 
-    {/* 🔗 Buttons */}
+    {/* Buttons */}
     <div className="mt-3 sm:mt-4 flex flex-wrap gap-2">
       <a
         href={project.github}
