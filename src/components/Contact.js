@@ -74,7 +74,6 @@ export default function Contact() {
 
       {/* Direct Contact Links */}
       <div className="mt-8 flex space-x-6 relative z-10">
-        <ContactLink icon={<FaEnvelope />} label="Email" href="mailto:your-email@example.com" />
         <ContactLink icon={<FaLinkedin />} label="LinkedIn" href="https://www.linkedin.com/in/denes-kosztyuk-766889198/" />
         <ContactLink icon={<FaGithub />} label="GitHub" href="https://github.com/deneskosztyuk" />
       </div>
@@ -83,8 +82,8 @@ export default function Contact() {
       <style>
         {`
           @keyframes twinkle {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            0%, 60% { opacity: 0.5; }
+            30% { opacity: 1; }
           }
 
           .animate-twinkle {
