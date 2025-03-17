@@ -131,24 +131,23 @@ export default function Hero() {
 
           <div className="flex flex-col md:flex-row mt-48 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8">
             {/* Hero Text */}
-            <div className="w-full md:w-1/2 text-center md:text-left">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-                Hi, I'm{" "}
-                <TypewriterText text="Denes Kosztyuk.." />
+            <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 fade-in-stage-2">
+                Hi, I'm <TypewriterText text="Denes Kosztyuk.." />
               </h1>
-              <h2 className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-4">
+              <h2 className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-4 fade-in-stage-3">
                 Software & Fullstack Developer
               </h2>
-              <p className="text-sm sm:text-md md:text-lg text-gray-400 mb-6 leading-6 sm:leading-7 md:leading-8">
+              <p className="text-sm sm:text-md md:text-lg text-gray-400 mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4">
                 With hands-on software development experience, including 1 year of commercial work with Java Spring🍃, React⚛️, Node.js🟩, and Python🐍, I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
               </p>
-              <p className="text-sm sm:text-md md:text-lg text-gray-100">
+              <p className="text-sm sm:text-md md:text-lg text-gray-100 fade-in-stage-5">
                 Got a web project in mind? Hire me! ✅
               </p>
             </div>
 
             {/* 3D Model */}
-            <div className="w-full md:w-1/2 flex items-center justify-center mt-8 md:mt-0">
+            <div className="w-full md:w-1/2 flex items-center justify-center mt-8 md:mt-0 fade-in-stage-6">
               <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] xl:w-[700px] h-auto">
                 <AstronautModel />
               </div>
@@ -159,51 +158,9 @@ export default function Hero() {
 
       <style>
         {`
-          @keyframes fly-towards {
-            from { transform: scale(0.3) translateZ(0); opacity: 1; }
-            to { transform: scale(4) translateY(50vh) translateX(50vw); opacity: 0; }
-          }
-
-          @keyframes twinkle {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-          }
-
-          .animate-twinkle {
-            animation: twinkle 2s infinite ease-in-out;
-          }
-
-          @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-          }
-
-          .blinking-cursor {
-            animation: blink 1s infinite;
-          }
-
-          .starfield-loader {
-            position: relative;
-            width: 100%;
-            height: 100%;
-          }
-
-          .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: star-animation ease-out forwards;
-          }
-
-          @keyframes star-animation {
-            from {
-              transform: scale(1) translateZ(0);
-              opacity: 1;
-            }
-            to {
-              transform: scale(0.2) translateY(-200vh);
-              opacity: 0;
-            }
+          @keyframes fade-in {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
           }
 
           .fade-in {
@@ -214,6 +171,13 @@ export default function Hero() {
           .fade-in.visible {
             opacity: 1;
           }
+
+          .fade-in-stage-1 { opacity: 0; animation: fade-in 1s 0.5s forwards; }
+          .fade-in-stage-2 { opacity: 0; animation: fade-in 1s 1s forwards; }
+          .fade-in-stage-3 { opacity: 0; animation: fade-in 1s 1.5s forwards; }
+          .fade-in-stage-4 { opacity: 0; animation: fade-in 1s 2s forwards; }
+          .fade-in-stage-5 { opacity: 0; animation: fade-in 1s 2.5s forwards; }
+          .fade-in-stage-6 { opacity: 0; animation: fade-in 1s 3s forwards; }
         `}
       </style>
     </section>
