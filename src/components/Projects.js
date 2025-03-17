@@ -68,7 +68,7 @@ export default function Projects() {
 
       {/* Section Title */}
       <div className="text-center mb-6 sm:mb-8 relative z-10">
-        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">🚀 My Projects</h1>
+        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold">🚀 My Projects</h1>
         <p className="mt-2 sm:mt-3 text-xs sm:text-sm md:text-base text-gray-300">
           A collection of projects showcasing my skills & experience.
         </p>
@@ -78,14 +78,14 @@ export default function Projects() {
       <div className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 relative z-10">
         <TechIcon icon={<FaJava />} label="Java" />
         <TechIcon icon={<FaPython />} label="Python" />
-        <TechIcon icon={<SiJavascript />} label="JavaScript" />
+        <TechIcon icon={<SiJavascript />} label="JS" />
         <TechIcon icon={<FaReact />} label="React" />
         <TechIcon icon={<SiSpring />} label="Spring" />
         <TechIcon icon={<FaNodeJs />} label="Node.js" />
         <TechIcon icon={<BiLogoPostgresql />} label="PostgreSQL" />
         <TechIcon icon={<GrMysql />} label="MySQL" />
-        <TechIcon icon={<SiTailwindcss />} label="TailwindCSS" />
-        <TechIcon icon={<FaGit />} label="Git/GitHub" />
+        <TechIcon icon={<SiTailwindcss />} label="Tailwind" />
+        <TechIcon icon={<FaGit />} label="Git" />
         <TechIcon icon={<FaAws />} label="AWS" />
       </div>
 
