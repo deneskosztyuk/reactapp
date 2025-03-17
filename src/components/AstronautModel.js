@@ -25,7 +25,7 @@ function AnimatedAstronaut() {
     <primitive
       ref={astronautRef}
       object={scene}
-      scale={[1.1, 1.1, 1.1]} // Slightly larger for better visibility
+      scale={[1.0, 1.0, 1.0]} // Slightly larger for better visibility
       position={[0, 0, 0]} // Keep centered
     />
   );
@@ -34,8 +34,8 @@ function AnimatedAstronaut() {
 // ✅ Main Astronaut Model Component
 export default function AstronautModel() {
   return (
-    <div className="w-full h-[70vh] md:h-[70vh] flex items-center justify-center">
-      <Canvas camera={{ position: [-3, 4, 8], fov: 60 }} className="w-full h-full">
+    <div className="translate-x-14 w-[30vh] md:w-[30vh] h-[60vh] md:h-[60vh] flex items-center justify-center">
+      <Canvas camera={{ position: [-2, 3, 7], fov: 60 }} className="w-full h-full">
         {/* Lighting */}
         <ambientLight intensity={1.2} />
         <directionalLight position={[5, 5, 5]} intensity={2} />

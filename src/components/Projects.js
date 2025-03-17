@@ -11,11 +11,11 @@ export default function Projects() {
   useEffect(() => {
     const starsArray = Array.from({ length: 200 }, (_, index) => ({
       id: `star-${index}`,
-      size: Math.random() * 3 + 1, // Small stars
-      left: Math.random() * 100, // Random horizontal position
-      top: Math.random() * 100, // Random vertical position
-      opacity: Math.random() * 0.5 + 0.5, // Random opacity
-      animationDelay: `${Math.random() * 10}s`, // Random twinkle delay
+      size: Math.random() * 3 + 1,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      opacity: Math.random() * 0.5 + 0.5,
+      animationDelay: `${Math.random() * 10}s`,
     }));
     setStaticStars(starsArray);
   }, []);
@@ -46,8 +46,10 @@ export default function Projects() {
   ];
 
   return (
-    <section id="projects" className="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 lg:px-10 bg-slate-950 text-white relative overflow-hidden">
-
+    <section
+      id="projects"
+      className="min-h-screen flex flex-col justify-center items-center px-3 sm:px-6 md:px-8 lg:px-10 bg-slate-950 text-white relative overflow-hidden"
+    >
       {/* Static Starry Background */}
       <div className="absolute inset-0">
         {staticStars.map((star) => (
@@ -67,15 +69,15 @@ export default function Projects() {
       </div>
 
       {/* Section Title */}
-      <div className="text-center mb-8 relative z-10">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">🚀 My Projects</h1>
-        <p className="mt-4 text-sm sm:text-base text-gray-300">
+      <div className="text-center mb-6 sm:mb-8 relative z-10">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">🚀 My Projects</h1>
+        <p className="mt-2 sm:mt-3 text-xs sm:text-sm md:text-base text-gray-300">
           A collection of projects showcasing my skills & experience.
         </p>
       </div>
 
       {/* 🔥 Tech Stack Icons Row */}
-      <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 relative z-10">
+      <div className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 relative z-10">
         <TechIcon icon={<FaJava />} label="Java" />
         <TechIcon icon={<FaPython />} label="Python" />
         <TechIcon icon={<SiJavascript />} label="JavaScript" />
@@ -107,24 +109,6 @@ export default function Projects() {
           .animate-twinkle {
             animation: twinkle 2s infinite ease-in-out;
           }
-
-          .tooltip {
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-          }
-
-          .tooltip.visible {
-            opacity: 1;
-          }
         `}
       </style>
     </section>
@@ -132,53 +116,54 @@ export default function Projects() {
 }
 
 /* ✅ Responsive Tech Icon Component */
-const TechIcon = ({ icon, label }) => {
-  const [showTooltip, setShowTooltip] = useState(false);
-
-  const handleClick = () => {
-    setShowTooltip(!showTooltip);
-  };
-
-  return (
-    <div className="relative group flex flex-col items-center">
-      <div
-        className="p-2 sm:p-3 bg-gray-500/40 rounded-lg transition-all duration-100
-                    group-hover:rounded-3xl group-hover:bg-slate-800 shadow-lg cursor-pointer"
-        onClick={handleClick}
-      >
-        <div className="text-2xl sm:text-3xl md:text-4xl text-white transition-all duration-300 animate-float">
-          {icon}
-        </div>
+const TechIcon = ({ icon, label }) => (
+  <div className="group flex flex-col items-center">
+    <div
+      className="p-1.5 sm:p-2 md:p-3 bg-gray-500/40 rounded-lg transition-all duration-100 
+                    group-hover:rounded-3xl group-hover:bg-slate-800 shadow-lg"
+    >
+      <div className="text-xl sm:text-2xl md:text-3xl text-white transition-all duration-300 animate-float">
+        {icon}
       </div>
-      {showTooltip && (
-        <div className="tooltip visible">
-          {label}
-        </div>
-      )}
     </div>
-  );
-};
+    <span className="text-xs sm:text-sm mt-1 sm:mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      {label}
+    </span>
+  </div>
+);
 
 /* ✅ Responsive Project Card */
 const ProjectCard = ({ project }) => (
   <div className="relative bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-all transform hover:scale-105 hover:shadow-xl p-3 sm:p-4">
     {/* Project Title & Description */}
-    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white">{project.title}</h3>
-    <p className="text-gray-400 mt-2 text-xs sm:text-sm md:text-base">{project.description}</p>
+    <h3 className="text-lg sm:text-xl font-bold text-white">{project.title}</h3>
+    <p className="text-gray-400 mt-1 sm:mt-2 text-xs sm:text-sm">{project.description}</p>
 
     {/* 🛠️ Technologies Used */}
-    <div className="mt-3 flex flex-wrap gap-2">
+    <div className="mt-2 sm:mt-3 flex flex-wrap gap-1 sm:gap-2">
       {project.technologies.map((tech, i) => (
-        <span key={i} className="px-2 py-1 bg-gray-700 text-xs rounded-md">{tech}</span>
+        <span key={i} className="px-2 py-1 bg-gray-700 text-xs rounded-md">
+          {tech}
+        </span>
       ))}
     </div>
 
     {/* 🔗 Buttons */}
-    <div className="mt-4 flex flex-wrap gap-3">
-      <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 flex items-center gap-1 text-xs sm:text-sm">
+    <div className="mt-3 sm:mt-4 flex flex-wrap gap-2">
+      <a
+        href={project.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-purple-400 hover:text-purple-300 flex items-center gap-1 text-xs sm:text-sm"
+      >
         Live Demo <FaReact />
       </a>
-      <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white flex items-center gap-1 text-xs sm:text-sm">
+      <a
+        href={project.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-gray-400 hover:text-white flex items-center gap-1 text-xs sm:text-sm"
+      >
         GitHub <FaGithub />
       </a>
     </div>

@@ -129,25 +129,27 @@ export default function Hero() {
             />
           ))}
 
-          <div className="flex flex-col md:flex-row items-center justify-center w-full gap-8 md:gap-12">
-            <div className="max-w-lg px-4 md:px-0 mt-72 sm:mt-48 md:mt-0 text-center md:text-left fade-in-stage-1">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white relative fade-in-stage-2 mb-4">
+          <div className="flex flex-col md:flex-row mt-48 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8">
+            {/* Hero Text */}
+            <div className="w-full md:w-1/2 text-center md:text-left">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
                 Hi, I'm{" "}
                 <TypewriterText text="Denes Kosztyuk.." />
               </h1>
-              <h2 className="text-lg sm:text-xl md:text-2xl text-gray-300 mt-4 fade-in-stage-3 mb-2">
+              <h2 className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-4">
                 Software & Fullstack Developer
               </h2>
-              <p className="text-sm sm:text-md md:text-lg text-gray-400 mt-4 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4 mb-4">
+              <p className="text-sm sm:text-md md:text-lg text-gray-400 mb-6 leading-6 sm:leading-7 md:leading-8">
                 With hands-on software development experience, including 1 year of commercial work with Java Spring🍃, React⚛️, Node.js🟩, and Python🐍, I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
               </p>
-              <p className="text-sm sm:text-md md:text-lg text-gray-100 mt-3 fade-in-stage-5">
+              <p className="text-sm sm:text-md md:text-lg text-gray-100">
                 Got a web project in mind? Hire me! ✅
               </p>
             </div>
 
-            <div className="w-full md:w-2/3 lg:w-1/2 flex items-center justify-center mt-6 md:mt-0 fade-in-stage-6">
-              <div className="w-[350px] sm:w-[500px] md:w-[700px] lg:w-[1000px] xl:w-[1400px] h-auto">
+            {/* 3D Model */}
+            <div className="w-full md:w-1/2 flex items-center justify-center mt-8 md:mt-0">
+              <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] xl:w-[700px] h-auto">
                 <AstronautModel />
               </div>
             </div>
@@ -211,48 +213,6 @@ export default function Hero() {
 
           .fade-in.visible {
             opacity: 1;
-          }
-
-          .fade-in-stage-1 {
-            opacity: 0;
-            animation: fade-in-stage 0.5s 0.5s forwards;
-          }
-
-          .fade-in-stage-2 {
-            opacity: 0;
-            animation: fade-in-stage 0.5s 1s forwards;
-          }
-
-          .fade-in-stage-3 {
-            opacity: 0;
-            animation: fade-in-stage 0.5s 1.5s forwards;
-          }
-
-          .fade-in-stage-4 {
-            opacity: 0;
-            animation: fade-in-stage 0.5s 2s forwards;
-          }
-
-          .fade-in-stage-5 {
-            opacity: 0;
-            animation: fade-in-stage 0.5s 2.5s forwards;
-          }
-
-          .fade-in-stage-6 {
-            opacity: 0;
-            animation: fade-in-stage 0.5s 3s forwards;
-          }
-
-          @keyframes fade-in-stage {
-            to {
-              opacity: 1;
-            }
-          }
-
-          @media (min-width: 768px) {
-            .fade-in-stage-1, .fade-in-stage-2, .fade-in-stage-3, .fade-in-stage-4, .fade-in-stage-5, .fade-in-stage-6 {
-              margin-top: 0;
-            }
           }
         `}
       </style>
