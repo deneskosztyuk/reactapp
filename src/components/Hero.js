@@ -129,7 +129,7 @@ export default function Hero() {
             />
           ))}
 
-          <div className="flex flex-col md:flex-row mt-52 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8">
+          <div className="flex flex-col md:flex-row mt-56 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8">
             {/* Hero Text */}
             <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1">
               <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4 fade-in-stage-2">
@@ -138,6 +138,10 @@ export default function Hero() {
               <h2 className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-4 fade-in-stage-3">
                 Software & Fullstack Developer
               </h2>
+              <h3 className="text-xs sm:text-sm md:text-base text-gray-300 mb-4 fade-in-stage-3">
+                📍London, UK / Stavanger, Norway
+              </h3>
+
               <p className="text-sm sm:text-md md:text-lg text-gray-400 mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4">
                 With hands-on software development experience, including 1 year of commercial work with Java Spring🍃, React⚛️, Node.js🟩, and Python🐍, I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
               </p>
