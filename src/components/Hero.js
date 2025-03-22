@@ -136,7 +136,7 @@ export default function Hero() {
                 Hi, I'm <TypewriterText text="Denes Kosztyuk" />
               </h1>
               <h2 className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-4 fade-in-stage-3">
-                Software & Fullstack Developer
+                Software & Fullstack Engineer
               </h2>
               <h3 className="text-xs sm:text-sm md:text-base text-gray-300 mb-4 fade-in-stage-3">
                 📍London, UK / Stavanger, Norway
