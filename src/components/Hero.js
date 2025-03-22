@@ -143,7 +143,7 @@ export default function Hero() {
               </h3>
 
               <p className="text-sm sm:text-md md:text-lg text-gray-400 mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4">
-                With hands-on software development experience, including 1 year of commercial work with Java Spring🍃, React⚛️, AWS☺️, and Python🐍, I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
+                Engineering Professional, including 6 months of commercial work with Java Spring🍃, React⚛️, AWS☺️, and Python🐍, I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
               </p>
               <p className="text-sm sm:text-md md:text-lg text-gray-100 fade-in-stage-5">
                 Got a project in mind? Connect with me! ✅
