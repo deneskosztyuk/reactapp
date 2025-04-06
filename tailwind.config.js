@@ -5,7 +5,7 @@ export default {
     "./public/index.html"
   ],
   safelist: [
-    "animate-wave"  // ✅ Ensure Tailwind keeps this class
+    "animate-wave"  
   ],
   theme: {
     extend: {
@@ -18,7 +18,7 @@ export default {
         },
       },
       animation: {
-        wave: "wave 1.5s ease-in-out infinite", // ✅ Smoother & more natural
+        wave: "wave 1.5s ease-in-out infinite", 
       },
     },
   },
