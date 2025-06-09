@@ -75,7 +75,7 @@ const Navbar = () => {
             <NavItem to="projects" label="Projects" onClick={() => setIsMobileMenuOpen(false)} />
             <NavItem to="freelance" label="Freelance Hire" onClick={() => setIsMobileMenuOpen(false)} />
             <a
-              href="https://www.linkedin.com/in/denes-kosztyuk-766889198/"
+              href="https://www.linkedin.com/in/deneskosztyuk/"
               target="_blank"
               rel="noopener noreferrer"
               className="cursor-pointer text-white px-4 py-2 bg-slate-800 rounded-lg shadow-lg transition-all hover:bg-purple-600"
