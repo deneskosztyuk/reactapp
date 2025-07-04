@@ -77,6 +77,12 @@ export default function Projects() {
       technologies: ["Python 3", "Numpy", "CoppeliaSim", "Electrical Engineering", "IoT"],
       github: "https://github.com/deneskosztyuk/3-Link-Robotic-Arm---CoppeliaSim",
     },
+    {
+      title: "Custom Trained ML Neural Network",
+      description: "A custom-trained neural network model, programmed in C# using reinforcement learning techniques within Unity for 3D visual representation and environment interaction.",
+      technologies: ["TensorFlow", "TensorBoard", "C#", "Unity", "Artificial Intelligence", "Neural Network"],
+      github: "https://github.com/deneskosztyuk/Warehouse-Navigation-Agent/tree/main",
+    },
   ];
 
   return (

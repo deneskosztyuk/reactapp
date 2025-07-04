@@ -4,6 +4,7 @@ import AstronautModel from "./AstronautModel";
 const TypewriterText = ({ text }) => {
   const [displayText, setDisplayText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
+  
 
   useEffect(() => {
     let currentIndex = 0;
