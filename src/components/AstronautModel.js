@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 
 function AnimatedAstronaut() {
   const { scene } = useGLTF("/Astronaut.glb");
@@ -42,13 +42,7 @@ export default function AstronautModel() {
 
         <AnimatedAstronaut />
 
-        <OrbitControls
-          enableZoom={false}
-          autoRotate
-          autoRotateSpeed={0.1}
-          minPolarAngle={Math.PI / 2}
-          maxPolarAngle={Math.PI / 2}
-        />
+        
       </Canvas>
     </div>
   );

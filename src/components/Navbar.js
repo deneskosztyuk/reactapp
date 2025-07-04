@@ -9,7 +9,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (isWaving) {
-      const timer = setTimeout(() => setIsWaving(false), 2000); // stop waving after 1s
+      const timer = setTimeout(() => setIsWaving(false), 2000); // stop waving after 2s
       return () => clearTimeout(timer);
     }
   }, [isWaving]);

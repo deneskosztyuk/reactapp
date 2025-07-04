@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AstronautModel from "./AstronautModel";
 
-const TypewriterText = ({ text }) => {
+const TypewriterTextGrad100 = ({ text }) => {
   const [displayText, setDisplayText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   
@@ -16,7 +16,7 @@ const TypewriterText = ({ text }) => {
         clearInterval(interval);
         setShowCursor(false);
       }
-    }, 150);
+    }, 100);
 
     return () => clearInterval(interval);
   }, [text]);
@@ -28,6 +28,35 @@ const TypewriterText = ({ text }) => {
     </span>
   );
 };
+
+const TypewriterText200 = ({ text }) => {
+  const [displayText, setDisplayText] = useState("");
+  const [showCursor, setShowCursor] = useState(true);
+  
+
+  useEffect(() => {
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      if (currentIndex <= text.length) {
+        setDisplayText(text.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(interval);
+        setShowCursor(false);
+      }
+    }, 200);
+
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return (
+    <span className="bg-white text-transparent bg-clip-text">
+      {displayText}
+      {showCursor && <span className="blinking-cursor">|</span>}
+    </span>
+  );
+};
+
 
 export default function Hero() {
   const [stars, setStars] = useState([]);
@@ -56,12 +85,12 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    const starsArray = Array.from({ length: 150 }, (_, index) => ({
+    const starsArray = Array.from({ length: 75 }, (_, index) => ({
       id: `star-${index}`,
       size: Math.random() * 2 + 1,
       left: Math.random() * 100,
       top: Math.random() * 100,
-      opacity: Math.random() * 0.5 + 0.5,
+      opacity: Math.random() * 0.1 + 0.1,
       animationDelay: `${Math.random() * 10}s`,
     }));
     setStaticStars(starsArray);
@@ -134,17 +163,18 @@ export default function Hero() {
             {/* Hero Text */}
             <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1">
               <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold text-white mb-4 fade-in-stage-2">
-                Hi, I'm <TypewriterText text="Denes Kosztyuk" />
+                Hi, I'm <TypewriterTextGrad100 text="Denes Kosztyuk" />
               </h1>
               <h2 className="text-lg sm:text-xl md:text-xl text-gray-300 mb-4 fade-in-stage-3">
-                Machine Learning | Fullstack | Backend 
+                <TypewriterText200 text="Machine Learning | Fullstack | Backend"></TypewriterText200>
               </h2>
               <h3 className="text-xs sm:text-sm md:text-base text-gray-300 mb-4 fade-in-stage-3">
                 📍Stavanger, Norway / Remote 👨‍💻
               </h3>
 
-              <p className="text-sm sm:text-md md:text-sm text-gray-300 mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4">
-                Holding degrees in BEng Computer Systems and Robotics, and Applied Machine Learning, including 6 months of commercial backend work with Next.js🔼, React⚛️, Python🐍, FastAPI🖥️, PostgreSQL🐘 and AWS☺️, and 2 years of Freelance experience - I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
+              <p className="text-sm sm:text-md md:text-sm text-white mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4">
+                {/* style={{textShadow: "0 2px 8px rgba(0,0,0,0.3)"}} */}
+                Holding degrees in BEng Computer Systems and Robotics, and Applied Machine Learning, including 6 months of commercial backend work with Next.js, React, Python, FastAPI, PostgreSQL and AWS, and 2 years of Freelance experience - I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
               </p>
               <p className="text-sm sm:text-md md:text-sm text-white fade-in-stage-5">
                 Got a project in mind? Connect with me! ✅
@@ -177,12 +207,6 @@ export default function Hero() {
             opacity: 1;
           }
 
-          .fade-in-stage-1 { opacity: 0; animation: fade-in 1s 0.5s forwards; }
-          .fade-in-stage-2 { opacity: 0; animation: fade-in 1s 1s forwards; }
-          .fade-in-stage-3 { opacity: 0; animation: fade-in 1s 1.5s forwards; }
-          .fade-in-stage-4 { opacity: 0; animation: fade-in 1s 2s forwards; }
-          .fade-in-stage-5 { opacity: 0; animation: fade-in 1s 2.5s forwards; }
-          .fade-in-stage-6 { opacity: 0; animation: fade-in 1s 3s forwards; }
         `}
       </style>
     </section>

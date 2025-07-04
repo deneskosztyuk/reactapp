@@ -50,7 +50,7 @@ export default function Projects() {
       size: Math.random() * 3 + 1,
       left: Math.random() * 100,
       top: Math.random() * 100,
-      opacity: Math.random() * 0.5 + 0.5,
+      opacity: Math.random() * 0.3 + 0.3,
       animationDelay: `${Math.random() * 10}s`,
     }));
     setStaticStars(starsArray);
@@ -69,7 +69,7 @@ export default function Projects() {
       title: "Custom Trained ML Neural Network",
       description: "A custom-trained neural network model, programmed in C# using reinforcement learning techniques within Unity for 3D visual representation and environment interaction.",
       technologies: ["TensorFlow", "TensorBoard", "C#", "Unity", "Artificial Intelligence", "Neural Network"],
-      github: "https://github.com/deneskosztyuk/Warehouse-Navigation-Agent/tree/main",
+      github: "https://github.com/deneskosztyuk/Warehouse-Navigation-Agent/blob/main/README.md",
     },
     {
       title: "Satellite Probe Simulator",

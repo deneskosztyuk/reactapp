@@ -28,7 +28,7 @@ export default function Contact() {
       size: Math.random() * 3 + 1,
       left: Math.random() * 100,
       top: Math.random() * 100,
-      opacity: Math.random() * 0.5 + 0.5,
+      opacity: Math.random() * 0.3 + 0.3,
       animationDelay: `${Math.random() * 10}s`,
     }));
     setStaticStars(starsArray);
