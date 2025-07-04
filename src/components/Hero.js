@@ -29,7 +29,7 @@ const TypewriterTextGrad100 = ({ text }) => {
   );
 };
 
-const TypewriterText200 = ({ text }) => {
+const TypewriterText150 = ({ text }) => {
   const [displayText, setDisplayText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   
@@ -44,7 +44,7 @@ const TypewriterText200 = ({ text }) => {
         clearInterval(interval);
         setShowCursor(false);
       }
-    }, 200);
+    }, 150);
 
     return () => clearInterval(interval);
   }, [text]);
@@ -166,7 +166,7 @@ export default function Hero() {
                 Hi, I'm <TypewriterTextGrad100 text="Denes Kosztyuk" />
               </h1>
               <h2 className="text-lg sm:text-xl md:text-xl text-gray-300 mb-4 fade-in-stage-3">
-                <TypewriterText200 text="Machine Learning | Fullstack | Backend"></TypewriterText200>
+                <TypewriterText150 text="Machine Learning | Fullstack | Backend"></TypewriterText150>
               </h2>
               <h3 className="text-xs sm:text-sm md:text-base text-gray-300 mb-4 fade-in-stage-3">
                 📍Stavanger, Norway / Remote 👨‍💻

@@ -5,11 +5,10 @@ import { FaReact,
   FaJava, 
   FaPython, 
   FaDatabase, 
-  FaGlobe, 
-  FaMobileAlt, 
+  FaGlobe,  
   FaRobot } from "react-icons/fa";
 
-import { SiTailwindcss, SiMongodb, SiPostgresql, SiSpring, SiTensorflow } from "react-icons/si";
+import { SiTailwindcss, SiPostgresql, SiSpring, SiTensorflow } from "react-icons/si";
 
 import { GrMysql } from "react-icons/gr";
 

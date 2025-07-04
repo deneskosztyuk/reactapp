@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaLinkedin, FaGithub, FaPaperclip } from "react-icons/fa";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
 
 // Reusable ContactLink component
 const ContactLink = ({ icon, label, href }) => (
@@ -33,10 +33,6 @@ export default function Contact() {
     }));
     setStaticStars(starsArray);
   }, []);
-
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
