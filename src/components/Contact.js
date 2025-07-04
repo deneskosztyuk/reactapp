@@ -166,7 +166,7 @@ export default function Contact() {
         <ContactLink
           icon={<FaLinkedin />}
           label="LinkedIn"
-          href="https://www.linkedin.com/in/denes-kosztyuk-766889198/"
+          href="https://www.linkedin.com/in/deneskosztyuk/"
         />
         <ContactLink
           icon={<FaGithub />}
