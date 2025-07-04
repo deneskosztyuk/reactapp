@@ -97,17 +97,20 @@ const Navbar = () => {
   );
 };
 
-/* ✅ Reusable Nav Item Component */
+/* Reusable Nav Item Component */
 const NavItem = ({ to, label, onClick }) => (
   <Link
     to={to}
     smooth={true}
     duration={600}
-    className="cursor-pointer text-white px-4 py-2 bg-slate-800 rounded-lg shadow-lg transition-all hover:bg-purple-600"
     onClick={onClick}
+    className="relative cursor-pointer text-white px-4 py-2 bg-slate-800 rounded-lg shadow-lg transition-all
+               hover:bg-purple-700 focus:bg-purple-700
+               after:content-[''] after:absolute after:left-4 after:right-4 after:bottom-2 after:h-[2px]
+               after:bg-purple-400 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left
+               hover:after:scale-x-100 focus:after:scale-x-100"
   >
     {label}
   </Link>
 );
-
 export default Navbar;
