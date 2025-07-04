@@ -16,11 +16,11 @@ const Navbar = () => {
     <nav className="fixed top-0 left-1/2 transform -translate-x-1/2 w-full bg-white/10 backdrop-blur-md shadow-md p-4 z-50">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
 
-        {/* Left Side - Welcome Text with Waving Emoji */}
+        {/* left side welcome text*/}
         <div
           className="text-white text-lg font-semibold px-1 py-1 cursor-pointer"
-          onMouseEnter={() => setIsWaving(true)}  // PC hover
-          onClick={() => setIsWaving(true)}  // Mobile tap
+          onMouseEnter={() => setIsWaving(true)}  // pC hover
+          onClick={() => setIsWaving(true)}  // mobile tap
         >
           Welcome{" "}
           <span className={`inline-block transition-transform ${isWaving ? "animate-wave" : ""}`}>
@@ -28,7 +28,7 @@ const Navbar = () => {
           </span>
         </div>
 
-        {/* Hamburger Menu for Mobile */}
+        {/* hamburger menu mobile */}
         <button
           className="md:hidden text-white focus:outline-none"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

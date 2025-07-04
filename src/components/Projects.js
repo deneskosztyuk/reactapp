@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaReact, FaNodeJs, FaJava, FaPython, FaGit, FaAws, FaGithub } from "react-icons/fa";
 import { BiLogoPostgresql } from "react-icons/bi";
-import { SiTailwindcss, SiJavascript, SiSpring } from "react-icons/si";
+import { SiTailwindcss, SiJavascript, SiSpring, SiTensorflow } from "react-icons/si";
 import { GrMysql } from "react-icons/gr";
 
 /* ✅ Responsive Tech Icon Component (Fixed) */
@@ -110,29 +110,30 @@ export default function Projects() {
         </p>
       </div>
 
-      {/* Tech Stack Icons Row */}
+      {/* stack icons */}
       <div className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 relative z-10">
-        <TechIcon icon={<FaJava />} label="Java" />
         <TechIcon icon={<FaPython />} label="Python" />
-        <TechIcon icon={<SiJavascript />} label="JS" />
+        <TechIcon icon={<SiTensorflow />} label="TensorFlow" />
+        <TechIcon icon={<SiJavascript />} label="JavaScript" />
         <TechIcon icon={<FaReact />} label="React" />
-        <TechIcon icon={<SiSpring />} label="Spring" />
         <TechIcon icon={<FaNodeJs />} label="Node.js" />
+        <TechIcon icon={<SiTailwindcss />} label="Tailwind" />
+        <TechIcon icon={<FaJava />} label="Java" />        
+        <TechIcon icon={<SiSpring />} label="Spring" />
         <TechIcon icon={<BiLogoPostgresql />} label="PostgreSQL" />
         <TechIcon icon={<GrMysql />} label="MySQL" />
-        <TechIcon icon={<SiTailwindcss />} label="Tailwind" />
         <TechIcon icon={<FaGit />} label="Git" />
         <TechIcon icon={<FaAws />} label="AWS" />
       </div>
 
-      {/* Projects Grid */}
+      {/* projects grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6 w-full max-w-6xl relative z-10 mt-3 sm:mt-12 md:mt-1">
         {projectList.map((project, index) => (
           <ProjectCard key={index} project={project} />
         ))}
       </div>
 
-      {/* CSS Animations */}
+      {/* CSS animations */}
       <style>
         {`
           @keyframes twinkle {
@@ -149,14 +150,14 @@ export default function Projects() {
   );
 }
 
-/* ✅ Responsive Project Card */
+/* responsive project card */
 const ProjectCard = ({ project }) => (
   <div className="relative bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-all transform hover:scale-105 hover:shadow-xl p-3 sm:p-4">
-    {/* Project Title & Description */}
+    {/* project title description */}
     <h3 className="text-lg sm:text-xl font-bold text-white">{project.title}</h3>
     <p className="text-gray-400 mt-1 sm:mt-2 text-xs sm:text-sm">{project.description}</p>
 
-    {/* 🛠️ Technologies Used */}
+    {/* technologies used */}
     <div className="mt-2 sm:mt-3 flex flex-wrap gap-1 sm:gap-2">
       {project.technologies.map((tech, i) => (
         <span key={i} className="px-2 py-1 bg-gray-700 text-xs rounded-md">
@@ -165,7 +166,7 @@ const ProjectCard = ({ project }) => (
       ))}
     </div>
 
-    {/* Buttons */}
+    {/* buttons */}
     <div className="mt-3 sm:mt-4 flex flex-wrap gap-2">
       <a
         href={project.github}
