@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-scroll";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+
 
 const Navbar = () => {
   const [isWaving, setIsWaving] = useState(false);
@@ -18,7 +20,7 @@ const Navbar = () => {
 
         {/* left side welcome text*/}
         <div
-          className="text-white text-lg font-semibold px-1 py-1 cursor-pointer"
+          className="text-white text-lg flex items-center space-x-4 font-semibold px-1 py-1 cursor-pointer"
           onMouseEnter={() => setIsWaving(true)}  // pC hover
           onClick={() => setIsWaving(true)}  // mobile tap
         >
@@ -26,7 +28,27 @@ const Navbar = () => {
           <span className={`inline-block transition-transform ${isWaving ? "animate-wave" : ""}`}>
             👋
           </span>
+
+          <a
+            href="https://github.com/deneskosztyuk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white hover:text-purple-400 transition-colors text-2xl"
+            aria-label="GitHub"
+          >
+            <FaGithub />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/deneskosztyuk/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white hover:text-purple-400 transition-colors text-2xl"
+            aria-label="LinkedIn"
+          >
+            <FaLinkedin />
+          </a>          
         </div>
+
 
         {/* hamburger menu mobile */}
         <button
@@ -49,19 +71,12 @@ const Navbar = () => {
           </svg>
         </button>
 
-        {/* Right Side - Desktop Nav Links */}
+        {/* Desktop Nav Links */}
         <div className="hidden md:flex space-x-6">
           <NavItem to="hero" label="Home" />
           <NavItem to="projects" label="Projects" />
           <NavItem to="freelance" label="Freelance" />
-          <a
-            href="https://www.linkedin.com/in/deneskosztyuk/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="cursor-pointer text-white px-4 py-2 bg-slate-800 rounded-lg shadow-lg transition-all hover:bg-purple-600"
-          >
-            Let's Connect
-          </a>
+          <NavItem to="contact" label="Contact Form" />
         </div>
 
         {/* Mobile Menu - Smooth Open & Close */}
