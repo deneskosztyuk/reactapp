@@ -133,20 +133,20 @@ export default function Hero() {
           <div className="flex flex-col md:flex-row mt-56 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8">
             {/* Hero Text */}
             <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1">
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4 fade-in-stage-2">
+              <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold text-white mb-4 fade-in-stage-2">
                 Hi, I'm <TypewriterText text="Denes Kosztyuk" />
               </h1>
-              <h2 className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-4 fade-in-stage-3">
+              <h2 className="text-lg sm:text-xl md:text-xl text-gray-300 mb-4 fade-in-stage-3">
                 Machine Learning | Fullstack | Backend 
               </h2>
               <h3 className="text-xs sm:text-sm md:text-base text-gray-300 mb-4 fade-in-stage-3">
                 📍Stavanger, Norway / Remote 👨‍💻
               </h3>
 
-              <p className="text-sm sm:text-md md:text-lg text-gray-300 mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4">
+              <p className="text-sm sm:text-md md:text-sm text-gray-300 mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4">
                 Holding degrees in BEng Computer Systems and Robotics, and Applied Machine Learning, including 6 months of commercial backend work with Next.js🔼, React⚛️, Python🐍, FastAPI🖥️, PostgreSQL🐘 and AWS☺️, and 2 years of Freelance experience - I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
               </p>
-              <p className="text-sm sm:text-md md:text-lg text-white fade-in-stage-5">
+              <p className="text-sm sm:text-md md:text-sm text-white fade-in-stage-5">
                 Got a project in mind? Connect with me! ✅
               </p>
             </div>
