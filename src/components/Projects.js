@@ -60,7 +60,7 @@ export default function Projects() {
   const projectList = [
     {
       title: "Current Portfolio Website",
-      description: "A modern personal portfolio built with Next.js, React, Tailwind, and Three.js. Optimized for mobile, tablet and PC viewing with a responsive development approach.",
+      description: "A modern personal Fullstack portfolio built with Next.js, Node, React, Tailwind, and Three.js. Optimized for mobile, tablet and PC viewing with a responsive development approach.",
       technologies: ["React", "TailwindCSS", "Three.js", "Java", "Spring"],
       link: "https://www.denesk.co.uk",
       github: "https://github.com/deneskosztyuk/reactapp",
