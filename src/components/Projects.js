@@ -6,7 +6,7 @@ import { GrMysql } from "react-icons/gr";
 
 // Constants for configuration
 const STAR_CONFIG = {
-  COUNT: 100, // Reduced from 200
+  COUNT: 100, // 
   MIN_SIZE: 1,
   MAX_SIZE: 4,
   MIN_OPACITY: 0.3,
