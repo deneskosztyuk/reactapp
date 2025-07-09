@@ -175,7 +175,7 @@ export default function Hero() {
 
               <p className="text-sm sm:text-md md:text-sm text-white mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4">
                 {/* style={{textShadow: "0 2px 8px rgba(0,0,0,0.3)"}} */}
-                Computer Systems & Robotics Engineering graduate with experience in backend, full-stack, and embedded development through academic projects and a 4-month internship. Versed in with Next.js, React, Python, FastAPI, PostgreSQL and AWS, and 2 years of Freelance experience - I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
+                Computer Systems & Robotics Engineering graduate with experience in backend, full-stack, and embedded development through academic projects and a 4-month internship. Versed in with Next.js, React, Python, FastAPI, Docker, PostgreSQL and AWS, and 2 years of Freelance experience - I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
               </p>
               <p className="text-sm sm:text-md md:text-sm text-white fade-in-stage-5">
                 Got a project in mind? Connect with me! ✅
