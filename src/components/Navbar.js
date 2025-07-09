@@ -33,7 +33,7 @@ const Navbar = () => {
             href="https://github.com/deneskosztyuk"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white hover:text-purple-400 transition-colors text-2xl"
+            className="text-white hover:text-purple-700 transition-colors text-2xl"
             aria-label="GitHub"
           >
             <FaGithub />
@@ -42,7 +42,7 @@ const Navbar = () => {
             href="https://www.linkedin.com/in/deneskosztyuk/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white hover:text-purple-400 transition-colors text-2xl"
+            className="text-white hover:text-purple-700 transition-colors text-2xl"
             aria-label="LinkedIn"
           >
             <FaLinkedin />
