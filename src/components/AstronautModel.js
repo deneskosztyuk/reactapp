@@ -35,7 +35,7 @@ function AnimatedAstronaut() {
 export default function AstronautModel() {
   return (
     <div className="translate-x-12 w-[30vh] md:w-[30vh] h-[60vh] md:h-[60vh] flex items-center justify-center">
-      <Canvas camera={{ position: [-2, 3, 7], fov: 70 }}>
+      <Canvas camera={{ position: [-2, 3, 7], fov: 77 }}>
         <ambientLight intensity={1.6} />
         <directionalLight position={[5, 5, 5]} intensity={2} />
         <spotLight position={[15, 10, 15]} angle={0.4} intensity={2} />
