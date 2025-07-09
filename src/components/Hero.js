@@ -66,24 +66,56 @@ export default function Hero() {
   const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const newStar = {
-        id: Math.random().toString(36).substr(2, 9),
-        size: Math.random() * 3 + 1,
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        duration: Math.random() * 8 + 4,
-      };
+  // configuration constants for easy adjustment
+  const STAR_CREATION_INTERVAL = 700; // increased from 250ms to reduce freq
+  const STAR_CREATION_PROBABILITY = 0.7; // 40% chance to create a star
+  const STAR_DURATION_MIN = 5; // minimum star lifetime in seconds
+  const STAR_DURATION_MAX = 15; // maximum star lifetime in seconds
+  const STAR_SIZE_MIN = 1;
+  const STAR_SIZE_MAX = 4;
 
+  // function to generate random numbers within a range
+  const getRandomInRange = (min, max) => Math.random() * (max - min) + min;
+
+  // function to generate unique star ID
+  const generateStarId = () => Math.random().toString(36).substr(2, 9);
+
+  // function to create a new star object
+  const createStar = () => ({
+    id: generateStarId(),
+    size: getRandomInRange(STAR_SIZE_MIN, STAR_SIZE_MAX),
+    left: Math.random() * 100, // Random position 0-100%
+    top: Math.random() * 100,  // Random position 0-100%
+    duration: getRandomInRange(STAR_DURATION_MIN, STAR_DURATION_MAX),
+  });
+
+  // function to remove star after its lifetime
+  const scheduleStarRemoval = (starId, duration) => {
+    setTimeout(() => {
+      setStars((prevStars) => prevStars.filter((star) => star.id !== starId));
+    }, duration * 1000);
+  };
+
+  // main star creation logic
+  const handleStarCreation = () => {
+    // only create star based on probability (reduces total count)
+    if (Math.random() < STAR_CREATION_PROBABILITY) {
+      const newStar = createStar();
+      
+      // add star to state
       setStars((prevStars) => [...prevStars, newStar]);
+      
+      // schedule its removal
+      scheduleStarRemoval(newStar.id, newStar.duration);
+    }
+  };
 
-      setTimeout(() => {
-        setStars((prevStars) => prevStars.filter((star) => star.id !== newStar.id));
-      }, newStar.duration * 1000);
-    }, 250);
+  // Set up interval for star creation
+  const interval = setInterval(handleStarCreation, STAR_CREATION_INTERVAL);
 
-    return () => clearInterval(interval);
-  }, []);
+  // Cleanup function
+  return () => clearInterval(interval);
+}, []);
 
   useEffect(() => {
     const starsArray = Array.from({ length: 75 }, (_, index) => ({
@@ -146,21 +178,7 @@ export default function Hero() {
             ))}
           </div>
 
-          {stars.map((star) => (
-            <div
-              key={star.id}
-              className="absolute bg-white rounded-full"
-              style={{
-                width: `${star.size}px`,
-                height: `${star.size}px`,
-                top: `${star.top}%`,
-                left: `${star.left}%`,
-                animation: `fly-towards ${star.duration}s linear forwards`,
-              }}
-            />
-          ))}
-
-          <div className="flex flex-col md:flex-row mt-56 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8">
+          <div className="flex flex-col md:flex-row mt-80 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8">
             {/* Hero Text */}
             <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1">
               <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold text-white mb-4 fade-in-stage-2">
@@ -174,8 +192,8 @@ export default function Hero() {
               </h3>
 
               <p className="text-sm sm:text-md md:text-sm text-white mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4">
-                {/* style={{textShadow: "0 2px 8px rgba(0,0,0,0.3)"}} */}
-                Computer Systems & Robotics Engineering graduate with experience in backend, full-stack, and embedded development through academic projects and a 4-month internship. Versed in with Next.js, React, Python, FastAPI, Docker, PostgreSQL and AWS, and 2 years of Freelance experience - I am excited to bring my technical skills and passion for innovation to a new team. Let’s build something amazing together!
+                Computer Systems & Robotics Engineering graduate with hands-on experience in backend, full-stack, and embedded development gained through academic projects and a 4-month internship. 
+                Proficient in embedded C, Python, KiCad, Docker, Git/GitHub CI/CD, and Supabase, complemented by 2 years of freelance development experience. 
               </p>
               <p className="text-sm sm:text-md md:text-sm text-white fade-in-stage-5">
                 Got a project in mind? Connect with me! ✅
@@ -200,7 +218,7 @@ export default function Hero() {
           }
 
           .fade-in {
-            opacity: 0;
+            opacity: 3;
             transition: opacity 1.5s ease-in-out;
           }
 
