@@ -20,7 +20,7 @@ const CAROUSEL_CONFIG = {
     TABLET: 2,
     DESKTOP: 3,
   },
-  AUTO_PLAY_INTERVAL: 5000, // 5 seconds
+  AUTO_PLAY_INTERVAL: 30000, // 30 sec
 };
 
 const TOOLTIP_CONFIG = {
@@ -69,6 +69,12 @@ const PROJECT_DATA = [
     description: "A robotic arm simulation made of 3 links, that perform inverse and forward kinematics with an attached end-effector.",
     technologies: ["Python 3", "Numpy", "CoppeliaSim", "Electronics Engineering", "IoT", "Robotics"],
     github: "https://github.com/deneskosztyuk/3-Link-Robotic-Arm---CoppeliaSim",
+  },
+  {
+    title: "Self-Navigating Robotic Device",
+    description: "A self-navigating robot that utilised the ATmega328p MCU, on-board sensors and modules (infrared, memory, motor driver, PID controller), custom written firmware to avoid hitting obstacles and navigate through challenging unkown terrain.",
+    technologies: ["Embedded C", "Electronics Engineering", "Robotics", "KiCad", "Arduino"],
+    github: "https://github.com/deneskosztyuk/Self-Navigating-Robotic-Device/blob/main/README.md",
   },
 ];
 
