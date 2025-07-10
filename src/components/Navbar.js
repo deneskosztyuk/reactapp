@@ -33,7 +33,7 @@ const Navbar = () => {
             href="https://github.com/deneskosztyuk"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white hover:text-purple-700 transition-colors text-2xl"
+            className="text-white hover:text-purple-600 transition-colors text-2xl"
             aria-label="GitHub"
           >
             <FaGithub />
@@ -42,7 +42,7 @@ const Navbar = () => {
             href="https://www.linkedin.com/in/deneskosztyuk/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white hover:text-purple-700 transition-colors text-2xl"
+            className="text-white hover:text-purple-600 transition-colors text-2xl"
             aria-label="LinkedIn"
           >
             <FaLinkedin />
@@ -75,7 +75,7 @@ const Navbar = () => {
         <div className="hidden md:flex space-x-6">
           <NavItem to="hero" label="Home" />
           <NavItem to="projects" label="Projects" />
-          <NavItem to="freelance" label="Freelance" />
+          {/*<NavItem to="freelance" label="Freelance" />*/}
           <NavItem to="contact" label="Contact Form" />
         </div>
 

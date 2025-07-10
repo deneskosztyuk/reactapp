@@ -13,7 +13,7 @@ export default function App() {
         <Navbar />
         <section id="hero"><Hero /></section>
         <section id="projects"><Projects /></section>
-        <section id="freelance"><Freelance /></section>
+        {/* <section id="freelance"><Freelance /></section> */}
         <section id="contact"><Contact /></section>
       </div>
     </SmoothScroll>
