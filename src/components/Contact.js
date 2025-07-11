@@ -72,7 +72,7 @@ export default function Contact() {
         formData.append("name", form.name);
         formData.append("email", form.email);
         formData.append("message", form.message);
-        formData.append("g-recaptcha-response", token); // Add CAPTCHA token for Web3Forms
+        formData.append("g-recaptcha-response", token); 
         if (selectedFile) formData.append("file", selectedFile);
 
         const res = await fetch("https://api.web3forms.com/submit", {
