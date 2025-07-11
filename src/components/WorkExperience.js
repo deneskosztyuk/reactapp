@@ -56,21 +56,6 @@ const WORK_EXPERIENCES = [
     technologies: ['React', 'Node.js', 'Java', 'Spring Boot', 'Docker', 'AWS']
   },
   {
-    id: 'academic-projects',
-    title: 'Computer Systems & Robotics Engineer',
-    company: 'University Projects',
-    period: '2020 - 2024',
-    location: 'UK',
-    type: 'Academic',
-    icon: <FaRobot />,
-    description: 'Completed extensive projects in IoT, embedded systems, and robotics during degree studies.',
-    achievements: [
-      'Built self-navigating robots, satellite simulation devices',
-      'Designed and developed custom Neural Network for a robotic AI warehouse worker'
-    ],
-    technologies: ['C/C++', 'Unity', 'Godot', 'IoT', 'Embedded Systems', 'Robotics']
-  },
-  {
     id: 'jabil',
     title: 'Line Maintanance Engineer',
     company: 'Jabil Ltd.',
@@ -85,7 +70,23 @@ const WORK_EXPERIENCES = [
       'Trained and guided 8 new line technicians in equipment setup, maintenance and compliance with RoHS and health and safety procedures'
     ],
     technologies: ['PCB', 'Circuit Production', 'IoT', 'Embedded Systems', 'Robotics', 'Electronics Engineering']
+  },
+  {
+    id: 'academic-projects',
+    title: 'Computer Systems & Robotics Engineer',
+    company: 'University Projects',
+    period: '2020 - 2024',
+    location: 'UK',
+    type: 'Academic',
+    icon: <FaRobot />,
+    description: 'Completed extensive projects in IoT, embedded systems, and robotics during degree studies.',
+    achievements: [
+      'Built self-navigating robots, satellite simulation devices',
+      'Designed and developed custom Neural Network for a robotic AI warehouse worker'
+    ],
+    technologies: ['C/C++', 'Unity', 'Godot', 'IoT', 'Embedded Systems', 'Robotics']
   }
+  
 ];
 
 const TECH_STACK = [
