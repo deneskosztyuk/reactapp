@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-scroll";
 import AstronautModel from "./AstronautModel";
 
 const TypewriterTextGrad100 = ({ text }) => {
@@ -58,7 +59,6 @@ const TypewriterText100 = ({ text }) => {
   );
 };
 
-
 export default function Hero() {
   const [stars, setStars] = useState([]);
   const [staticStars, setStaticStars] = useState([]);
@@ -66,56 +66,42 @@ export default function Hero() {
   const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
-  // configuration constants for easy adjustment
-  const STAR_CREATION_INTERVAL = 700; // increased from 250ms to reduce freq
-  const STAR_CREATION_PROBABILITY = 0.7; // 40% chance to create a star
-  const STAR_DURATION_MIN = 5; // minimum star lifetime in seconds
-  const STAR_DURATION_MAX = 15; // maximum star lifetime in seconds
-  const STAR_SIZE_MIN = 1;
-  const STAR_SIZE_MAX = 4;
+    // configuration constants for easy adjustment
+    const STAR_CREATION_INTERVAL = 700;
+    const STAR_CREATION_PROBABILITY = 0.7;
+    const STAR_DURATION_MIN = 5;
+    const STAR_DURATION_MAX = 15;
+    const STAR_SIZE_MIN = 1;
+    const STAR_SIZE_MAX = 4;
 
-  // function to generate random numbers within a range
-  const getRandomInRange = (min, max) => Math.random() * (max - min) + min;
+    const getRandomInRange = (min, max) => Math.random() * (max - min) + min;
+    const generateStarId = () => Math.random().toString(36).substr(2, 9);
 
-  // function to generate unique star ID
-  const generateStarId = () => Math.random().toString(36).substr(2, 9);
+    const createStar = () => ({
+      id: generateStarId(),
+      size: getRandomInRange(STAR_SIZE_MIN, STAR_SIZE_MAX),
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      duration: getRandomInRange(STAR_DURATION_MIN, STAR_DURATION_MAX),
+    });
 
-  // function to create a new star object
-  const createStar = () => ({
-    id: generateStarId(),
-    size: getRandomInRange(STAR_SIZE_MIN, STAR_SIZE_MAX),
-    left: Math.random() * 100, // Random position 0-100%
-    top: Math.random() * 100,  // Random position 0-100%
-    duration: getRandomInRange(STAR_DURATION_MIN, STAR_DURATION_MAX),
-  });
+    const scheduleStarRemoval = (starId, duration) => {
+      setTimeout(() => {
+        setStars((prevStars) => prevStars.filter((star) => star.id !== starId));
+      }, duration * 1000);
+    };
 
-  // function to remove star after its lifetime
-  const scheduleStarRemoval = (starId, duration) => {
-    setTimeout(() => {
-      setStars((prevStars) => prevStars.filter((star) => star.id !== starId));
-    }, duration * 1000);
-  };
+    const handleStarCreation = () => {
+      if (Math.random() < STAR_CREATION_PROBABILITY) {
+        const newStar = createStar();
+        setStars((prevStars) => [...prevStars, newStar]);
+        scheduleStarRemoval(newStar.id, newStar.duration);
+      }
+    };
 
-  // main star creation logic
-  const handleStarCreation = () => {
-    // only create star based on probability (reduces total count)
-    if (Math.random() < STAR_CREATION_PROBABILITY) {
-      const newStar = createStar();
-      
-      // add star to state
-      setStars((prevStars) => [...prevStars, newStar]);
-      
-      // schedule its removal
-      scheduleStarRemoval(newStar.id, newStar.duration);
-    }
-  };
-
-  // Set up interval for star creation
-  const interval = setInterval(handleStarCreation, STAR_CREATION_INTERVAL);
-
-  // Cleanup function
-  return () => clearInterval(interval);
-}, []);
+    const interval = setInterval(handleStarCreation, STAR_CREATION_INTERVAL);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const starsArray = Array.from({ length: 75 }, (_, index) => ({
@@ -160,8 +146,9 @@ export default function Hero() {
           </div>
         </div>
       ) : (
-        <div className={`fade-in ${fadeIn ? "visible" : ""}`}>
-          <div className="absolute inset-0">
+        <div className={`fade-in ${fadeIn ? "visible" : ""}`} style={{ pointerEvents: 'auto', userSelect: 'text' }}>
+          {/* Stars Background - Lower z-index */}
+          <div className="absolute inset-0" style={{ pointerEvents: 'none', zIndex: 1 }}>
             {staticStars.map((star) => (
               <div
                 key={star.id}
@@ -173,35 +160,51 @@ export default function Hero() {
                   left: `${star.left}%`,
                   opacity: star.opacity,
                   animationDelay: star.animationDelay,
+                  pointerEvents: 'none'
                 }}
               />
             ))}
           </div>
 
-          <div className="flex flex-col md:flex-row mt-80 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8">
+          {/* Content - Higher z-index */}
+          <div className="flex flex-col md:flex-row mt-80 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 10 }}>
             {/* Hero Text */}
-            <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1">
-              <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold text-white mb-4 fade-in-stage-2">
+            <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1" style={{ pointerEvents: 'auto', userSelect: 'text' }}>
+              <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold text-white mb-4 fade-in-stage-2" style={{ userSelect: 'text' }}>
                 Hi, I'm <TypewriterTextGrad100 text="Denes Kosztyuk" />
               </h1>
-              <h2 className="text-lg sm:text-xl md:text-xl text-gray-300 mb-4 fade-in-stage-3">
+              <h2 className="text-lg sm:text-xl md:text-xl text-gray-300 mb-4 fade-in-stage-3" style={{ userSelect: 'text' }}>
                 <TypewriterText100 text="Backend & API | IoT | Embedded"></TypewriterText100>
               </h2>
-              <h3 className="text-xs sm:text-sm md:text-base text-gray-300 mb-4 fade-in-stage-3">
+              <h3 className="text-xs sm:text-sm md:text-base text-gray-300 mb-4 fade-in-stage-3" style={{ userSelect: 'text' }}>
                 📍Stavanger, Norway / Remote 👨‍💻
               </h3>
 
-              <p className="text-sm sm:text-md md:text-sm text-white mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4">
-                Computer Systems & Robotics Engineering graduate with hands-on experience in backend, full-stack, and embedded development gained through academic projects and a 4-month internship. 
-                Proficient in embedded C, Python, KiCad, Docker, Git/GitHub CI/CD, and Supabase, complemented by 2 years of freelance development experience. 
+              <p className="text-sm sm:text-md md:text-sm text-white mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4" style={{ userSelect: 'text' }}>
+                Computer Systems & Robotics Engineering graduate specializing in backend development and embedded systems. 
+                Professional experience through internship and academic projects.
+                Skilled in embedded C, Python, Java, KiCad, EasyEDA, Docker, Git/GitHub CI/CD, PostgreSQL. Two years freelance development experience. 
               </p>
-              <p className="text-sm sm:text-md md:text-sm text-white fade-in-stage-5">
-                Got a project in mind? Connect with me! ✅
+              <p className="text-sm sm:text-md md:text-sm text-white fade-in-stage-5" style={{ userSelect: 'text' }}>
+                Something caught your eye?{" "}
+                <Link
+                  to="contact"
+                  smooth={true}
+                  duration={600}
+                  className="cursor-pointer text-blue-300 hover:text-purple-800 underline underline-offset-2 hover:underline-offset-4 transition-all duration-200 inline-flex items-center gap-1 relative"
+                  style={{ 
+                    pointerEvents: 'auto',
+                    userSelect: 'none',
+                    zIndex: 20
+                  }}
+                >
+                  Let's have a chat ✅
+                </Link>
               </p>
             </div>
 
             {/* 3D Model */}
-            <div className="w-full md:w-1/2 flex items-center justify-center mt-8 md:mt-0 fade-in-stage-6">
+            <div className="w-full md:w-1/2 flex items-center justify-center mt-8 md:mt-0 fade-in-stage-6" style={{ zIndex: 5 }}>
               <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] xl:w-[700px] h-auto">
                 <AstronautModel />
               </div>
@@ -218,14 +221,31 @@ export default function Hero() {
           }
 
           .fade-in {
-            opacity: 3;
+            opacity: 0;
             transition: opacity 1.5s ease-in-out;
+            pointer-events: auto !important;
+            user-select: text !important;
           }
 
           .fade-in.visible {
             opacity: 1;
           }
 
+          /* Ensure text is selectable */
+          * {
+            user-select: text !important;
+          }
+
+          /* Ensure buttons are clickable */
+          button {
+            pointer-events: auto !important;
+            user-select: none !important;
+          }
+
+          /* Ensure star background doesn't interfere */
+          .star, .animate-twinkle {
+            pointer-events: none !important;
+          }
         `}
       </style>
     </section>
