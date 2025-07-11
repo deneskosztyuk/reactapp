@@ -84,7 +84,7 @@ const WORK_EXPERIENCES = [
       'Built self-navigating robots, satellite simulation devices',
       'Designed and developed custom Neural Network for a robotic AI warehouse worker'
     ],
-    technologies: ['C/C++', 'Unity', 'Godot', 'IoT', 'Embedded Systems', 'Robotics']
+    technologies: ['C/C++', 'Unity', 'Java', 'Assembly','Python', 'OpenCV', 'FPGA', 'IoT', 'Embedded Systems', 'Robotics']
   }
   
 ];
