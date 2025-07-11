@@ -82,7 +82,8 @@ const WORK_EXPERIENCES = [
     description: 'Completed extensive projects in IoT, embedded systems, and robotics during degree studies.',
     achievements: [
       'Built self-navigating robots, satellite simulation devices',
-      'Designed and developed custom Neural Network for a robotic AI warehouse worker'
+      'Designed and developed custom Neural Network for a robotic AI warehouse worker',
+      'Designed, programmed and simulated a 3 link robotic arm to perform inverse and forward kinematics'
     ],
     technologies: ['C/C++', 'Unity', 'Java', 'Assembly','Python', 'OpenCV', 'FPGA', 'IoT', 'Embedded Systems', 'Robotics']
   }
