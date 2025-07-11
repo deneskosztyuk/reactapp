@@ -62,7 +62,6 @@ const TypewriterText100 = ({ text }) => {
 export default function Hero() {
   const [stars, setStars] = useState([]);
   const [staticStars, setStaticStars] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
@@ -115,103 +114,85 @@ export default function Hero() {
     setStaticStars(starsArray);
   }, []);
 
+  // Trigger fade-in effect immediately on component mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      setLoading(false);
       setFadeIn(true);
-    }, 3000); 
+    }, 100); // Small delay to ensure smooth transition
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <section className="relative h-screen flex flex-col md:flex-row items-center justify-center px-4 md:px-20 overflow-hidden">
-      {loading ? (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-900">
-          <div className="starfield-loader">
-            {Array.from({ length: 50 }, (_, index) => (
-              <div
-                key={index}
-                className="star"
-                style={{
-                  width: `${Math.random() * 2 + 1}px`,
-                  height: `${Math.random() * 2 + 1}px`,
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 5}s`,
-                  animationDuration: `${Math.random() * 3 + 2}s`,
-                }}
-              />
-            ))}
-          </div>
+    <section className="relative h-screen flex flex-col md:flex-row items-center justify-center px-4 md:px-20 overflow-hidden bg-slate-950">
+      <div className={`fade-in ${fadeIn ? "visible" : ""}`} style={{ pointerEvents: 'auto', userSelect: 'text' }}>
+        {/* Stars Background - Lower z-index */}
+        <div className="absolute inset-0" style={{ pointerEvents: 'none', zIndex: 1 }}>
+          {staticStars.map((star) => (
+            <div
+              key={star.id}
+              className="absolute bg-white rounded-full animate-twinkle"
+              style={{
+                width: `${star.size}px`,
+                height: `${star.size}px`,
+                top: `${star.top}%`,
+                left: `${star.left}%`,
+                opacity: star.opacity,
+                animationDelay: star.animationDelay,
+                pointerEvents: 'none'
+              }}
+            />
+          ))}
         </div>
-      ) : (
-        <div className={`fade-in ${fadeIn ? "visible" : ""}`} style={{ pointerEvents: 'auto', userSelect: 'text' }}>
-          {/* Stars Background - Lower z-index */}
-          <div className="absolute inset-0" style={{ pointerEvents: 'none', zIndex: 1 }}>
-            {staticStars.map((star) => (
-              <div
-                key={star.id}
-                className="absolute bg-white rounded-full animate-twinkle"
-                style={{
-                  width: `${star.size}px`,
-                  height: `${star.size}px`,
-                  top: `${star.top}%`,
-                  left: `${star.left}%`,
-                  opacity: star.opacity,
-                  animationDelay: star.animationDelay,
-                  pointerEvents: 'none'
+
+        {/* Content - Higher z-index */}
+        <div className="flex flex-col md:flex-row mt-80 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 10 }}>
+          {/* Hero Text */}
+          <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1" style={{ pointerEvents: 'auto', userSelect: 'text' }}>
+            <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold text-white mb-4 fade-in-stage-2" style={{ userSelect: 'text' }}>
+              Hi, I'm <TypewriterTextGrad100 text="Denes Kosztyuk" />
+            </h1>
+            <h2 className="text-lg sm:text-xl md:text-xl text-gray-300 mb-4 fade-in-stage-3" style={{ userSelect: 'text' }}>
+              <TypewriterText100 text="Backend & API | IoT | Embedded"></TypewriterText100>
+            </h2>
+            <h3 className="text-xs sm:text-sm md:text-base text-gray-300 mb-4 fade-in-stage-3" style={{ userSelect: 'text' }}>
+              📍Stavanger, Norway / Remote 👨‍💻
+            </h3>
+
+            <p className="text-sm sm:text-md md:text-sm text-white mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4" style={{ userSelect: 'text' }}>
+              Computer Systems & Robotics Engineering graduate specializing in backend development and embedded systems. 
+              Professional experience through internship and academic projects.
+              Skilled in embedded C, Python, Java, KiCad, EasyEDA, Docker, Git/GitHub CI/CD, PostgreSQL. Two years freelance development experience. 
+            </p>
+            <p className="text-sm sm:text-md md:text-sm text-white fade-in-stage-5" style={{ userSelect: 'text' }}>
+              Something caught your eye?{" "}
+              <Link
+                to="contact"
+                smooth={true}
+                duration={600}
+                className="cursor-pointer text-blue-300 hover:text-purple-800 transition-all duration-200 inline-flex items-center gap-1 relative"
+                style={{ 
+                  pointerEvents: 'auto',
+                  userSelect: 'none',
+                  zIndex: 20
                 }}
-              />
-            ))}
+              >
+                <span className="underline underline-offset-2 hover:underline-offset-4 transition-all duration-200">
+                  Let's have a chat
+                </span>
+                <span className="ml-1">✅</span>
+              </Link>
+            </p>
           </div>
 
-          {/* Content - Higher z-index */}
-          <div className="flex flex-col md:flex-row mt-80 sm:mt-24 items-center justify-between w-full max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 10 }}>
-            {/* Hero Text */}
-            <div className="w-full md:w-1/2 text-center md:text-left fade-in-stage-1" style={{ pointerEvents: 'auto', userSelect: 'text' }}>
-              <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold text-white mb-4 fade-in-stage-2" style={{ userSelect: 'text' }}>
-                Hi, I'm <TypewriterTextGrad100 text="Denes Kosztyuk" />
-              </h1>
-              <h2 className="text-lg sm:text-xl md:text-xl text-gray-300 mb-4 fade-in-stage-3" style={{ userSelect: 'text' }}>
-                <TypewriterText100 text="Backend & API | IoT | Embedded"></TypewriterText100>
-              </h2>
-              <h3 className="text-xs sm:text-sm md:text-base text-gray-300 mb-4 fade-in-stage-3" style={{ userSelect: 'text' }}>
-                📍Stavanger, Norway / Remote 👨‍💻
-              </h3>
-
-              <p className="text-sm sm:text-md md:text-sm text-white mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4" style={{ userSelect: 'text' }}>
-                Computer Systems & Robotics Engineering graduate specializing in backend development and embedded systems. 
-                Professional experience through internship and academic projects.
-                Skilled in embedded C, Python, Java, KiCad, EasyEDA, Docker, Git/GitHub CI/CD, PostgreSQL. Two years freelance development experience. 
-              </p>
-              <p className="text-sm sm:text-md md:text-sm text-white fade-in-stage-5" style={{ userSelect: 'text' }}>
-                Something caught your eye?{" "}
-                <Link
-                  to="contact"
-                  smooth={true}
-                  duration={600}
-                  className="cursor-pointer text-blue-300 hover:text-purple-800 underline underline-offset-2 hover:underline-offset-4 transition-all duration-200 inline-flex items-center gap-1 relative"
-                  style={{ 
-                    pointerEvents: 'auto',
-                    userSelect: 'none',
-                    zIndex: 20
-                  }}
-                >
-                  Let's have a chat ✅
-                </Link>
-              </p>
-            </div>
-
-            {/* 3D Model */}
-            <div className="w-full md:w-1/2 flex items-center justify-center mt-8 md:mt-0 fade-in-stage-6" style={{ zIndex: 5 }}>
-              <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] xl:w-[700px] h-auto">
-                <AstronautModel />
-              </div>
+          {/* 3D Model */}
+          <div className="w-full md:w-1/2 flex items-center justify-center mt-8 md:mt-0 fade-in-stage-6" style={{ zIndex: 5 }}>
+            <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] xl:w-[700px] h-auto">
+              <AstronautModel />
             </div>
           </div>
         </div>
-      )}
+      </div>
 
       <style>
         {`
@@ -229,6 +210,21 @@ export default function Hero() {
 
           .fade-in.visible {
             opacity: 1;
+          }
+
+          @keyframes twinkle {
+            0%, 100% { 
+              opacity: 0.3; 
+              transform: scale(1);
+            }
+            50% { 
+              opacity: 1; 
+              transform: scale(1.1);
+            }
+          }
+
+          .animate-twinkle {
+            animation: twinkle 3s infinite ease-in-out;
           }
 
           /* Ensure text is selectable */
