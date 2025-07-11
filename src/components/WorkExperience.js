@@ -53,7 +53,7 @@ const WORK_EXPERIENCES = [
       'Deployed containerized applications on AWS',
       'Designed and developed custom Discord bots'
     ],
-    technologies: ['React', 'Node.js', 'Java', 'Spring Boot', 'Docker', 'AWS']
+    technologies: ['React', 'Node.js', 'Java', 'Spring Boot', 'Docker', 'AWS', 'discord.py']
   },
   {
     id: 'jabil',
