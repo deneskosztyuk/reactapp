@@ -162,7 +162,7 @@ export default function Hero() {
             <p className="text-sm sm:text-md md:text-sm text-white mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4" style={{ userSelect: 'text' }}>
               Computer Systems & Robotics Engineering graduate specializing in backend development and embedded systems. 
               Professional experience through internship and in-depth experience with academic and personal projects.
-              Skilled in embedded C, Python, Java, KiCad, EasyEDA, Docker, Git/GitHub CI/CD, PostgreSQL. Two years freelance development experience. 
+              Skilled in embedded C, Python, Java, JavaScript, KiCad, EasyEDA, Docker, Git/GitHub CI/CD, PostgreSQL. Two years freelance development experience. 
             </p>
             <p className="text-sm sm:text-md md:text-sm text-white fade-in-stage-5" style={{ userSelect: 'text' }}>
               Something caught your eye?{" "}
