@@ -274,7 +274,7 @@ const SectionHeader = () => (
       🚀 My Projects
     </h1>
     <p className="mt-2 sm:mt-3 text-xs sm:text-sm md:text-base text-gray-300">
-      A collection of projects showcasing my skills & experience.
+      A collection of projects showcasing my software skills & practical experience.
     </p>
   </div>
 );
