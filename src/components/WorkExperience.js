@@ -57,13 +57,13 @@ const WORK_EXPERIENCES = [
   },
   {
     id: 'jabil',
-    title: 'Line Maintanance Engineer',
+    title: 'Line Maintenance Engineer',
     company: 'Jabil Ltd.',
     period: '2014 - 2016',
     location: 'Ukraine',
     type: 'Fulltime',
     icon: <FaCog />,
-    description: 'Performed hardware maintanance and callibration at a PCB manufacturing factory',
+    description: 'Performed hardware maintenance and calibration at a PCB manufacturing factory',
     achievements: [
       'Increased production line efficiency by 15% through optimized equipment maintenance schedules',
       'Installed, setup, and calibrated over 15 autonomous robotic machinery, ensuring product quality and adherence to QA requirements',
@@ -87,7 +87,6 @@ const WORK_EXPERIENCES = [
     ],
     technologies: ['C/C++', 'Unity', 'Java', 'Assembly','Python', 'OpenCV', 'FPGA', 'IoT', 'Embedded Systems', 'Robotics']
   }
-  
 ];
 
 const TECH_STACK = [
@@ -166,7 +165,7 @@ export default function WorkExperience() {
         </div>
       </div>
 
-      {/* CSS Animations */}
+      {/* Enhanced CSS Animations */}
       <style jsx>{`
         @keyframes twinkle {
           0%, 100% { 
@@ -197,12 +196,76 @@ export default function WorkExperience() {
         .animate-fade-in-up {
           animation: fadeInUp 0.6s ease-out;
         }
+
+        @keyframes gradientGlow {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        @keyframes smoothScale {
+          0% {
+            transform: scale(1);
+          }
+          100% {
+            transform: scale(1.05);
+          }
+        }
+
+        .work-experience-card {
+          position: relative;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .work-experience-card::before {
+          content: '';
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          border-radius: inherit;
+          padding: 2px;
+          background: linear-gradient(
+            45deg,
+            rgba(59, 130, 246, 0.8),
+            rgba(147, 51, 234, 0.8),
+            rgba(236, 72, 153, 0.8),
+            rgba(59, 130, 246, 0.8)
+          );
+          background-size: 300% 300%;
+          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          mask-composite: exclude;
+          -webkit-mask-composite: xor;
+          opacity: 0;
+          transition: opacity 0.4s ease-in-out;
+          z-index: -1;
+        }
+
+        .work-experience-card:hover::before {
+          opacity: 1;
+          animation: gradientGlow 3s ease-in-out infinite;
+        }
+
+        .work-experience-card:hover {
+          animation: smoothScale 0.4s ease-out forwards;
+        }
+
+        .work-experience-card:not(:hover) {
+          animation: smoothScale 0.4s ease-out reverse;
+        }
       `}</style>
     </section>
   );
 }
 
-// Work Experience Card Component
+// Enhanced Work Experience Card Component
 const WorkExperienceCard = ({ experience }) => {
   const {
     title,
@@ -217,7 +280,7 @@ const WorkExperienceCard = ({ experience }) => {
   } = experience;
 
   return (
-    <article className="bg-gray-800/40 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 hover:transform hover:scale-105 animate-fade-in-up">
+    <article className="work-experience-card bg-gray-800/40 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-gray-700/50 hover:bg-gray-800/60 animate-fade-in-up">
       {/* Card Header */}
       <header className="flex items-start gap-4 mb-4">
         <div className="flex-shrink-0 p-3 bg-blue-600/20 rounded-lg text-blue-400">
@@ -256,7 +319,7 @@ const WorkExperienceCard = ({ experience }) => {
         <ul className="space-y-1">
           {achievements.map((achievement, index) => (
             <li key={index} className="text-xs text-gray-300 flex items-start gap-2">
-              <span className="text-green-400 mt-1">•</span>
+              <span className="text-green-400 mt-1 flex-shrink-0">•</span>
               <span>{achievement}</span>
             </li>
           ))}
@@ -270,7 +333,7 @@ const WorkExperienceCard = ({ experience }) => {
           {technologies.map((tech, index) => (
             <span
               key={index}
-              className="px-2 py-1 bg-gray-700/50 rounded-md text-xs text-gray-300 border border-gray-600/50"
+              className="px-2 py-1 bg-gray-700/50 rounded-md text-xs text-gray-300 border border-gray-600/50 transition-colors duration-200 hover:bg-gray-600/60"
             >
               {tech}
             </span>
