@@ -153,7 +153,7 @@ export default function Hero() {
               Hi, I'm <TypewriterTextGrad100 text="Denes Kosztyuk" />
             </h1>
             <h2 className="text-lg sm:text-xl md:text-xl text-gray-300 mb-4 fade-in-stage-3" style={{ userSelect: 'text' }}>
-              <TypewriterText100 text="Backend & API | IoT | Embedded"></TypewriterText100>
+              <TypewriterText100 text="Backend & API | Robotics | IoT | Embedded Systems"></TypewriterText100>
             </h2>
             <h3 className="text-xs sm:text-sm md:text-base text-gray-300 mb-4 fade-in-stage-3" style={{ userSelect: 'text' }}>
               📍Stavanger, Norway / Remote 👨‍💻
@@ -161,7 +161,7 @@ export default function Hero() {
 
             <p className="text-sm sm:text-md md:text-sm text-white mb-6 leading-6 sm:leading-7 md:leading-8 fade-in-stage-4" style={{ userSelect: 'text' }}>
               Computer Systems & Robotics Engineering graduate specializing in backend development and embedded systems. 
-              Professional experience through internship and academic projects.
+              Professional experience through internship and in-depth experience with academic and personal projects.
               Skilled in embedded C, Python, Java, KiCad, EasyEDA, Docker, Git/GitHub CI/CD, PostgreSQL. Two years freelance development experience. 
             </p>
             <p className="text-sm sm:text-md md:text-sm text-white fade-in-stage-5" style={{ userSelect: 'text' }}>
