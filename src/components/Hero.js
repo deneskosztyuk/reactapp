@@ -23,7 +23,7 @@ const TypewriterTextGrad100 = ({ text }) => {
   }, [text]);
 
   return (
-    <span className="bg-gradient-to-r from-blue-600 via-purple-400 to-pink-600 text-transparent bg-clip-text">
+    <span className="bg-gradient-to-r from-green-600 via-green-300 to-green-800 text-transparent bg-clip-text">
       {displayText}
       {showCursor && <span className="blinking-cursor">|</span>}
     </span>
@@ -65,7 +65,6 @@ export default function Hero() {
   const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
-    // configuration constants for easy adjustment
     const STAR_CREATION_INTERVAL = 700;
     const STAR_CREATION_PROBABILITY = 0.7;
     const STAR_DURATION_MIN = 5;
@@ -118,7 +117,7 @@ export default function Hero() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setFadeIn(true);
-    }, 100); // Small delay to ensure smooth transition
+    }, 100); 
 
     return () => clearTimeout(timer);
   }, []);
@@ -177,7 +176,7 @@ export default function Hero() {
                   zIndex: 20
                 }}
               >
-                <span className="underline underline-offset-2 hover:underline-offset-4 transition-all duration-200">
+                <span className="underline underline-offset-2 text-green-400 hover:underline-offset-4 transition-all duration-200">
                   Let's have a chat
                 </span>
                 <span className="ml-1">✅</span>

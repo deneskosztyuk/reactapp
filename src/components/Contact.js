@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 
-// ===== CONSTANTS =====
+// Configuration constants
 const FORM_CONFIG = {
   ACCESS_KEY: "722cd945-9473-4c48-a538-7502a3ceaf27",
   API_ENDPOINT: "https://api.web3forms.com/submit"
 };
 
-const STARS_CONFIG = {
-  COUNT: 200,
+const STAR_CONFIG = {
+  COUNT: 100,
   MIN_SIZE: 1,
   MAX_SIZE: 4,
   MIN_OPACITY: 0.3,
@@ -22,20 +22,21 @@ const MATH_CONFIG = {
   OPERATIONS: ['+', '-', '×']
 };
 
-const STYLES = {
-  section: "h-screen flex flex-col justify-center items-center px-6 md:px-20 bg-slate-950 text-white relative overflow-hidden",
-  starBackground: "absolute inset-0",
-  heading: "text-center relative z-10",
-  form: "mt-10 w-full max-w-lg bg-gray-800/60 p-6 rounded-lg shadow-lg flex flex-col gap-4 relative z-10",
-  input: "p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500",
-  submitButton: "bg-slate-800 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-md transition-all",
-  socialLinks: "mt-8 flex space-x-6 relative z-10",
-  popup: "fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4",
-  popupContent: "bg-slate-800 p-6 sm:p-8 rounded-xl border border-slate-600 max-w-md w-full mx-4 relative z-50"
-};
-
-// ===== UTILITY FUNCTIONS =====
+// Utility functions
 const generateRandomInRange = (min, max) => Math.random() * (max - min) + min;
+
+const createStar = (index) => ({
+  id: `star-${index}`,
+  size: generateRandomInRange(STAR_CONFIG.MIN_SIZE, STAR_CONFIG.MAX_SIZE),
+  left: Math.random() * 100,
+  top: Math.random() * 100,
+  opacity: generateRandomInRange(STAR_CONFIG.MIN_OPACITY, STAR_CONFIG.MAX_OPACITY),
+  animationDelay: `${Math.random() * STAR_CONFIG.MAX_ANIMATION_DELAY}s`,
+});
+
+const generateStars = () => {
+  return Array.from({ length: STAR_CONFIG.COUNT }, (_, index) => createStar(index));
+};
 
 const createFormData = (formValues, selectedFile = null) => {
   const formData = new FormData();
@@ -68,28 +69,7 @@ const createJsonPayload = (formValues) => ({
   botcheck: ""
 });
 
-// ===== CUSTOM HOOKS =====
-const useStarField = () => {
-  const [staticStars, setStaticStars] = useState([]);
-
-  useEffect(() => {
-    const generateStars = () => {
-      return Array.from({ length: STARS_CONFIG.COUNT }, (_, index) => ({
-        id: `star-${index}`,
-        size: generateRandomInRange(STARS_CONFIG.MIN_SIZE, STARS_CONFIG.MAX_SIZE),
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        opacity: generateRandomInRange(STARS_CONFIG.MIN_OPACITY, STARS_CONFIG.MAX_OPACITY),
-        animationDelay: `${Math.random() * STARS_CONFIG.MAX_ANIMATION_DELAY}s`,
-      }));
-    };
-
-    setStaticStars(generateStars());
-  }, []);
-
-  return staticStars;
-};
-
+// Custom hooks
 const useFormState = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [selectedFile, setSelectedFile] = useState(null);
@@ -217,7 +197,6 @@ const useFormSubmission = () => {
     try {
       let response, result;
 
-      // Try FormData first
       try {
         ({ response, result } = await submitWithFormData(formValues, selectedFile));
         
@@ -226,12 +205,10 @@ const useFormSubmission = () => {
           return { success: true };
         }
         
-        // Fallback to JSON if FormData fails with 400
         if (response.status === 400) {
           ({ response, result } = await submitWithJson(formValues));
         }
       } catch (error) {
-        // Network error, try JSON fallback
         ({ response, result } = await submitWithJson(formValues));
       }
 
@@ -262,30 +239,9 @@ const useFormSubmission = () => {
   };
 };
 
-const useMathVerificationPopup = () => {
-  const [showMathPopup, setShowMathPopup] = useState(false);
-
-  const openPopup = () => setShowMathPopup(true);
-  const closePopup = () => setShowMathPopup(false);
-
-  return { showMathPopup, openPopup, closePopup };
-};
-
-// ===== COMPONENTS =====
-const ContactLink = ({ icon, label, href }) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex items-center space-x-2 text-gray-300 hover:text-white transition-all"
-  >
-    <span className="text-xl">{icon}</span>
-    <span>{label}</span>
-  </a>
-);
-
-const StarField = ({ stars }) => (
-  <div className={STYLES.starBackground}>
+// Components
+const StarryBackground = ({ stars }) => (
+  <div className="absolute inset-0">
     {stars.map((star) => (
       <div
         key={star.id}
@@ -304,10 +260,12 @@ const StarField = ({ stars }) => (
 );
 
 const ContactHeader = () => (
-  <div className={STYLES.heading}>
-    <h1 className="text-2xl md:text-3xl font-bold">Let's Connect! 🤝</h1>
-    <p className="mt-4 text-sm text-gray-300">
-      Interested in working together? Fill out the form or reach out directly.
+  <div className="text-center mb-12 relative z-10">
+    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-mono font-bold mb-4 text-white">
+      🤝 Let's Connect
+    </h1>
+    <p className="text-base sm:text-lg text-white max-w-2xl mx-auto font-mono">
+      Interested in reaching out? Fill out the form or reach out directly.
     </p>
   </div>
 );
@@ -340,7 +298,9 @@ const FormField = ({ type = "text", name, placeholder, value, onChange, rows, re
       value={value}
       onChange={onChange}
       rows={type === "textarea" ? rows : undefined}
-      className={STYLES.input}
+      className="p-3 bg-gray-900 border-2 border-green-400 text-green-100 placeholder-green-300 
+                 font-mono text-sm focus:outline-none focus:border-green-300 focus:bg-green-900/20 
+                 transition-all duration-300"
       required={required}
     />
   );
@@ -351,11 +311,11 @@ const SubmitButton = ({ isSubmitting }) => (
     <button
       type="submit"
       disabled={isSubmitting}
-      className={`${STYLES.submitButton} ${
-        isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-      }`}
+      className={`bg-gray-900 border-2 border-green-400 text-green-400 font-mono font-bold 
+                  py-3 px-8 transition-all duration-300 hover:bg-green-900 hover:scale-105 
+                  ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
     >
-      {isSubmitting ? "Sending..." : "Send"}
+      {isSubmitting ? "SENDING..." : "SEND_MESSAGE"}
     </button>
   </div>
 );
@@ -363,32 +323,50 @@ const SubmitButton = ({ isSubmitting }) => (
 const StatusMessages = ({ success, errorMessage }) => (
   <>
     {success === true && (
-      <div className="mt-4 text-green-400 text-center relative z-10">
-        Thank you! Your message has been sent. 🚀
+      <div className="mt-6 p-4 bg-green-900/30 border-2 border-green-400 text-green-300 
+                      text-center relative z-10 font-mono">
+        <div className="text-green-400 font-bold">MESSAGE_SENT</div>
+        <div className="text-sm mt-1">Thank you! Your message has been transmitted successfully. 🚀</div>
       </div>
     )}
     {success === false && (
-      <div className="mt-4 text-red-400 text-center relative z-10 max-w-lg">
-        <p className="font-semibold">Message sending failed</p>
+      <div className="mt-6 p-4 bg-red-900/30 border-2 border-red-400 text-red-300 
+                      text-center relative z-10 font-mono max-w-lg mx-auto">
+        <div className="text-red-400 font-bold mb-2">TRANSMISSION_FAILED</div>
         {errorMessage && (
-          <p className="text-sm mt-1 text-red-300">{errorMessage}</p>
+          <p className="text-sm mb-2">{errorMessage}</p>
         )}
-        <p className="text-sm mt-2">Please try the direct contact links below:</p>
+        <p className="text-sm">Please use direct contact links below:</p>
       </div>
     )}
   </>
 );
 
+const ContactLink = ({ icon, label, href }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center space-x-3 text-green-300 hover:text-green-400 
+               transition-all duration-300 hover:scale-110 font-mono"
+  >
+    <div className="text-xl border-2 border-green-400 p-2 bg-gray-900 hover:bg-green-900 transition-all duration-300">
+      {icon}
+    </div>
+    <span>{label}</span>
+  </a>
+);
+
 const SocialLinks = () => (
-  <div className={STYLES.socialLinks}>
+  <div className="mt-8 flex space-x-6 relative z-10">
     <ContactLink
       icon={<FaLinkedin />}
-      label="LinkedIn"
+      label="LINKEDIN"
       href="https://www.linkedin.com/in/deneskosztyuk/"
     />
     <ContactLink
       icon={<FaGithub />}
-      label="GitHub"
+      label="GITHUB"
       href="https://github.com/deneskosztyuk"
     />
   </div>
@@ -408,17 +386,19 @@ const MathVerificationPopup = ({
   if (!isVisible) return null;
 
   return (
-    <div className={STYLES.popup}>
-      <div className={STYLES.popupContent}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-gray-900 border-2 border-green-400 p-6 sm:p-8 max-w-md w-full mx-4 relative z-50">
         <div className="text-center mb-6">
-          <h3 className="text-lg sm:text-xl font-bold text-white mb-2">Security Verification</h3>
-          <p className="text-sm sm:text-base text-gray-300">
-            Please solve this simple math problem to verify you're human
+          <h3 className="text-lg sm:text-xl font-bold text-green-400 mb-2 font-mono">
+            SECURITY_VERIFICATION
+          </h3>
+          <p className="text-sm sm:text-base text-green-200 font-mono">
+            Solve this equation to verify human identity
           </p>
         </div>
         
         <div className="text-center mb-6">
-          <div className="text-2xl sm:text-3xl font-bold text-blue-300 mb-4">
+          <div className="text-2xl sm:text-3xl font-bold text-green-300 mb-4 font-mono">
             {mathChallenge.question} = ?
           </div>
           
@@ -428,16 +408,17 @@ const MathVerificationPopup = ({
             pattern="[0-9]*"
             value={userAnswer}
             onChange={(e) => onAnswerChange(e.target.value)}
-            placeholder="Enter your answer"
-            className={`w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 text-center text-lg ${
-              mathError ? 'ring-red-500 border-red-500' : 'focus:ring-blue-500'
+            placeholder="Enter answer"
+            className={`w-full p-3 bg-gray-900 border-2 text-green-100 placeholder-green-300 
+                       font-mono text-center text-lg focus:outline-none transition-all duration-300 ${
+              mathError ? 'border-red-400' : 'border-green-400 focus:border-green-300'
             }`}
             autoFocus
           />
           
           {mathError && (
-            <p className="text-red-400 text-sm mt-2">
-              ❌ That's not correct. Please try again.
+            <p className="text-red-400 text-sm mt-2 font-mono">
+              ❌ INCORRECT_ANSWER. Please try again.
             </p>
           )}
         </div>
@@ -445,27 +426,30 @@ const MathVerificationPopup = ({
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button
             onClick={onVerify}
-            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium disabled:opacity-50"
+            className="px-6 py-2 bg-gray-900 border-2 border-green-400 text-green-400 
+                       font-mono font-bold hover:bg-green-900 transition-all duration-300 
+                       disabled:opacity-50"
             disabled={!userAnswer || isSubmitting}
           >
-            {isSubmitting ? "Sending..." : "Verify & Send"}
+            {isSubmitting ? "SENDING..." : "VERIFY_&_SEND"}
           </button>
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+            className="px-6 py-2 bg-gray-900 border-2 border-red-400 text-red-400 
+                       font-mono hover:bg-red-900 transition-all duration-300"
             disabled={isSubmitting}
           >
-            Cancel
+            CANCEL
           </button>
         </div>
         
         <div className="text-center mt-4">
           <button
             onClick={onGenerateNew}
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-sm text-green-400 hover:text-green-300 transition-colors font-mono"
             disabled={isSubmitting}
           >
-            🔄 Generate new problem
+            🔄 NEW_EQUATION
           </button>
         </div>
       </div>
@@ -473,13 +457,17 @@ const MathVerificationPopup = ({
   );
 };
 
-// ===== MAIN COMPONENT =====
+// Main component
 export default function Contact() {
-  const stars = useStarField();
+  const [stars, setStars] = useState([]);
   const formState = useFormState();
   const mathChallenge = useMathChallenge();
   const formSubmission = useFormSubmission();
-  const mathPopup = useMathVerificationPopup();
+  const [showMathPopup, setShowMathPopup] = useState(false);
+
+  useEffect(() => {
+    setStars(generateStars());
+  }, []);
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -499,13 +487,13 @@ export default function Contact() {
     
     // Show math verification
     mathChallenge.generateMathChallenge();
-    mathPopup.openPopup();
+    setShowMathPopup(true);
     formSubmission.setErrorMessage("");
   };
 
   const handleMathVerification = async () => {
     if (mathChallenge.validateAnswer()) {
-      mathPopup.closePopup();
+      setShowMathPopup(false);
       
       const result = await formSubmission.submitForm(formState.form, formState.selectedFile);
       
@@ -519,16 +507,24 @@ export default function Contact() {
   };
 
   const handlePopupClose = () => {
-    mathPopup.closePopup();
+    setShowMathPopup(false);
     mathChallenge.resetChallenge();
   };
 
   return (
-    <section id="contact" className={STYLES.section}>
-      <StarField stars={stars} />
+    <section 
+      id="contact" 
+      className="min-h-screen py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 
+                 bg-slate-950 text-white relative overflow-hidden flex flex-col justify-center items-center"
+    >
+      <StarryBackground stars={stars} />
       <ContactHeader />
       
-      <form className={STYLES.form} onSubmit={handleFormSubmit}>
+      <form 
+        className="w-full max-w-lg bg-gray-900/60 border-2 border-green-400 p-8 
+                   flex flex-col gap-6 relative z-10" 
+        onSubmit={handleFormSubmit}
+      >
         <HoneypotField 
           value={formState.honeypot} 
           onChange={(e) => formState.setHoneypot(e.target.value)} 
@@ -536,7 +532,7 @@ export default function Contact() {
         
         <FormField
           name="name"
-          placeholder="Full Name"
+          placeholder="FULL_NAME"
           value={formState.form.name}
           onChange={formState.handleInputChange}
           required
@@ -545,7 +541,7 @@ export default function Contact() {
         <FormField
           type="email"
           name="email"
-          placeholder="Your Email"
+          placeholder="EMAIL_ADDRESS"
           value={formState.form.email}
           onChange={formState.handleInputChange}
           required
@@ -554,7 +550,7 @@ export default function Contact() {
         <FormField
           type="textarea"
           name="message"
-          placeholder="Your Message"
+          placeholder="MESSAGE_CONTENT"
           rows="4"
           value={formState.form.message}
           onChange={formState.handleInputChange}
@@ -572,7 +568,7 @@ export default function Contact() {
       <SocialLinks />
 
       <MathVerificationPopup
-        isVisible={mathPopup.showMathPopup}
+        isVisible={showMathPopup}
         mathChallenge={mathChallenge.mathChallenge}
         userAnswer={mathChallenge.userAnswer}
         mathError={mathChallenge.mathError}
@@ -583,17 +579,22 @@ export default function Contact() {
         onGenerateNew={mathChallenge.generateMathChallenge}
       />
 
-      <style>
-        {`
-          @keyframes twinkle {
-            0%, 60% { opacity: 0.5; }
-            30% { opacity: 1; }
+      <style jsx>{`
+        @keyframes twinkle {
+          0%, 100% { 
+            opacity: 0.3; 
+            transform: scale(1);
           }
-          .animate-twinkle {
-            animation: twinkle 2s infinite ease-in-out;
+          50% { 
+            opacity: 1; 
+            transform: scale(1.1);
           }
-        `}
-      </style>
+        }
+
+        .animate-twinkle {
+          animation: twinkle 3s infinite ease-in-out;
+        }
+      `}</style>
     </section>
   );
 }
