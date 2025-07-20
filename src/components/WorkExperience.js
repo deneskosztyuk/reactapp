@@ -658,7 +658,7 @@ const MobileElectronicComponent = ({ experience, index, isHovered, onToggle }) =
               </ul>
             </div>
             <div>
-              <div className="text-green-400 font-bold mb-1">COMPONENTS:</div>
+              <div className="text-green-400 font-bold mb-1">TOOLS:</div>
               <div className="flex flex-wrap gap-1">
                 {experience.technologies.map(tech => (
                   <span 
