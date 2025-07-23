@@ -54,11 +54,11 @@ const HeroHeading = () => (
       </span>
     </h1>
     
-    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto">
+    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-light leading-relaxed max-w-3xl mx-auto">
       <TypewriterText text={PERSONAL_INFO.title} />
     </h2>
     
-    <div className="flex items-center justify-center text-gray-400 text-base sm:text-lg mt-8">
+    <div className="flex items-center justify-center text-white text-base sm:text-lg mt-8">
       <span className="mr-2">📍</span>
       <span>{PERSONAL_INFO.location}</span>
       <span className="ml-4">👨‍💻</span>
@@ -67,20 +67,20 @@ const HeroHeading = () => (
 );
 
 const HeroDescription = () => (
-  <div className="space-y-8 text-gray-300 leading-relaxed max-w-3xl mx-auto">
+  <div className="space-y-8 text-white leading-relaxed max-w-3xl mx-auto">
     <p className="text-lg sm:text-xl md:text-2xl leading-loose">
       {PERSONAL_INFO.description}
     </p>
     
     <p className="text-base sm:text-lg md:text-xl leading-loose">
-      <span className="font-bold text-blue-300">Core Skills:</span> {PERSONAL_INFO.skills}
+      <span className="font-bold text-blue-500">Core Skills:</span> {PERSONAL_INFO.skills}
     </p>
   </div>
 );
 
 const HeroCTA = () => (
   <div className="pt-8 sm:pt-12">
-    <p className="text-lg sm:text-xl text-gray-300 mb-8">
+    <p className="text-lg sm:text-xl text-gray-200 mb-8">
       Something caught your eye?
     </p>
     <Link
