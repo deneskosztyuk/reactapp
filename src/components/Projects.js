@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import { BiLogoPostgresql } from "react-icons/bi";
 import { SiTailwindcss, SiJavascript, SiSpring, SiTensorflow } from "react-icons/si";
-import { GrMysql } from "react-icons/gr";
+import { GrMysql } from "react-icons/gr"; 
 
 const BREAKPOINTS = {
   MOBILE: 640,
