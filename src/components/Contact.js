@@ -407,10 +407,10 @@ const MathVerificationPopup = ({
       <div className="bg-slate-800/95 backdrop-blur-lg border border-slate-700/50 rounded-xl p-6 sm:p-8 max-w-md w-full mx-4 shadow-2xl">
         <div className="text-center mb-6">
           <h3 className="text-xl sm:text-2xl font-medium text-white mb-2">
-            Security Verification
+            BEEP...BOOP 🤖
           </h3>
           <p className="text-gray-300">
-            Please solve this simple math problem to continue
+            Please solve this simple math problem to prove you're not a robot or spam!
           </p>
         </div>
         
@@ -462,7 +462,8 @@ const MathVerificationPopup = ({
             className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
             disabled={isSubmitting}
           >
-            Generate new problem
+            Generate new problem.
+            <h4>(Come on, this looks simple enough already!)</h4>
           </button>
         </div>
       </div>
