@@ -1,430 +1,380 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-scroll";
-import { FaGithub, FaLinkedin, FaPowerOff, FaWifi } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaBars, FaTimes } from "react-icons/fa";
 
-// Constants
+const SCROLL_THRESHOLD = 20;
+const SECTION_OFFSET = 200;
+const SCROLL_DURATION = 600;
+const CLICK_OUTSIDE_DELAY = 100;
+
 const NAVIGATION_ITEMS = [
-  { to: "hero", label: "HOME" },
-  { to: "work-experience", label: "WORK_EXP" },
-  { to: "projects", label: "PROJECTS"},
-  { to: "contact", label: "CONTACT" }
+  { to: "hero", label: "Home" },
+  { to: "work-experience", label: "Experience" },
+  { to: "projects", label: "Projects" },
+  { to: "contact", label: "Contact" }
 ];
 
 const SOCIAL_LINKS = [
   {
     href: "https://github.com/deneskosztyuk",
-    icon: FaGithub,
-    label: "GITHUB_REPO"
+    icon: <FaGithub />,
+    label: "GitHub"
   },
   {
     href: "https://www.linkedin.com/in/deneskosztyuk/",
-    icon: FaLinkedin,
-    label: "LINKEDIN_NET"
+    icon: <FaLinkedin />,
+    label: "LinkedIn"
   }
 ];
 
-// Custom Hook for System Status Animation
-const useSystemStatus = () => {
-  const [systemStatus, setSystemStatus] = useState("INITIALIZING");
-  const [signalStrength, setSignalStrength] = useState(0);
-
-  useEffect(() => {
-    // Simulate system boot sequence
-    const bootSequence = [
-      { status: "INITIALIZING", delay: 0 },
-      { status: "LOADING", delay: 500 },
-      { status: "CONNECTING", delay: 1000 },
-      { status: "OPERATIONAL", delay: 1500 }
-    ];
-
-    bootSequence.forEach(({ status, delay }) => {
-      setTimeout(() => setSystemStatus(status), delay);
-    });
-
-    // Animate signal strength
-    const signalInterval = setInterval(() => {
-      setSignalStrength(prev => (prev + 1) % 6);
-    }, 800);
-
-    return () => clearInterval(signalInterval);
-  }, []);
-
-  return { systemStatus, signalStrength };
+const NAVBAR_STYLES = {
+  scrolled: "bg-slate-900/95 backdrop-blur-md py-3 border-b border-slate-800/50 shadow-lg shadow-black/10",
+  transparent: "bg-transparent py-4 sm:py-6"
 };
 
-// Custom Hook for Mobile Menu
+const useScrollDetection = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return isScrolled;
+};
+
+const useActiveSection = () => {
+  const [activeSection, setActiveSection] = useState("hero");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + SECTION_OFFSET;
+      
+      for (const section of NAVIGATION_ITEMS) {
+        const element = document.getElementById(section.to);
+        if (element && 
+            element.offsetTop <= scrollPosition && 
+            element.offsetTop + element.offsetHeight > scrollPosition) {
+          setActiveSection(section.to);
+          break;
+        }
+      }
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return activeSection;
+};
+
 const useMobileMenu = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen(prev => !prev);
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (isMobileMenuOpen && 
+          !mobileMenu?.contains(e.target) && 
+          !mobileMenuButton?.contains(e.target)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    
+    if (isMobileMenuOpen) {
+      setTimeout(() => {
+        document.addEventListener("click", handleClickOutside);
+      }, CLICK_OUTSIDE_DELAY);
+    }
+    
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [isMobileMenuOpen]);
+
+  const toggleMobileMenu = (e) => {
+    e.stopPropagation();
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu };
 };
 
-// System Status Display Component
-const SystemStatusDisplay = ({ systemStatus, signalStrength }) => (
-  <div className="hidden lg:flex items-center space-x-3 text-xs font-mono">
-    <div className="flex items-center space-x-1">
-      <FaPowerOff className={`text-xs ${systemStatus === "OPERATIONAL" ? "text-green-400" : "text-yellow-400"}`} />
-      <span className="text-green-300">{systemStatus}</span>
-    </div>
-    
-    <div className="h-4 w-px bg-green-600"></div>
-    
-    <div className="flex items-center space-x-1">
-      <FaWifi className="text-green-400 text-xs" />
-      <SignalStrengthIndicator strength={signalStrength} size="xs" />
-    </div>
-    
-    <div className="text-green-400">
-      {new Date().toLocaleTimeString('en-US', { 
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      })}
-    </div>
-  </div>
-);
-
-// Signal Strength Indicator
-const SignalStrengthIndicator = ({ strength, size = "sm" }) => {
-  const bars = 5;
-  const filledBars = Math.min(strength, bars);
-
-  return (
-    <div className="flex items-end space-x-0.5">
-      {Array.from({ length: bars }, (_, i) => (
-        <div
-          key={i}
-          className={`w-0.5 ${size === "xs" ? "h-2" : "h-3"} ${
-            i < filledBars ? 'bg-green-400 animate-pulse' : 'bg-gray-600'
-          }`}
-          style={{ height: `${(i + 1) * (size === "xs" ? 2 : 3)}px` }}
-        />
-      ))}
-    </div>
-  );
-};
-
-// Technical Welcome Section Component
-const TechnicalWelcomeSection = ({ systemStatus }) => (
-  <div className="flex items-center space-x-4">
-    {/* System ID Badge */}
-    <div className="bg-green-900 border border-green-400 px-3 py-1 rounded">
-      <span className="text-green-400 font-mono text-xs font-bold">
-        SYS_ID: PORTFOLIO_v2.1
-      </span>
-    </div>
-    
-    {/* Social Circuit Connections */}
-    <div className="hidden md:flex items-center space-x-2">
-      {SOCIAL_LINKS.map(({ href, icon: Icon, label }) => (
-        <TechnicalSocialLink
-          key={label}
-          href={href}
-          icon={<Icon />}
-          label={label}
-        />
-      ))}
-    </div>
-  </div>
-);
-
-// Technical Social Link Component
-const TechnicalSocialLink = ({ href, icon, label }) => (
-  <div className="relative group">
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center justify-center w-8 h-8 border border-green-400 bg-gray-900 hover:bg-green-900 transition-all duration-300 group-hover:animate-voltage-glow"
-      aria-label={label}
+const Logo = () => (
+  <div className="flex-shrink-0">
+    <Link
+      to="hero"
+      smooth={true}
+      duration={SCROLL_DURATION}
+      className="cursor-pointer"
     >
-      <div className="text-green-400 text-sm group-hover:text-green-300">
-        {icon}
+      <div className="text-xl sm:text-2xl font-light text-white hover:text-cyan-400 transition-colors duration-300">
+        <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">
+          Velkommen
+        </span>
       </div>
-    </a>
+    </Link>
+  </div>
+);
+
+const NavigationItem = ({ item, activeSection }) => (
+  <li key={item.to}>
+    <Link
+      to={item.to}
+      spy={true}
+      smooth={true}
+      duration={SCROLL_DURATION}
+      className={`relative text-sm lg:text-base font-medium transition-all duration-300 cursor-pointer ${
+        activeSection === item.to
+          ? "text-cyan-400"
+          : "text-gray-300 hover:text-cyan-300"
+      }`}
+    >
+      {item.label}
+      {activeSection === item.to && (
+        <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"></span>
+      )}
+    </Link>
+  </li>
+);
+
+const SocialLink = ({ link }) => (
+  <a
+    key={link.label}
+    href={link.href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-gray-400 hover:text-cyan-400 transition-colors duration-300 transform hover:scale-110"
+    aria-label={link.label}
+  >
+    <div className="w-5 h-5">{link.icon}</div>
+  </a>
+);
+
+const DesktopNavigation = ({ activeSection }) => (
+  <div className="hidden md:flex items-center space-x-8 lg:space-x-12">
+    <ul className="flex space-x-8 lg:space-x-10">
+      {NAVIGATION_ITEMS.map((item) => (
+        <NavigationItem key={item.to} item={item} activeSection={activeSection} />
+      ))}
+    </ul>
     
-    {/* Connection trace */}
-    <div className="absolute -bottom-1 left-1/2 w-0.5 h-2 bg-green-400 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-    
-    {/* Technical label */}
-    <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-      <div className="bg-gray-900 border border-green-400 px-2 py-1 text-xs font-mono text-green-400 whitespace-nowrap">
-        {label}
-      </div>
+    <div className="flex items-center space-x-4 border-l border-slate-700/50 pl-6 ml-4">
+      {SOCIAL_LINKS.map((link) => (
+        <SocialLink key={link.label} link={link} />
+      ))}
     </div>
   </div>
 );
 
-// Technical Hamburger Menu Button
-const TechnicalHamburgerButton = ({ isOpen, onClick }) => {
-  return (
+const HamburgerButton = ({ isMobileMenuOpen, toggleMobileMenu }) => (
+  <div className="md:hidden">
     <button
-      className="md:hidden relative w-10 h-10 border border-green-400 bg-gray-900 hover:bg-green-900 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-      onClick={onClick}
-      aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+      id="mobile-menu-button"
+      onClick={toggleMobileMenu}
+      className="relative p-2 text-gray-300 hover:text-cyan-400 focus:outline-none transition-all duration-300 transform hover:scale-110 hamburger-button"
+      aria-label="Toggle menu"
+      type="button"
     >
-      {/* Circuit pattern background */}
-      <div className="absolute inset-1 opacity-20">
-        <div className="w-full h-full" style={{
-          backgroundImage: 'linear-gradient(45deg, #22c55e 25%, transparent 25%), linear-gradient(-45deg, #22c55e 25%, transparent 25%)',
-          backgroundSize: '4px 4px'
-        }}></div>
+      <div className="hamburger-container">
+        <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
+        <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
+        <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
       </div>
-      
-      {/* Menu bars */}
-      <div className="relative z-10 flex flex-col justify-center items-center h-full">
-        <span className={`block w-4 h-0.5 bg-green-400 transform transition-all duration-300 ${
-          isOpen ? 'rotate-45 translate-y-0.5' : '-translate-y-1'
-        }`} />
-        <span className={`block w-4 h-0.5 bg-green-400 transform transition-all duration-300 ${
-          isOpen ? 'opacity-0' : 'opacity-100'
-        }`} />
-        <span className={`block w-4 h-0.5 bg-green-400 transform transition-all duration-300 ${
-          isOpen ? '-rotate-45 -translate-y-0.5' : 'translate-y-1'
-        }`} />
-      </div>
-      
-      {/* Status indicator */}
-      <div className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ${
-        isOpen ? 'bg-red-400 animate-pulse' : 'bg-green-400'
-      }`}></div>
     </button>
-  );
-};
-
-// Desktop Technical Navigation
-const DesktopTechnicalNavigation = () => (
-  <nav className="hidden md:flex items-center space-x-1">
-    {/* Main circuit trace */}
-    <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-green-400/20 via-green-400/60 to-green-400/20 transform -translate-y-1/2 -z-10"></div>
-    
-    {NAVIGATION_ITEMS.map(({ to, label, voltage }, index) => (
-      <TechnicalNavItem 
-        key={to} 
-        to={to} 
-        label={label} 
-        voltage={voltage}
-        index={index}
-      />
-    ))}
-  </nav>
+  </div>
 );
 
-// Mobile Technical Navigation
-const MobileTechnicalNavigation = ({ isOpen, onClose }) => {
+const MobileMenuItem = ({ item, index, activeSection, closeMobileMenu }) => (
+  <li key={item.to} className={`animate-slide-in-${index}`}>
+    <Link
+      to={item.to}
+      spy={true}
+      smooth={true}
+      duration={SCROLL_DURATION}
+      onClick={closeMobileMenu}
+      className={`block py-4 px-4 text-lg font-medium transition-all duration-300 cursor-pointer rounded-lg ${
+        activeSection === item.to
+          ? "text-cyan-400 bg-cyan-400/10 border-l-4 border-cyan-400 shadow-lg shadow-cyan-400/20"
+          : "text-gray-300 hover:text-cyan-300 hover:bg-slate-800/50 hover:pl-6"
+      }`}
+    >
+      {item.label}
+    </Link>
+  </li>
+);
+
+const MobileSocialLink = ({ link, index }) => (
+  <a
+    key={link.label}
+    href={link.href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className={`text-gray-400 hover:text-cyan-400 transition-all duration-300 transform hover:scale-125 hover:rotate-12 animate-bounce-in-${index}`}
+    aria-label={link.label}
+  >
+    <div className="w-8 h-8 p-1 rounded-full hover:bg-cyan-400/10">{link.icon}</div>
+  </a>
+);
+
+const MobileMenu = ({ isMobileMenuOpen, activeSection, closeMobileMenu }) => {
+  if (!isMobileMenuOpen) return null;
+
   return (
-    <div className={`md:hidden absolute top-full left-0 right-0 bg-slate-950/95 backdrop-blur-lg border-t border-green-400/30 transform transition-all duration-500 ${
-      isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
-    }`}>
-      {/* PCB Pattern Background */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="w-full h-full" style={{
-          backgroundImage: `
-            radial-gradient(circle at 25px 25px, #22c55e 2px, transparent 2px),
-            linear-gradient(#1f2937 1px, transparent 1px),
-            linear-gradient(90deg, #1f2937 1px, transparent 1px)
-          `,
-          backgroundSize: '25px 25px, 25px 25px, 25px 25px'
-        }}></div>
-      </div>
+    <>
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 animate-fade-in" onClick={closeMobileMenu}></div>
       
-      <nav className="relative z-10 p-6">
-        {/* Mobile circuit trace */}
-        <svg className="absolute left-4 top-0 w-full h-full pointer-events-none">
-          <line 
-            x1="8" y1="0" x2="8" y2="100%" 
-            stroke="#22c55e" 
-            strokeWidth="2" 
-            opacity="0.6"
-          />
-        </svg>
-        
-        <div className="space-y-4 ml-8">
-          {NAVIGATION_ITEMS.map(({ to, label, voltage }, index) => (
-            <div
-              key={to}
-              className={`transform transition-all duration-300 ${
-                isOpen ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0'
-              }`}
-              style={{ transitionDelay: isOpen ? `${index * 100}ms` : '0ms' }}
-            >
-              <MobileTechnicalNavItem 
-                to={to} 
-                label={label} 
-                voltage={voltage}
-                onClick={onClose} 
+      <div 
+        id="mobile-menu"
+        className="md:hidden relative z-50 bg-slate-900/98 backdrop-blur-lg border-t border-slate-800/50 shadow-2xl animate-slide-down"
+      >
+        <div className="px-4 py-6 space-y-6">
+          <ul className="space-y-2">
+            {NAVIGATION_ITEMS.map((item, index) => (
+              <MobileMenuItem 
+                key={item.to}
+                item={item} 
+                index={index} 
+                activeSection={activeSection} 
+                closeMobileMenu={closeMobileMenu} 
               />
-            </div>
-          ))}
+            ))}
+          </ul>
           
-          {/* Mobile Social Links */}
-          <div className={`pt-4 border-t border-green-400/30 transform transition-all duration-300 ${
-            isOpen ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0'
-          }`} style={{ transitionDelay: isOpen ? `${NAVIGATION_ITEMS.length * 100}ms` : '0ms' }}>
-            <div className="text-green-400 font-mono text-xs mb-3">EXTERNAL_LINKS:</div>
-            <div className="flex space-x-4">
-              {SOCIAL_LINKS.map(({ href, icon: Icon, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-2 text-green-300 hover:text-green-400 transition-colors"
-                >
-                  <Icon className="text-sm" />
-                  <span className="font-mono text-xs">{label}</span>
-                </a>
+          <div className="pt-6 border-t border-slate-800/50 animate-slide-in-social">
+            <div className="flex space-x-8 justify-center">
+              {SOCIAL_LINKS.map((link, index) => (
+                <MobileSocialLink key={link.label} link={link} index={index} />
               ))}
             </div>
           </div>
         </div>
-      </nav>
-    </div>
-  );
-};
-
-// Technical Navigation Item for Desktop
-const TechnicalNavItem = ({ to, label, voltage, index }) => {
-  return (
-    <div className="relative group">
-      {/* Component housing */}
-      <Link
-        to={to}
-        smooth={true}
-        duration={600}
-        className="block relative cursor-pointer"
-      >
-        <div className="bg-gray-900 border border-green-400 px-4 py-2 hover:bg-green-900 transition-all duration-300 group-hover:animate-voltage-glow">
-          <div className="font-mono text-xs text-green-100 group-hover:text-white">
-            {label}
-          </div>
-        </div>
-        
-        {/* Voltage indicator */}
-        <div className="absolute -top-2 -right-1 bg-green-400 text-black px-1 text-xs font-mono font-bold">
-          {voltage}
-        </div>
-        
-        {/* Connection point */}
-        <div className="absolute top-1/2 -left-1 w-2 h-2 bg-green-400 transform -translate-y-1/2 rotate-45"></div>
-      </Link>
-    </div>
-  );
-};
-
-// Mobile Technical Navigation Item
-const MobileTechnicalNavItem = ({ to, label, voltage, onClick }) => {
-  return (
-    <Link
-      to={to}
-      smooth={true}
-      duration={600}
-      onClick={onClick}
-      className="block relative cursor-pointer group"
-    >
-      <div className="bg-gray-900 border border-green-400 p-3 hover:bg-green-900 transition-all duration-300 relative">
-        {/* Component label */}
-        <div className="absolute -top-2 left-2 bg-green-400 text-black px-2 py-0.5 text-xs font-mono font-bold">
-          COMPONENT_{label}
-        </div>
-        
-        <div className="flex items-center justify-between mt-2">
-          <span className="font-mono text-sm text-green-100 group-hover:text-white">
-            {label}
-          </span>
-          <span className="font-mono text-xs text-green-400">
-            {voltage}
-          </span>
-        </div>
-        
-        {/* Connection trace */}
-        <div className="absolute left-0 top-1/2 w-4 h-0.5 bg-green-400 transform -translate-y-1/2 -translate-x-4"></div>
       </div>
-    </Link>
+    </>
   );
 };
 
-// Main Technical Navbar Component
+const NavbarStyles = () => (
+  <style jsx>{`
+    .hamburger-container {
+      width: 24px;
+      height: 18px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hamburger-line {
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      border-radius: 2px;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      transform-origin: center;
+    }
+
+    .hamburger-line:first-child.active {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger-line:nth-child(2).active {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    .hamburger-line:last-child.active {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slide-down {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slide-in-0 {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slide-in-1 {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slide-in-2 {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slide-in-3 {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slide-in-social {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce-in-0 {
+      from { opacity: 0; transform: scale(0) rotate(-180deg); }
+      to { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes bounce-in-1 {
+      from { opacity: 0; transform: scale(0) rotate(-180deg); }
+      to { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    .animate-fade-in { animation: fade-in 0.3s ease-out; }
+    .animate-slide-down { animation: slide-down 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+    .animate-slide-in-0 { animation: slide-in-0 0.5s ease-out 0.1s both; }
+    .animate-slide-in-1 { animation: slide-in-1 0.5s ease-out 0.2s both; }
+    .animate-slide-in-2 { animation: slide-in-2 0.5s ease-out 0.3s both; }
+    .animate-slide-in-3 { animation: slide-in-3 0.5s ease-out 0.4s both; }
+    .animate-slide-in-social { animation: slide-in-social 0.6s ease-out 0.5s both; }
+    .animate-bounce-in-0 { animation: bounce-in-0 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.6s both; }
+    .animate-bounce-in-1 { animation: bounce-in-1 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.7s both; }
+  `}</style>
+);
+
 const Navbar = () => {
-  const { systemStatus, signalStrength } = useSystemStatus();
+  const isScrolled = useScrollDetection();
+  const activeSection = useActiveSection();
   const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu();
-  const [currentTime, setCurrentTime] = useState(new Date());
 
-  // Update time every second
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  // Close mobile menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isMobileMenuOpen && !event.target.closest('nav')) {
-        closeMobileMenu();
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [isMobileMenuOpen, closeMobileMenu]);
+  const navbarClass = `fixed w-full z-50 transition-all duration-300 ${
+    isScrolled ? NAVBAR_STYLES.scrolled : NAVBAR_STYLES.transparent
+  }`;
 
   return (
-    <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 w-full max-w-7xl mx-auto z-50 px-4">
-      {/* Main Navigation Container */}
-      <div className="relative bg-slate-950/90 backdrop-blur-lg border-2 border-green-400/50 shadow-lg">
-        {/* PCB Background Pattern */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="w-full h-full" style={{
-            backgroundImage: `
-              radial-gradient(circle at 25px 25px, #22c55e 2px, transparent 2px),
-              linear-gradient(#1f2937 1px, transparent 1px),
-              linear-gradient(90deg, #1f2937 1px, transparent 1px)
-            `,
-            backgroundSize: '25px 25px, 25px 25px, 25px 25px'
-          }}></div>
-        </div>
-
-        <div className="relative z-10 flex justify-between items-center p-4">
-          <TechnicalWelcomeSection systemStatus={systemStatus} />
-          
-          <TechnicalHamburgerButton 
-            isOpen={isMobileMenuOpen} 
-            onClick={toggleMobileMenu} 
-          />
-          
-          <DesktopTechnicalNavigation />
-          
-          <SystemStatusDisplay 
-            systemStatus={systemStatus} 
-            signalStrength={signalStrength}
+    <nav className={navbarClass}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center">
+          <Logo />
+          <DesktopNavigation activeSection={activeSection} />
+          <HamburgerButton 
+            isMobileMenuOpen={isMobileMenuOpen} 
+            toggleMobileMenu={toggleMobileMenu} 
           />
         </div>
-
-        <MobileTechnicalNavigation 
-          isOpen={isMobileMenuOpen} 
-          onClose={closeMobileMenu} 
-        />
       </div>
-
-      {/* Enhanced CSS Animations */}
-      <style jsx>{`
-        @keyframes voltage-glow {
-          0%, 100% { 
-            box-shadow: 0 0 5px rgba(34, 197, 94, 0.4);
-          }
-          50% { 
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.8), 0 0 30px rgba(34, 197, 94, 0.4);
-          }
-        }
-
-        .animate-voltage-glow {
-          animation: voltage-glow 1.5s ease-in-out infinite;
-        }
-      `}</style>
+      
+      <MobileMenu 
+        isMobileMenuOpen={isMobileMenuOpen} 
+        activeSection={activeSection} 
+        closeMobileMenu={closeMobileMenu} 
+      />
+      <NavbarStyles />
     </nav>
   );
 };
