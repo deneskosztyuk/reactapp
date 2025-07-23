@@ -26,7 +26,6 @@ const PROJECTS_PER_VIEW = {
   DESKTOP: 3
 };
 
-const BUTTON_WIDTH = 28;
 const TRANSITION_DURATION = 300;
 const GRADIENT_TEXT_CLASS = "bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text";
 
@@ -298,7 +297,7 @@ const NavigationButton = ({ direction, onClick, disabled, children }) => (
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`flex items-center justify-center space-x-2 w-${BUTTON_WIDTH} py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl transition-all duration-${TRANSITION_DURATION} ${
+    className={`flex items-center justify-center space-x-2 w-28 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl transition-all duration-300 ${
       !disabled 
         ? 'hover:border-cyan-500/50 hover:bg-slate-800/70 text-gray-300 hover:text-cyan-400' 
         : 'opacity-50 cursor-not-allowed text-gray-600'
