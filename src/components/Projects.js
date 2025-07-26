@@ -76,7 +76,7 @@ const PROJECT_DATA = [
     id: 'robotic-arm',
     title: '3-Link Robotic Arm',
     subtitle: 'Robotics & Simulation',
-    description: 'Robotic arm simulation with 3 degrees of freedom, performing inverse and forward kinematics calculations with precise end-effector control.',
+    description: 'Robotic arm simulation with 360 degrees of freedom movement, performing inverse and forward kinematics calculations with precise end-effector control.',
     technologies: ['Python', 'NumPy', 'CoppeliaSim', 'Robotics', 'Kinematics'],
     githubUrl: 'https://github.com/deneskosztyuk/3-Link-Robotic-Arm---CoppeliaSim',
     featured: true,
