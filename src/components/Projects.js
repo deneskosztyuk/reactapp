@@ -60,7 +60,7 @@ const PROJECT_DATA = [
     subtitle: 'AI & Machine Learning',
     description: 'Custom-trained neural network using reinforcement learning in Unity. Features 3D environment interaction and intelligent decision-making for warehouse navigation.',
     technologies: ['TensorFlow', 'C#', 'Unity', 'Machine Learning', 'AI'],
-    githubUrl: 'https://github.com/deneskosztyuk/Warehouse-Navigation-Agent',
+    githubUrl: 'https://github.com/deneskosztyuk/Warehouse-Navigation-Agent/blob/main/README.md',
     featured: true,
   },
   {
@@ -69,7 +69,7 @@ const PROJECT_DATA = [
     subtitle: 'IoT & Embedded Systems',
     description: 'Hardware/software system simulating satellite behavior with environmental data collection, RF telemetry, and desktop monitoring interface.',
     technologies: ['Python', 'Flask', 'C/C++', 'ESP32', 'RF Communication'],
-    githubUrl: 'https://github.com/deneskosztyuk/DSPS_Guide-Deep-Space-Probe-Simulator',
+    githubUrl: 'https://github.com/deneskosztyuk/DSPS_Guide-Deep-Space-Probe-Simulator/blob/main/README.md',
     featured: false,
   },
   {
@@ -78,7 +78,7 @@ const PROJECT_DATA = [
     subtitle: 'Robotics & Simulation',
     description: 'Robotic arm simulation with 360 degrees of freedom movement, performing inverse and forward kinematics calculations with precise end-effector control.',
     technologies: ['Python', 'NumPy', 'CoppeliaSim', 'Robotics', 'Kinematics'],
-    githubUrl: 'https://github.com/deneskosztyuk/3-Link-Robotic-Arm---CoppeliaSim',
+    githubUrl: 'https://github.com/deneskosztyuk/3-Link-Robotic-Arm---CoppeliaSim/blob/master/readme.md',
     featured: true,
   },
   {
@@ -87,7 +87,7 @@ const PROJECT_DATA = [
     subtitle: 'Embedded Systems & Robotics',
     description: 'Autonomous robot using ATmega328p MCU with custom firmware, sensors, and PID control for obstacle avoidance and terrain navigation.',
     technologies: ['Embedded C', 'Arduino', 'KiCad', 'Electronics', 'Robotics'],
-    githubUrl: 'https://github.com/deneskosztyuk/Self-Navigating-Robotic-Device',
+    githubUrl: 'https://github.com/deneskosztyuk/Self-Navigating-Robotic-Device/blob/main/README.md',
     featured: true,
   },
 ];
