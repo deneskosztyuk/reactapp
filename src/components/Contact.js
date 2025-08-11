@@ -6,6 +6,15 @@ const FORM_CONFIG = {
   API_ENDPOINT: "https://api.web3forms.com/submit"
 };
 
+// In your form submission hook (e.g., submitForm function)
+const response = await fetch('/api/submit-form', { // Relative URL to your Vercel function
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(formValues), // No access key here!
+});
+// Handle response as before
+
+
 const MATH_CONFIG = {
   MAX_NUMBER: 15,
   MAX_SMALL_NUMBER: 8,
