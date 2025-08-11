@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaLinkedin, FaGithub, FaEnvelope, FaUser, FaPaperPlane } from "react-icons/fa";
 
 const FORM_CONFIG = {
@@ -226,15 +226,15 @@ const useFormSubmission = () => {
 };
 
 const SectionHeader = () => (
-  <div className="space-y-6 sm:space-y-8 mb-16 sm:mb-20">
-    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white leading-tight">
+  <div className="space-y-6 mb-16">
+    <h1 className="text-3xl sm:text-4xl font-light text-white leading-tight">
       Let's{" "}
       <span className={GRADIENT_TEXT_CLASS}>
         Connect
       </span>
     </h1>
     
-    <p className="text-lg sm:text-xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto">
+    <p className="text-lg text-gray-300 font-light leading-relaxed max-w-3xl mx-auto">
       Ready to collaborate or have a question? I'd love to hear from you. Send me a message or connect through social media.
     </p>
   </div>
@@ -274,7 +274,7 @@ const FormField = ({ type = "text", name, placeholder, value, onChange, rows, re
         value={value}
         onChange={onChange}
         rows={type === "textarea" ? rows : undefined}
-        className={`w-full ${icon ? 'pl-12' : 'pl-4'} pr-4 py-4 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500/50 focus:bg-slate-800/70 transition-all duration-300 resize-none`}
+        className={`w-full ${icon ? 'pl-12' : 'pl-4'} pr-4 py-4 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500/50 transition-all duration-300 resize-none`}
         required={required}
       />
     </div>
@@ -295,21 +295,21 @@ const SubmitButton = ({ isSubmitting }) => (
 const StatusMessage = ({ success, errorMessage }) => {
   if (success === true) {
     return (
-      <div className="mt-6 p-4 bg-green-900/20 border border-green-500/50 rounded-xl text-center">
-        <div className="text-green-400 font-medium mb-1">Message Sent Successfully!</div>
-        <div className="text-green-300 text-sm">Thank you for reaching out. I'll get back to you soon.</div>
+      <div className="mt-6 p-4 bg-green-900/20 border border-green-500/50 rounded-xl text-center text-green-400">
+        <div className="font-medium mb-1">Message Sent Successfully!</div>
+        <div className="text-sm">Thank you for reaching out. I'll get back to you soon.</div>
       </div>
     );
   }
 
   if (success === false) {
     return (
-      <div className="mt-6 p-4 bg-red-900/20 border border-red-500/50 rounded-xl text-center">
-        <div className="text-red-400 font-medium mb-2">Message Failed to Send</div>
+      <div className="mt-6 p-4 bg-red-900/20 border border-red-500/50 rounded-xl text-center text-red-400">
+        <div className="font-medium mb-2">Message Failed to Send</div>
         {errorMessage && (
-          <p className="text-red-300 text-sm mb-2">{errorMessage}</p>
+          <p className="text-sm mb-2">{errorMessage}</p>
         )}
-        <p className="text-red-300 text-sm">Please try using the direct contact links instead.</p>
+        <p className="text-sm">Please try using the direct contact links instead.</p>
       </div>
     );
   }
@@ -318,8 +318,8 @@ const StatusMessage = ({ success, errorMessage }) => {
 };
 
 const ContactForm = ({ formState, formSubmission, onSubmit }) => (
-  <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 sm:p-8">
-    <h2 className="text-2xl font-medium text-white mb-6 text-left">Send Message</h2>
+  <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 max-w-2xl mx-auto">
+    <h2 className="text-2xl font-medium text-white mb-6">Send Message</h2>
     
     <form className="space-y-6" onSubmit={onSubmit}>
       <HoneypotField 
@@ -366,29 +366,6 @@ const ContactForm = ({ formState, formSubmission, onSubmit }) => (
   </div>
 );
 
-const AvailabilityIndicator = ({ isAvailable, label }) => (
-  <div className="flex items-center space-x-3 text-gray-300">
-    <span className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-green-400 animate-pulse' : 'bg-cyan-400'}`}></span>
-    <span>{label}</span>
-  </div>
-);
-
-const ContactInfo = () => (
-  <div className="space-y-8">
-    <div className="text-left">
-      <h2 className="text-2xl font-medium text-white mb-4">Get In Touch</h2>
-      <p className="text-gray-300 leading-relaxed mb-6">
-        I'm currently available for new opportunities and interesting projects. Whether you have a question about my work or want to discuss potential collaboration, feel free to reach out.
-      </p>
-      
-      <div className="space-y-4">
-        <AvailabilityIndicator isAvailable={true} label="Available for work" />
-        <AvailabilityIndicator isAvailable={false} label="Response within 12 hours" />
-      </div>
-    </div>
-  </div>
-);
-
 const MathVerificationPopup = ({ 
   isVisible, 
   mathChallenge, 
@@ -403,10 +380,10 @@ const MathVerificationPopup = ({
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-slate-800/95 backdrop-blur-lg border border-slate-700/50 rounded-xl p-6 sm:p-8 max-w-md w-full mx-4 shadow-2xl">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+      <div className="bg-slate-800/95 border border-slate-700/50 rounded-xl p-6 max-w-md w-full shadow-2xl">
         <div className="text-center mb-6">
-          <h3 className="text-xl sm:text-2xl font-medium text-white mb-2">
+          <h3 className="text-xl font-medium text-white mb-2">
             BEEP...BOOP 🤖
           </h3>
           <p className="text-gray-300">
@@ -415,7 +392,7 @@ const MathVerificationPopup = ({
         </div>
         
         <div className="text-center mb-6">
-          <div className="text-3xl sm:text-4xl font-light text-cyan-400 mb-4">
+          <div className="text-3xl font-light text-cyan-400 mb-4">
             {mathChallenge.question} = ?
           </div>
           
@@ -439,7 +416,7 @@ const MathVerificationPopup = ({
           )}
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col gap-3">
           <button
             onClick={onVerify}
             className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-700 text-white rounded-xl hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-cyan-500/25 disabled:opacity-50 disabled:transform-none"
@@ -462,8 +439,7 @@ const MathVerificationPopup = ({
             className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
             disabled={isSubmitting}
           >
-            Generate new problem.
-            <h4>(Come on, this looks simple enough already!)</h4>
+            Generate new problem (Come on, this looks simple enough already!)
           </button>
         </div>
       </div>
@@ -519,19 +495,16 @@ export default function Contact() {
   return (
     <section 
       id="contact" 
-      className="min-h-screen py-20 sm:py-24 md:py-28 px-4 sm:px-6 md:px-12 lg:px-20"
+      className="min-h-screen py-20 px-4"
     >
       <div className="w-full max-w-4xl mx-auto text-center">
         <SectionHeader />
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          <ContactForm 
-            formState={formState}
-            formSubmission={formSubmission}
-            onSubmit={handleFormSubmit}
-          />
-          <ContactInfo />
-        </div>
+        
+        <ContactForm 
+          formState={formState}
+          formSubmission={formSubmission}
+          onSubmit={handleFormSubmit}
+        />
       </div>
 
       <MathVerificationPopup
