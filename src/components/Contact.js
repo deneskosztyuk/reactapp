@@ -6,7 +6,6 @@ const FORM_CONFIG = {
   API_ENDPOINT: "https://api.web3forms.com/submit"
 };
 
-
 const MATH_CONFIG = {
   MAX_NUMBER: 15,
   MAX_SMALL_NUMBER: 8,
@@ -24,7 +23,7 @@ const SOCIAL_LINKS = [
     href: "https://github.com/deneskosztyuk",
     icon: <FaGithub />,
     label: "GitHub", 
-    color: "gray"
+    color: "blue"
   }
 ];
 
@@ -318,6 +317,23 @@ const StatusMessage = ({ success, errorMessage }) => {
   return null;
 };
 
+const SocialLinks = () => (
+  <div className="mt-8 flex justify-center space-x-6">
+    {SOCIAL_LINKS.map((link, index) => (
+      <a
+        key={index}
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`text-${link.color}-500 hover:text-${link.color}-400 transition-colors text-3xl`}
+        aria-label={link.label}
+      >
+        {link.icon}
+      </a>
+    ))}
+  </div>
+);
+
 const ContactForm = ({ formState, formSubmission, onSubmit }) => (
   <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 max-w-2xl mx-auto">
     <h2 className="text-2xl font-medium text-white mb-6">Send Message</h2>
@@ -506,6 +522,8 @@ export default function Contact() {
           formSubmission={formSubmission}
           onSubmit={handleFormSubmit}
         />
+
+        <SocialLinks />
       </div>
 
       <MathVerificationPopup
