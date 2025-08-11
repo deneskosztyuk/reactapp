@@ -47,14 +47,14 @@ const TypewriterText = ({ text, gradient = false }) => {
 
 const HeroHeading = () => (
   <div className="space-y-6 sm:space-y-8">
-    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight">
+    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light text-white leading-tight">
       Hei, I'm{" "}
       <span className="block mt-4 sm:mt-6">
         <TypewriterText text={PERSONAL_INFO.name} gradient={true} />
       </span>
     </h1>
     
-    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-light leading-relaxed max-w-3xl mx-auto">
+    <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl text-white font-light leading-relaxed max-w-3xl mx-auto">
       <TypewriterText text={PERSONAL_INFO.title} />
     </h2>
     
@@ -68,7 +68,7 @@ const HeroHeading = () => (
 
 const HeroDescription = () => (
   <div className="space-y-8 text-white leading-relaxed max-w-3xl mx-auto">
-    <p className="text-lg sm:text-xl md:text-2xl leading-loose">
+    <p className="text-base sm:text-lg md:text-xl leading-loose">
       {PERSONAL_INFO.description}
     </p>
     
