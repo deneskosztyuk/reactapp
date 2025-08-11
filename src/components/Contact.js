@@ -2,9 +2,10 @@ import { useState } from "react";
 import { FaLinkedin, FaGithub, FaEnvelope, FaUser, FaPaperPlane } from "react-icons/fa";
 
 const FORM_CONFIG = {
-  ACCESS_KEY: "722cd945-9473-4c48-a538-7502a3ceaf27",
+  ACCESS_KEY: process.env.REACT_APP_WEB3FORMS_ACCESS_KEY,
   API_ENDPOINT: "https://api.web3forms.com/submit"
 };
+
 
 const MATH_CONFIG = {
   MAX_NUMBER: 15,
