@@ -49,22 +49,6 @@ const WORK_EXPERIENCES = [
     technologies: ['React', 'Node.js', 'Java', 'Spring Boot', 'Docker', 'AWS', 'discord.py']
   },
   {
-    id: 'academic-projects',
-    title: 'Computer Systems & Robotics Engineer',
-    company: 'University Projects',
-    period: '2020 – 2024',
-    location: 'UK',
-    type: 'Academic',
-    icon: <FaRobot />,
-    description: 'Completed projects in IoT, embedded systems, and robotics during my degree.',
-    achievements: [
-      'Built self-navigating robots & satellite simulation devices',
-      'Developed NN for an AI warehouse robot',
-      'Simulated a 3-link robotic arm (kinematics)'
-    ],
-    technologies: ['C/C++', 'Unity', 'Java', 'Assembly', 'Python', 'OpenCV', 'FPGA', 'IoT']
-  },
-  {
     id: 'jabil',
     title: 'Line Maintenance Engineer',
     company: 'Jabil Ltd.',
@@ -79,6 +63,22 @@ const WORK_EXPERIENCES = [
       'Trained 8 new technicians on RoHS & safety compliance'
     ],
     technologies: ['PCB', 'Circuit Production', 'IoT', 'Embedded Systems', 'Robotics']
+  },
+  {
+    id: 'academic-projects',
+    title: 'Computer Systems & Robotics Engineer',
+    company: 'University Projects',
+    period: '2020 – 2024',
+    location: 'UK',
+    type: 'Academic',
+    icon: <FaRobot />,
+    description: 'Completed projects in IoT, embedded systems, and robotics during my degree.',
+    achievements: [
+      'Built self-navigating robots & satellite simulation devices',
+      'Developed NN for an AI warehouse robot',
+      'Simulated a 3-link robotic arm (kinematics)'
+    ],
+    technologies: ['C/C++', 'Unity', 'Java', 'Assembly', 'Python', 'OpenCV', 'FPGA', 'IoT']
   }
 ];
 
