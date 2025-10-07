@@ -10,10 +10,10 @@ const DEFAULT_TEXT_CLASS = "text-gray-300";
 
 const PERSONAL_INFO = {
   name: "Denes Kosztyuk",
-  title: "Robotics | IoT | Embedded Systems | Backend & API",
+  title: "Robotics | Embedded Systems | Fullstack",
   location: "Stavanger, Norway / Remote",
-  description: "Computer Systems & Robotics Engineering graduate specializing in robotics and embedded systems. Professional experience through internship and in-depth experience with academic and personal projects.",
-  skills: "Embedded C, Python, Java, JavaScript, KiCad, EasyEDA, Docker, Git/GitHub CI/CD, PostgreSQL. Two years freelance development experience."
+  description: "Computer Systems & Robotics Engineering graduate specializing in software and web applications, robotics and embedded systems. Professional experience through internship and in-depth experience with academic and personal projects.",
+  skills: "Embedded C, Python, Java, JavaScript, KiCad, EasyEDA, Docker, Git, PostgreSQL. Over two years freelance development experience."
 };
 
 const TypewriterText = ({ text, gradient = false }) => {

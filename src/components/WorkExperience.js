@@ -26,14 +26,14 @@ const WORK_EXPERIENCES = [
     description: 'Developed asynchronous processes and performance optimizations for a location-based B2B marketplace.',
     achievements: [
       'Implemented FastAPI background tasks for image management',
-      'Enhanced performance with Redis caching strategies',
+      'Enhanced performance with code reviews and refactoring using clean code practices',
       'Increased productivity by 30% through comprehensive testing'
     ],
     technologies: ['Python', 'FastAPI', 'Redis', 'PostgreSQL', 'pytest']
   },
   {
     id: 'freelance-projects',
-    title: 'Software Developer',
+    title: 'Software Developer Contractor / Programming Tutor',
     company: 'Freelance Contractor',
     period: '2023 – Present',
     location: 'Remote',
@@ -41,10 +41,10 @@ const WORK_EXPERIENCES = [
     icon: <FaGlobe />,
     description: 'Delivered custom web apps and software solutions for various clients.',
     achievements: [
-      'Built dynamic web applications with modern frameworks',
-      'Implemented RESTful APIs and database integrations',
-      'Deployed containerized applications on AWS',
-      'Designed and developed custom Discord bots'
+      'Built dynamic web applications with modern frameworks - Next.js, React',
+      'Implemented RESTful APIs and database integrations using Java Spring, FastAPI',
+      'Provided 1:1 tutoring in Python, Java, and embedded C programming for students and hobbyists',
+      'Consulted on projects to identify improvements and resolve performance bottlenecks'
     ],
     technologies: ['React', 'Node.js', 'Java', 'Spring Boot', 'Docker', 'AWS', 'discord.py']
   },
@@ -63,22 +63,6 @@ const WORK_EXPERIENCES = [
       'Trained 8 new technicians on RoHS & safety compliance'
     ],
     technologies: ['PCB', 'Circuit Production', 'IoT', 'Embedded Systems', 'Robotics']
-  },
-  {
-    id: 'academic-projects',
-    title: 'Computer Systems & Robotics Engineer',
-    company: 'University Projects',
-    period: '2020 – 2024',
-    location: 'UK',
-    type: 'Academic',
-    icon: <FaRobot />,
-    description: 'Completed projects in IoT, embedded systems, and robotics during my degree.',
-    achievements: [
-      'Built self-navigating robots & satellite simulation devices',
-      'Developed NN for an AI warehouse robot',
-      'Simulated a 3-link robotic arm (kinematics)'
-    ],
-    technologies: ['C/C++', 'Unity', 'Java', 'Assembly', 'Python', 'OpenCV', 'FPGA', 'IoT']
   }
 ];
 
