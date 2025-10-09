@@ -40,8 +40,7 @@ const TECH_STACK = [
   { icon: <SiSpring />, label: "Spring" },
   { icon: <BiLogoPostgresql />, label: "PostgreSQL" },
   { icon: <GrMysql />, label: "MySQL" },
-  { icon: <FaGit />, label: "Git" },
-  { icon: <FaAws />, label: "AWS" },
+  { icon: <FaGit />, label: "Git" }
 ];
 
 const PROJECT_DATA = [
