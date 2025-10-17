@@ -175,7 +175,7 @@ const DesktopNavigation = ({ activeSection }) => (
 );
 
 const HamburgerButton = ({ isMobileMenuOpen, toggleMobileMenu }) => (
-  <div className="md:hidden">
+  <div className="md:hidden pr-4">
     <button
       id="mobile-menu-button"
       onClick={toggleMobileMenu}
@@ -261,96 +261,6 @@ const MobileMenu = ({ isMobileMenuOpen, activeSection, closeMobileMenu }) => {
   );
 };
 
-const NavbarStyles = () => (
-  <style jsx>{`
-    .hamburger-container {
-      width: 24px;
-      height: 18px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .hamburger-line {
-      width: 100%;
-      height: 2px;
-      background: currentColor;
-      border-radius: 2px;
-      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      transform-origin: center;
-    }
-
-    .hamburger-line:first-child.active {
-      transform: translateY(8px) rotate(45deg);
-    }
-
-    .hamburger-line:nth-child(2).active {
-      opacity: 0;
-      transform: scaleX(0);
-    }
-
-    .hamburger-line:last-child.active {
-      transform: translateY(-8px) rotate(-45deg);
-    }
-
-    @keyframes fade-in {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slide-down {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slide-in-0 {
-      from { opacity: 0; transform: translateX(-30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes slide-in-1 {
-      from { opacity: 0; transform: translateX(-30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes slide-in-2 {
-      from { opacity: 0; transform: translateX(-30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes slide-in-3 {
-      from { opacity: 0; transform: translateX(-30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes slide-in-social {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes bounce-in-0 {
-      from { opacity: 0; transform: scale(0) rotate(-180deg); }
-      to { opacity: 1; transform: scale(1) rotate(0deg); }
-    }
-
-    @keyframes bounce-in-1 {
-      from { opacity: 0; transform: scale(0) rotate(-180deg); }
-      to { opacity: 1; transform: scale(1) rotate(0deg); }
-    }
-
-    .animate-fade-in { animation: fade-in 0.3s ease-out; }
-    .animate-slide-down { animation: slide-down 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-    .animate-slide-in-0 { animation: slide-in-0 0.5s ease-out 0.1s both; }
-    .animate-slide-in-1 { animation: slide-in-1 0.5s ease-out 0.2s both; }
-    .animate-slide-in-2 { animation: slide-in-2 0.5s ease-out 0.3s both; }
-    .animate-slide-in-3 { animation: slide-in-3 0.5s ease-out 0.4s both; }
-    .animate-slide-in-social { animation: slide-in-social 0.6s ease-out 0.5s both; }
-    .animate-bounce-in-0 { animation: bounce-in-0 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.6s both; }
-    .animate-bounce-in-1 { animation: bounce-in-1 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.7s both; }
-  `}</style>
-);
-
 const Navbar = () => {
   const isScrolled = useScrollDetection();
   const activeSection = useActiveSection();
@@ -361,24 +271,114 @@ const Navbar = () => {
   }`;
 
   return (
-    <nav className={navbarClass}>
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex justify-between items-center">
-          <Logo />
-          <DesktopNavigation activeSection={activeSection} />
-          <HamburgerButton 
-            isMobileMenuOpen={isMobileMenuOpen} 
-            toggleMobileMenu={toggleMobileMenu} 
-          />
+    <>
+      <style>{`
+        .hamburger-container {
+          width: 24px;
+          height: 18px;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+
+        .hamburger-line {
+          width: 100%;
+          height: 2px;
+          background: currentColor;
+          border-radius: 2px;
+          transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+          transform-origin: center;
+        }
+
+        .hamburger-line:first-child.active {
+          transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger-line:nth-child(2).active {
+          opacity: 0;
+          transform: scaleX(0);
+        }
+
+        .hamburger-line:last-child.active {
+          transform: translateY(-8px) rotate(-45deg);
+        }
+
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes slide-down {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slide-in-0 {
+          from { opacity: 0; transform: translateX(-30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slide-in-1 {
+          from { opacity: 0; transform: translateX(-30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slide-in-2 {
+          from { opacity: 0; transform: translateX(-30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slide-in-3 {
+          from { opacity: 0; transform: translateX(-30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slide-in-social {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce-in-0 {
+          from { opacity: 0; transform: scale(0) rotate(-180deg); }
+          to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes bounce-in-1 {
+          from { opacity: 0; transform: scale(0) rotate(-180deg); }
+          to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        .animate-fade-in { animation: fade-in 0.3s ease-out; }
+        .animate-slide-down { animation: slide-down 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .animate-slide-in-0 { animation: slide-in-0 0.5s ease-out 0.1s both; }
+        .animate-slide-in-1 { animation: slide-in-1 0.5s ease-out 0.2s both; }
+        .animate-slide-in-2 { animation: slide-in-2 0.5s ease-out 0.3s both; }
+        .animate-slide-in-3 { animation: slide-in-3 0.5s ease-out 0.4s both; }
+        .animate-slide-in-social { animation: slide-in-social 0.6s ease-out 0.5s both; }
+        .animate-bounce-in-0 { animation: bounce-in-0 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.6s both; }
+        .animate-bounce-in-1 { animation: bounce-in-1 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.7s both; }
+      `}</style>
+
+      <nav className={navbarClass}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-between items-center">
+            <Logo />
+            <DesktopNavigation activeSection={activeSection} />
+            <HamburgerButton 
+              isMobileMenuOpen={isMobileMenuOpen} 
+              toggleMobileMenu={toggleMobileMenu} 
+            />
+          </div>
         </div>
-      </div>
-      
-      <MobileMenu 
-        isMobileMenuOpen={isMobileMenuOpen} 
-        activeSection={activeSection} 
-        closeMobileMenu={closeMobileMenu} />
-      <NavbarStyles />
-    </nav>
+        
+        <MobileMenu 
+          isMobileMenuOpen={isMobileMenuOpen} 
+          activeSection={activeSection} 
+          closeMobileMenu={closeMobileMenu} 
+        />
+      </nav>
+    </>
   );
 };
 
