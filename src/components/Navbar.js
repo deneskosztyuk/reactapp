@@ -112,7 +112,7 @@ const Logo = () => (
       className="cursor-pointer"
     >
       <h1 className="text-xl font-bold tracking-widest text-white hover:text-cyan-400 transition-colors duration-300">
-        Velkommen til nettstedet mitt<span className="text-cyan-400">.</span>
+        Velkommen<span className="text-cyan-400"></span>
       </h1>
     </Link>
   </div>

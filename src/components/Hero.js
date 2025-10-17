@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-scroll";
+import { FaJava, FaPython, FaReact } from "react-icons/fa";
+import { SiTypescript, SiNextdotjs } from "react-icons/si";
+import { GiRobotAntennas } from "react-icons/gi";
+import { IoMdCellular } from "react-icons/io";
 
 const FADE_IN_DELAY = 100;
 const SCROLL_DURATION = 600;
@@ -9,7 +13,15 @@ const PERSONAL_INFO = {
   lastName: "KOSZTYUK",
   title: "SOFTWARE ENGINEER, ROBOTICS & FULLSTACK DEVELOPER.",
   location: "Stavanger, Norway / Remote",
-  skills: ["Java", "Python", "TypeScript", "React", "Next.js", "Robotics", "IoT"],
+  skills: [
+    { name: "Java", icon: <FaJava /> },
+    { name: "Python", icon: <FaPython /> },
+    { name: "TypeScript", icon: <SiTypescript /> },
+    { name: "React", icon: <FaReact /> },
+    { name: "Next.js", icon: <SiNextdotjs /> },
+    { name: "Robotics", icon: <GiRobotAntennas /> },
+    { name: "IoT", icon: <IoMdCellular /> },
+  ],
 };
 
 const HeroHeading = () => {
@@ -83,7 +95,7 @@ const SkillsMarquee = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Duplicate skills array for seamless loop
+  // Double the skills array for seamless infinite scroll
   const duplicatedSkills = [...PERSONAL_INFO.skills, ...PERSONAL_INFO.skills];
 
   return (
@@ -97,16 +109,30 @@ const SkillsMarquee = () => {
         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-900 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-900 to-transparent z-10 pointer-events-none" />
         
-        {/* Scrolling text */}
-        <div className="flex animate-marquee whitespace-nowrap">
-          {duplicatedSkills.map((skill, index) => (
-            <span
-              key={index}
-              className="inline-block px-8 text-xl sm:text-2xl font-black text-white opacity-10 tracking-wide"
-            >
-              {skill}
-            </span>
-          ))}
+        {/* Scrolling text with icons - true infinite scroll */}
+        <div className="flex">
+          <div className="flex animate-infinite-scroll">
+            {duplicatedSkills.map((skill, index) => (
+              <span
+                key={`first-${index}`}
+                className="inline-flex items-center gap-3 px-8 text-xl sm:text-2xl font-black text-white opacity-10 tracking-wide flex-shrink-0"
+              >
+                <span className="text-2xl sm:text-3xl">{skill.icon}</span>
+                <span className="whitespace-nowrap">{skill.name}</span>
+              </span>
+            ))}
+          </div>
+          <div className="flex animate-infinite-scroll" aria-hidden="true">
+            {duplicatedSkills.map((skill, index) => (
+              <span
+                key={`second-${index}`}
+                className="inline-flex items-center gap-3 px-8 text-xl sm:text-2xl font-black text-white opacity-10 tracking-wide flex-shrink-0"
+              >
+                <span className="text-2xl sm:text-3xl">{skill.icon}</span>
+                <span className="whitespace-nowrap">{skill.name}</span>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -165,12 +191,12 @@ const CTAButton = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Trigger glitch effect every 5 seconds
+  // Trigger glitch effect every 3 seconds
   useEffect(() => {
     const glitchInterval = setInterval(() => {
       setIsGlitching(true);
-      setTimeout(() => setIsGlitching(false), 400); // Glitch duration 400ms
-    }, 3000); // Every 3 seconds
+      setTimeout(() => setIsGlitching(false), 400);
+    }, 3000);
 
     return () => clearInterval(glitchInterval);
   }, []);
@@ -229,153 +255,6 @@ const FloatingShapes = () => {
   );
 };
 
-const HeroStyles = () => (
-  <style jsx>{`
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(45deg); }
-      50% { transform: translateY(-20px) rotate(45deg); }
-    }
-
-    @keyframes float-delayed {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-30px); }
-    }
-
-    @keyframes spin-slow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes pulse-glow {
-      0%, 100% { 
-        opacity: 0.3;
-        transform: scale(1);
-      }
-      50% { 
-        opacity: 0.5;
-        transform: scale(1.1);
-      }
-    }
-
-    @keyframes float-vertical {
-      0%, 100% { transform: translate(-50%, 0); }
-      50% { transform: translate(-50%, -10px); }
-    }
-
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    @keyframes glitch {
-      0% {
-        transform: translate(0);
-        filter: hue-rotate(0deg) brightness(1);
-      }
-      20% {
-        transform: translate(-2px, 2px);
-        filter: hue-rotate(0deg) brightness(1.2);
-      }
-      40% {
-        transform: translate(2px, -2px);
-        filter: hue-rotate(0deg) brightness(1.1);
-      }
-      60% {
-        transform: translate(-1px, 1px);
-        filter: hue-rotate(0deg) brightness(1.3);
-      }
-      80% {
-        transform: translate(1px, -1px);
-        filter: hue-rotate(0deg) brightness(1.1);
-      }
-      100% {
-        transform: translate(0);
-        filter: hue-rotate(0deg) brightness(1);
-      }
-    }
-
-    @keyframes glitch-text {
-      0%, 100% {
-        text-shadow: 
-          -2px 0 #ff006e,
-          2px 0 #00f5ff,
-          0 2px #39ff14,
-          0 -2px #9d4edd;
-        transform: translate(0);
-      }
-      20% {
-        text-shadow: 
-          2px 0 #ff006e,
-          -2px 0 #00f5ff,
-          -1px 2px #39ff14,
-          1px -2px #9d4edd;
-        transform: translate(-2px, 0);
-      }
-      40% {
-        text-shadow: 
-          -2px 0 #00f5ff,
-          2px 0 #39ff14,
-          1px -2px #ff006e,
-          -1px 2px #9d4edd;
-        transform: translate(2px, 0);
-      }
-      60% {
-        text-shadow: 
-          2px 0 #9d4edd,
-          -2px 0 #ff006e,
-          0 2px #00f5ff,
-          0 -2px #39ff14;
-        transform: translate(-1px, 0);
-      }
-      80% {
-        text-shadow: 
-          -1px 0 #39ff14,
-          1px 0 #9d4edd,
-          2px 1px #ff006e,
-          -2px -1px #00f5ff;
-        transform: translate(1px, 0);
-      }
-    }
-
-    .animate-float {
-      animation: float 6s ease-in-out infinite;
-    }
-
-    .animate-float-delayed {
-      animation: float-delayed 8s ease-in-out infinite;
-    }
-
-    .animate-spin-slow {
-      animation: spin-slow 20s linear infinite;
-    }
-
-    .animate-pulse-glow {
-      animation: pulse-glow 4s ease-in-out infinite;
-    }
-
-    .animate-float-vertical {
-      animation: float-vertical 3s ease-in-out infinite;
-    }
-
-    .animate-marquee {
-      animation: marquee 20s linear infinite;
-    }
-
-    .animate-marquee:hover {
-      animation-play-state: paused;
-    }
-
-    .animate-glitch {
-      animation: glitch 0.4s ease-in-out;
-    }
-
-    .animate-glitch-text {
-      animation: glitch-text 0.4s ease-in-out;
-    }
-  `}</style>
-);
-
-
 export default function Hero() {
   const [fadeIn, setFadeIn] = useState(false);
 
@@ -389,25 +268,170 @@ export default function Hero() {
   }`;
 
   return (
-    <section 
-      id="hero"
-      className="relative min-h-screen flex items-center justify-center px-6 sm:px-12 pb-32 overflow-hidden"
-    >
-      <FloatingShapes />
-      
-      <div className={containerClass}>
-        <div className="space-y-16">
-          <HeroHeading />
-          <LocationBadge />
-          <SkillsMarquee />
-          <div className="pt-8">
-            <CTAButton />
+    <>
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(45deg); }
+          50% { transform: translateY(-20px) rotate(45deg); }
+        }
+
+        @keyframes float-delayed {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-30px); }
+        }
+
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-glow {
+          0%, 100% { 
+            opacity: 0.3;
+            transform: scale(1);
+          }
+          50% { 
+            opacity: 0.5;
+            transform: scale(1.1);
+          }
+        }
+
+        @keyframes float-vertical {
+          0%, 100% { transform: translate(-50%, 0); }
+          50% { transform: translate(-50%, -10px); }
+        }
+
+        @keyframes infinite-scroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+
+        @keyframes glitch {
+          0% {
+            transform: translate(0);
+            filter: hue-rotate(0deg) brightness(1);
+          }
+          20% {
+            transform: translate(-2px, 2px);
+            filter: hue-rotate(0deg) brightness(1.2);
+          }
+          40% {
+            transform: translate(2px, -2px);
+            filter: hue-rotate(0deg) brightness(1.1);
+          }
+          60% {
+            transform: translate(-1px, 1px);
+            filter: hue-rotate(0deg) brightness(1.3);
+          }
+          80% {
+            transform: translate(1px, -1px);
+            filter: hue-rotate(0deg) brightness(1.1);
+          }
+          100% {
+            transform: translate(0);
+            filter: hue-rotate(0deg) brightness(1);
+          }
+        }
+
+        @keyframes glitch-text {
+          0%, 100% {
+            text-shadow: 
+              -2px 0 #ff006e,
+              2px 0 #00f5ff,
+              0 2px #39ff14,
+              0 -2px #9d4edd;
+            transform: translate(0);
+          }
+          20% {
+            text-shadow: 
+              2px 0 #ff006e,
+              -2px 0 #00f5ff,
+              -1px 2px #39ff14,
+              1px -2px #9d4edd;
+            transform: translate(-2px, 0);
+          }
+          40% {
+            text-shadow: 
+              -2px 0 #00f5ff,
+              2px 0 #39ff14,
+              1px -2px #ff006e,
+              -1px 2px #9d4edd;
+            transform: translate(2px, 0);
+          }
+          60% {
+            text-shadow: 
+              2px 0 #9d4edd,
+              -2px 0 #ff006e,
+              0 2px #00f5ff,
+              0 -2px #39ff14;
+            transform: translate(-1px, 0);
+          }
+          80% {
+            text-shadow: 
+              -1px 0 #39ff14,
+              1px 0 #9d4edd,
+              2px 1px #ff006e,
+              -2px -1px #00f5ff;
+            transform: translate(1px, 0);
+          }
+        }
+
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+          animation: float-delayed 8s ease-in-out infinite;
+        }
+
+        .animate-spin-slow {
+          animation: spin-slow 20s linear infinite;
+        }
+
+        .animate-pulse-glow {
+          animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        .animate-float-vertical {
+          animation: float-vertical 3s ease-in-out infinite;
+        }
+
+        .animate-infinite-scroll {
+          animation: infinite-scroll 40s linear infinite;
+        }
+
+        .animate-infinite-scroll:hover {
+          animation-play-state: paused;
+        }
+
+        .animate-glitch {
+          animation: glitch 0.4s ease-in-out;
+        }
+
+        .animate-glitch-text {
+          animation: glitch-text 0.4s ease-in-out;
+        }
+      `}</style>
+
+      <section 
+        id="hero"
+        className="relative min-h-screen flex items-center justify-center px-6 sm:px-12 pb-32 overflow-hidden"
+      >
+        <FloatingShapes />
+        
+        <div className={containerClass}>
+          <div className="space-y-16">
+            <HeroHeading />
+            <LocationBadge />
+            <SkillsMarquee />
+            <div className="pt-8">
+              <CTAButton />
+            </div>
           </div>
         </div>
-      </div>
 
-      <ScrollIndicator />
-      <HeroStyles />
-    </section>
+        <ScrollIndicator />
+      </section>
+    </>
   );
 }
