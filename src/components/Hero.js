@@ -12,29 +12,61 @@ const PERSONAL_INFO = {
   skills: ["Java", "Python", "TypeScript", "React", "Next.js", "Robotics", "IoT"],
 };
 
-const HeroHeading = () => (
-  <div className="relative space-y-6 pt-20">
-    {/* Massive name typography */}
-    <div className="relative">
-      <h1 className="text-[clamp(2rem,10vw,8rem)] font-black leading-[0.9] tracking-tight">
-        <span className="block text-white opacity-90">
-          {PERSONAL_INFO.firstName}
-        </span>
-        <span className="block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">
-          {PERSONAL_INFO.lastName}
-        </span>
-      </h1>
-      
-      {/* Floating orb decoration - space vibe */}
-      <div className="absolute top-1/2 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-full blur-3xl opacity-30 animate-pulse"></div>
-    </div>
+const HeroHeading = () => {
+  const [showFirstName, setShowFirstName] = useState(false);
+  const [showLastName, setShowLastName] = useState(false);
 
-    {/* Professional title */}
-    <h2 className="text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-300 tracking-[0.2em] uppercase max-w-3xl mx-auto leading-relaxed">
-      {PERSONAL_INFO.title}
-    </h2>
-  </div>
-);
+  useEffect(() => {
+    // First name appears after 200ms
+    const firstNameTimer = setTimeout(() => setShowFirstName(true), 200);
+    // Last name appears 400ms after first name
+    const lastNameTimer = setTimeout(() => setShowLastName(true), 600);
+
+    return () => {
+      clearTimeout(firstNameTimer);
+      clearTimeout(lastNameTimer);
+    };
+  }, []);
+
+  return (
+    <div className="relative space-y-6 pt-20">
+      {/* Massive name typography */}
+      <div className="relative">
+        <h1 className="text-[clamp(2rem,10vw,8rem)] font-black leading-[0.9] tracking-tight">
+          {/* First Name - Slides in from left */}
+          <span 
+            className={`block text-white opacity-90 transition-all duration-700 ${
+              showFirstName 
+                ? 'opacity-90 translate-x-0' 
+                : 'opacity-0 -translate-x-12'
+            }`}
+          >
+            {PERSONAL_INFO.firstName}
+          </span>
+          
+          {/* Last Name - Slides in from right */}
+          <span 
+            className={`block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text transition-all duration-700 ${
+              showLastName 
+                ? 'opacity-100 translate-x-0' 
+                : 'opacity-0 translate-x-12'
+            }`}
+          >
+            {PERSONAL_INFO.lastName}
+          </span>
+        </h1>
+        
+        {/* Floating orb decoration - space vibe */}
+        <div className="absolute top-1/2 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+      </div>
+
+      {/* Professional title */}
+      <h2 className="text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-300 tracking-[0.2em] uppercase max-w-3xl mx-auto leading-relaxed">
+        {PERSONAL_INFO.title}
+      </h2>
+    </div>
+  );
+};
 
 const SkillsBadges = () => (
   <div className="flex flex-wrap justify-center gap-4 mt-12 max-w-2xl mx-auto">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { 
   FaGlobe, 
   FaCog, 
@@ -129,43 +129,77 @@ const TechnologiesList = ({ technologies }) => (
   </div>
 );
 
-const ExperienceCard = ({ experience }) => (
-  <div className={`bg-gradient-to-br ${experience.gradient} p-8 md:p-12 transition-all duration-300 hover:brightness-110`}>
-    {/* Header */}
-    <div className="flex items-start gap-6 mb-6">
-      <ExperienceIcon icon={experience.icon} />
-      <div className="flex-1">
-        <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-          {experience.title}
-        </h3>
-        <p className="text-lg text-white/90 font-semibold">
-          {experience.company}
-        </p>
-        <MetaInfo 
-          period={experience.period} 
-          location={experience.location} 
-          type={experience.type} 
-        />
+const ExperienceCard = ({ experience, index }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Alternate animation direction - left card slides from left, right card slides from right
+  const animationClass = index % 2 === 0
+    ? isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+    : isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12';
+
+  return (
+    <div 
+      ref={cardRef}
+      className={`bg-gradient-to-br ${experience.gradient} p-8 md:p-12 transition-all duration-700 hover:brightness-110 ${animationClass}`}
+    >
+      {/* Header */}
+      <div className="flex items-start gap-6 mb-6">
+        <ExperienceIcon icon={experience.icon} />
+        <div className="flex-1">
+          <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+            {experience.title}
+          </h3>
+          <p className="text-lg text-white/90 font-semibold">
+            {experience.company}
+          </p>
+          <MetaInfo 
+            period={experience.period} 
+            location={experience.location} 
+            type={experience.type} 
+          />
+        </div>
       </div>
+
+      {/* Description */}
+      <p className="text-white/90 text-base leading-relaxed mb-6">
+        {experience.description}
+      </p>
+
+      {/* Achievements */}
+      <AchievementsList achievements={experience.achievements} />
+
+      {/* Technologies */}
+      <TechnologiesList technologies={experience.technologies} />
     </div>
-
-    {/* Description */}
-    <p className="text-white/90 text-base leading-relaxed mb-6">
-      {experience.description}
-    </p>
-
-    {/* Achievements */}
-    <AchievementsList achievements={experience.achievements} />
-
-    {/* Technologies */}
-    <TechnologiesList technologies={experience.technologies} />
-  </div>
-);
+  );
+};
 
 const ExperiencesMosaic = ({ experiences }) => (
   <div className="grid grid-cols-1 lg:grid-cols-2">
-    {experiences.map(experience => (
-      <ExperienceCard key={experience.id} experience={experience} />
+    {experiences.map((experience, index) => (
+      <ExperienceCard key={experience.id} experience={experience} index={index} />
     ))}
   </div>
 );

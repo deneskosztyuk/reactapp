@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   FaReact, 
   FaNodeJs, 
@@ -142,15 +142,6 @@ const useCarousel = (totalItems, itemsPerView) => {
   };
 };
 
-const useHover = () => {
-  const [isHovered, setIsHovered] = useState(false);
-  
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(false);
-  
-  return { isHovered, handleMouseEnter, handleMouseLeave };
-};
-
 const SectionHeader = () => (
   <div className="space-y-6 mb-16">
     {/* Section number indicator */}
@@ -277,18 +268,52 @@ const ProjectLinks = ({ githubUrl, liveUrl }) => (
   </div>
 );
 
-const ProjectCard = ({ project }) => (
-  <div className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 h-full flex flex-col transition-all duration-300 hover:border-cyan-500/30 hover:bg-white/[0.07] hover:shadow-lg hover:shadow-cyan-500/10 relative">
-    {project.featured && <FeaturedBadge />}
-    <ProjectCardHeader 
-      title={project.title}
-      subtitle={project.subtitle}
-      description={project.description}
-    />
-    <TechnologiesSection technologies={project.technologies} />
-    <ProjectLinks githubUrl={project.githubUrl} liveUrl={project.liveUrl} />
-  </div>
-);
+const ProjectCard = ({ project, index }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Delay based on index for sequential animation
+          setTimeout(() => {
+            setIsVisible(true);
+          }, index * 150); // 150ms delay between each card
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [index]);
+
+  return (
+    <div 
+      ref={cardRef}
+      className={`group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 h-full flex flex-col transition-all duration-700 hover:border-cyan-500/30 hover:bg-white/[0.07] hover:shadow-lg hover:shadow-cyan-500/10 relative ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+    >
+      {project.featured && <FeaturedBadge />}
+      <ProjectCardHeader 
+        title={project.title}
+        subtitle={project.subtitle}
+        description={project.description}
+      />
+      <TechnologiesSection technologies={project.technologies} />
+      <ProjectLinks githubUrl={project.githubUrl} liveUrl={project.liveUrl} />
+    </div>
+  );
+};
 
 const NavigationButton = ({ direction, onClick, disabled, children }) => (
   <button
@@ -326,7 +351,7 @@ const CarouselNavigation = ({ onPrevious, onNext, canGoPrevious, canGoNext }) =>
   </div>
 );
 
-const ProjectsGrid = ({ projects, projectsPerView }) => {
+const ProjectsGrid = ({ projects, projectsPerView, startIndex }) => {
   const gridClass = `grid gap-6 mb-8 ${
     projectsPerView === 1 ? 'grid-cols-1' :
     projectsPerView === 2 ? 'grid-cols-2' : 'grid-cols-3'
@@ -334,9 +359,9 @@ const ProjectsGrid = ({ projects, projectsPerView }) => {
 
   return (
     <div className={gridClass}>
-      {projects.map(project => (
+      {projects.map((project, idx) => (
         <div key={project.id} className="relative">
-          <ProjectCard project={project} />
+          <ProjectCard project={project} index={idx} />
         </div>
       ))}
     </div>
@@ -361,7 +386,11 @@ const ProjectsCarousel = () => {
 
   return (
     <div className="w-full max-w-6xl mx-auto">
-      <ProjectsGrid projects={visibleProjects} projectsPerView={projectsPerView} />
+      <ProjectsGrid 
+        projects={visibleProjects} 
+        projectsPerView={projectsPerView}
+        startIndex={currentIndex}
+      />
       {showNavigation && (
         <CarouselNavigation
           onPrevious={goToPrevious}
