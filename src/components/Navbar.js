@@ -112,7 +112,7 @@ const Logo = () => (
       className="cursor-pointer block"
     >
       <h1 className="font-bold text-white hover:text-cyan-400 transition-colors duration-300 whitespace-nowrap text-[16px] xs:text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl tracking-tight sm:tracking-normal md:tracking-wide lg:tracking-wider">
-        Velkommen til min webportefølje<span className="text-cyan-400"></span>
+        Velkommen til min webportefølje.<span className="text-cyan-400"></span>
       </h1>
     </Link>
   </div>

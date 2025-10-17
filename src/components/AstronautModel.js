@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect } from "react";
+import React, { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 
@@ -6,7 +6,6 @@ function AnimatedAstronaut() {
   const { scene } = useGLTF("/Astronaut.glb");
   const astro = useRef();
   
-  // Clone the scene to prevent disposal issues
   const clonedScene = useMemo(() => scene.clone(), [scene]);
 
   const tiltX = Math.PI / 23;   
@@ -33,34 +32,8 @@ function AnimatedAstronaut() {
 }
 
 export default function AstronautModel() {
-  const canvasRef = useRef();
-
-  useEffect(() => {
-    const canvas = canvasRef.current?.querySelector('canvas');
-    if (!canvas) return;
-
-    // Handle WebGL context loss
-    const handleContextLost = (event) => {
-      event.preventDefault();
-      console.log('WebGL context lost, preventing default behavior');
-    };
-
-    const handleContextRestored = () => {
-      console.log('WebGL context restored');
-    };
-
-    canvas.addEventListener('webglcontextlost', handleContextLost, false);
-    canvas.addEventListener('webglcontextrestored', handleContextRestored, false);
-
-    return () => {
-      canvas.removeEventListener('webglcontextlost', handleContextLost);
-      canvas.removeEventListener('webglcontextrestored', handleContextRestored);
-    };
-  }, []);
-
   return (
     <div 
-      ref={canvasRef}
       className="w-full h-full"
       style={{ pointerEvents: 'none' }}
     >
@@ -70,10 +43,9 @@ export default function AstronautModel() {
         gl={{ 
           alpha: true, 
           antialias: true,
-          preserveDrawingBuffer: true,
           powerPreference: "high-performance"
         }}
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
       >
         <ambientLight intensity={1.6} />
         <directionalLight position={[5, 5, 5]} intensity={2} />

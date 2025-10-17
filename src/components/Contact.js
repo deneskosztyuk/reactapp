@@ -403,7 +403,7 @@ const ContactForm = ({ formState, formSubmission, onSubmit }) => {
   return (
     <div 
       ref={formRef}
-      className={`bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 max-w-2xl mx-auto backdrop-blur-sm transition-all duration-700 ${
+      className={`max-w-2xl mx-auto transition-all duration-700 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
       }`}
     >
