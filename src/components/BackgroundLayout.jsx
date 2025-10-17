@@ -1,4 +1,3 @@
-// components/BackgroundLayout.jsx
 import React, { useState, useEffect, useRef } from 'react';
 
 const BackgroundLayout = ({ children }) => {
@@ -11,7 +10,6 @@ const BackgroundLayout = ({ children }) => {
   const innerRef = useRef({ x: 0, y: 0 });
   const outerRef = useRef({ x: 0, y: 0 });
 
-  // Generate static stars with gentle twinkling
   useEffect(() => {
     const generateStars = () => {
       const newStars = [];
@@ -41,7 +39,6 @@ const BackgroundLayout = ({ children }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Track mouse position
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePos({ x: e.clientX, y: e.clientY });
@@ -67,12 +64,11 @@ const BackgroundLayout = ({ children }) => {
     };
   }, []);
 
-  // Animate inner dot with lerp (fast)
   useEffect(() => {
     let animationFrameId;
     
     const animate = () => {
-      const innerSpeed = 0.2; // Fast response (higher = faster)
+      const innerSpeed = 0.2;
       
       innerRef.current.x += (mousePos.x - innerRef.current.x) * innerSpeed;
       innerRef.current.y += (mousePos.y - innerRef.current.y) * innerSpeed;
@@ -90,12 +86,11 @@ const BackgroundLayout = ({ children }) => {
     return () => cancelAnimationFrame(animationFrameId);
   }, [mousePos]);
 
-  // Animate outer circle with lerp (slow)
   useEffect(() => {
     let animationFrameId;
     
     const animate = () => {
-      const outerSpeed = 0.08; // Slow response (lower = slower)
+      const outerSpeed = 0.08;
       
       outerRef.current.x += (mousePos.x - outerRef.current.x) * outerSpeed;
       outerRef.current.y += (mousePos.y - outerRef.current.y) * outerSpeed;
@@ -114,55 +109,8 @@ const BackgroundLayout = ({ children }) => {
   }, [mousePos]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black relative">
-      {/* Subtle starry background */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        {stars.map((star) => (
-          <div
-            key={star.id}
-            className="absolute rounded-full bg-white animate-twinkle"
-            style={{
-              left: `${star.x}%`,
-              top: `${star.y}%`,
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-              opacity: star.opacity,
-              animationDelay: `${star.twinkleDelay}s`,
-              animationDuration: `${star.twinkleDuration}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Custom cursor followers */}
-      {cursorVisible && (
-        <>
-          {/* Larger outer circle - slower */}
-          <div
-            className="custom-cursor-outer"
-            style={{
-              left: `${outerPos.x}px`,
-              top: `${outerPos.y}px`,
-            }}
-          />
-          
-          {/* Smaller inner dot - faster */}
-          <div
-            className="custom-cursor-inner"
-            style={{
-              left: `${innerPos.x}px`,
-              top: `${innerPos.y}px`,
-            }}
-          />
-        </>
-      )}
-
-      {/* Content */}
-      <div className="relative z-10">
-        {children}
-      </div>
-
-      <style jsx>{`
+    <>
+      <style>{`
         @keyframes twinkle {
           0%, 100% { 
             opacity: 0.2;
@@ -178,7 +126,6 @@ const BackgroundLayout = ({ children }) => {
           animation: twinkle ease-in-out infinite;
         }
 
-        /* Custom cursor followers */
         .custom-cursor-outer {
           position: fixed;
           width: 40px;
@@ -203,7 +150,57 @@ const BackgroundLayout = ({ children }) => {
           box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
       `}</style>
-    </div>
+
+      <div 
+        className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black relative"
+        style={{ overflowX: 'hidden', maxWidth: '100vw', width: '100%' }}
+      >
+        {/* Subtle starry background */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          {stars.map((star) => (
+            <div
+              key={star.id}
+              className="absolute rounded-full bg-white animate-twinkle"
+              style={{
+                left: `${star.x}%`,
+                top: `${star.y}%`,
+                width: `${star.size}px`,
+                height: `${star.size}px`,
+                opacity: star.opacity,
+                animationDelay: `${star.twinkleDelay}s`,
+                animationDuration: `${star.twinkleDuration}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Custom cursor followers */}
+        {cursorVisible && (
+          <>
+            <div
+              className="custom-cursor-outer"
+              style={{
+                left: `${outerPos.x}px`,
+                top: `${outerPos.y}px`,
+              }}
+            />
+            
+            <div
+              className="custom-cursor-inner"
+              style={{
+                left: `${innerPos.x}px`,
+                top: `${innerPos.y}px`,
+              }}
+            />
+          </>
+        )}
+
+        {/* Content */}
+        <div className="relative z-10" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
+          {children}
+        </div>
+      </div>
+    </>
   );
 };
 

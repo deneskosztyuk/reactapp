@@ -43,10 +43,8 @@ const HeroHeading = () => {
 
   return (
     <div className="relative space-y-6 pt-20">
-      {/* Massive name typography */}
       <div className="relative">
         <h1 className="text-[clamp(2rem,10vw,8rem)] font-black leading-[0.9] tracking-tight">
-          {/* First Name - Slides in from left with blur */}
           <span 
             className={`block text-white opacity-90 transition-all duration-700 ${
               showFirstName 
@@ -57,7 +55,6 @@ const HeroHeading = () => {
             {PERSONAL_INFO.firstName}
           </span>
           
-          {/* Last Name - Slides in from right with blur */}
           <span 
             className={`block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text transition-all duration-700 ${
               showLastName 
@@ -69,11 +66,9 @@ const HeroHeading = () => {
           </span>
         </h1>
         
-        {/* Floating orb decoration - space vibe with scale animation */}
         <div className="absolute top-1/2 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-full blur-3xl opacity-30 animate-pulse-glow"></div>
       </div>
 
-      {/* Professional title - Fade in with slight delay */}
       <h2 
         className={`text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-300 tracking-[0.2em] uppercase max-w-3xl mx-auto leading-relaxed transition-all duration-1000 ${
           showTitle 
@@ -95,23 +90,23 @@ const SkillsMarquee = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Double the skills array for seamless infinite scroll
   const duplicatedSkills = [...PERSONAL_INFO.skills, ...PERSONAL_INFO.skills];
 
   return (
     <div 
-      className={`w-full max-w-4xl mx-auto mt-12 overflow-hidden transition-all duration-1000 ${
+      className={`w-full max-w-4xl mx-auto mt-12 transition-all duration-1000 ${
         showMarquee ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
+      style={{ overflow: 'hidden', maxWidth: '100%' }}
     >
-      <div className="relative">
+      <div className="relative w-full" style={{ overflow: 'hidden' }}>
         {/* Gradient fade on edges */}
         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-900 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-900 to-transparent z-10 pointer-events-none" />
         
-        {/* Scrolling text with icons - true infinite scroll */}
-        <div className="flex">
-          <div className="flex animate-infinite-scroll">
+        {/* Scrolling text with icons - contained properly */}
+        <div className="flex" style={{ overflow: 'hidden' }}>
+          <div className="flex animate-infinite-scroll" style={{ minWidth: 'max-content' }}>
             {duplicatedSkills.map((skill, index) => (
               <span
                 key={`first-${index}`}
@@ -122,7 +117,7 @@ const SkillsMarquee = () => {
               </span>
             ))}
           </div>
-          <div className="flex animate-infinite-scroll" aria-hidden="true">
+          <div className="flex animate-infinite-scroll" aria-hidden="true" style={{ minWidth: 'max-content' }}>
             {duplicatedSkills.map((skill, index) => (
               <span
                 key={`second-${index}`}
@@ -191,7 +186,6 @@ const CTAButton = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Trigger glitch effect every 3 seconds
   useEffect(() => {
     const glitchInterval = setInterval(() => {
       setIsGlitching(true);
@@ -235,7 +229,6 @@ const FloatingShapes = () => {
 
   return (
     <>
-      {/* Geometric shapes for space aesthetic - Fade in */}
       <div 
         className={`absolute top-1/4 left-10 w-20 h-20 border border-cyan-500/20 rounded-lg rotate-45 animate-float transition-opacity duration-1000 ${
           showShapes ? 'opacity-100' : 'opacity-0'
@@ -411,11 +404,21 @@ export default function Hero() {
         .animate-glitch-text {
           animation: glitch-text 0.4s ease-in-out;
         }
+
+        /* CRITICAL: Prevent horizontal overflow */
+        body {
+          overflow-x: hidden;
+        }
+
+        #hero {
+          overflow-x: hidden;
+          max-width: 100vw;
+        }
       `}</style>
 
       <section 
         id="hero"
-        className="relative min-h-screen flex items-center justify-center px-6 sm:px-12 pb-32 overflow-hidden"
+        className="relative min-h-screen flex items-center justify-center px-6 sm:px-12 pb-32 overflow-x-hidden max-w-full"
       >
         <FloatingShapes />
         

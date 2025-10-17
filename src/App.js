@@ -9,14 +9,16 @@ import Contact from "./components/Contact";
 
 export default function App() {
   return (
-    <SmoothScroll scrollSpeed={1} smoothness={0.1}>
-      <BackgroundLayout>
-        <Navbar />
-        <section id="hero"><Hero /></section>
-        <section id="work-experience"><WorkExperience /></section>
-        <section id="projects"><Projects /></section>
-        <section id="contact"><Contact /></section>
-      </BackgroundLayout>
-    </SmoothScroll>
+    <div style={{ overflowX: 'hidden', maxWidth: '100vw', width: '100%' }}>
+      <SmoothScroll scrollSpeed={1} smoothness={0.1}>
+        <BackgroundLayout>
+          <Navbar />
+          <Hero />
+          <WorkExperience />
+          <Projects />
+          <Contact />
+        </BackgroundLayout>
+      </SmoothScroll>
+    </div>
   );
 }
