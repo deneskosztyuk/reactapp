@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FaLinkedin, FaGithub, FaEnvelope, FaUser, FaPaperPlane } from "react-icons/fa";
 
 const FORM_CONFIG = {
@@ -16,14 +16,12 @@ const SOCIAL_LINKS = [
   {
     href: "https://www.linkedin.com/in/deneskosztyuk/",
     icon: <FaLinkedin />,
-    label: "LinkedIn",
-    color: "blue"
+    label: "LinkedIn"
   },
   {
     href: "https://github.com/deneskosztyuk",
     icon: <FaGithub />,
-    label: "GitHub", 
-    color: "blue"
+    label: "GitHub"
   }
 ];
 
@@ -264,13 +262,21 @@ const HoneypotField = ({ value, onChange }) => (
   />
 );
 
-const FormField = ({ type = "text", name, placeholder, value, onChange, rows, required = false, icon }) => {
+const FormField = ({ type = "text", name, placeholder, value, onChange, rows, required = false, icon, delay = 0 }) => {
+  const [isVisible, setIsVisible] = useState(false);
   const Component = type === "textarea" ? "textarea" : "input";
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
   
   return (
-    <div className="relative group">
+    <div className={`relative group transition-all duration-700 ${
+      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+    }`}>
       {icon && (
-        <div className="absolute left-4 top-4 text-gray-500 group-focus-within:text-cyan-400 transition-colors">
+        <div className="absolute left-4 top-4 text-white/50 group-focus-within:text-cyan-400 transition-all duration-300 group-focus-within:scale-110">
           {icon}
         </div>
       )}
@@ -281,28 +287,39 @@ const FormField = ({ type = "text", name, placeholder, value, onChange, rows, re
         value={value}
         onChange={onChange}
         rows={type === "textarea" ? rows : undefined}
-        className={`w-full ${icon ? 'pl-12' : 'pl-4'} pr-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] transition-all duration-300 resize-none`}
+        className={`w-full ${icon ? 'pl-12' : 'pl-4'} pr-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] focus:shadow-lg focus:shadow-cyan-500/10 transition-all duration-300 resize-none`}
         required={required}
       />
     </div>
   );
 };
 
-const SubmitButton = ({ isSubmitting }) => (
-  <button
-    type="submit"
-    disabled={isSubmitting}
-    className={`${BUTTON_BASE_CLASS} ${isSubmitting ? 'opacity-50 transform-none' : ''}`}
-  >
-    <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
-    <FaPaperPlane className="w-4 h-4" />
-  </button>
-);
+const SubmitButton = ({ isSubmitting, delay = 0 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <button
+      type="submit"
+      disabled={isSubmitting}
+      className={`${BUTTON_BASE_CLASS} ${isSubmitting ? 'opacity-50 transform-none' : ''} transition-all duration-700 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      }`}
+    >
+      <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
+      <FaPaperPlane className="w-4 h-4" />
+    </button>
+  );
+};
 
 const StatusMessage = ({ success, errorMessage }) => {
   if (success === true) {
     return (
-      <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-center text-green-400">
+      <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-center text-green-400 animate-fade-in-up">
         <div className="font-semibold mb-1">Message Sent Successfully!</div>
         <div className="text-sm text-green-300">Thank you for reaching out. I'll get back to you soon.</div>
       </div>
@@ -311,7 +328,7 @@ const StatusMessage = ({ success, errorMessage }) => {
 
   if (success === false) {
     return (
-      <div className="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-center text-red-400">
+      <div className="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-center text-red-400 animate-fade-in-up">
         <div className="font-semibold mb-2">Message Failed to Send</div>
         {errorMessage && (
           <p className="text-sm mb-2 text-red-300">{errorMessage}</p>
@@ -324,71 +341,128 @@ const StatusMessage = ({ success, errorMessage }) => {
   return null;
 };
 
-const SocialLinks = () => (
-  <div className="mt-12 flex justify-center gap-6">
-    {SOCIAL_LINKS.map((link, index) => (
-      <a
-        key={index}
-        href={link.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-lg text-gray-400 hover:text-cyan-400 hover:border-cyan-500/50 hover:bg-cyan-500/5 transition-all duration-300 hover:scale-110 text-xl"
-        aria-label={link.label}
+const SocialLinks = () => {
+  const [visibleLinks, setVisibleLinks] = useState([]);
+
+  useEffect(() => {
+    SOCIAL_LINKS.forEach((_, index) => {
+      setTimeout(() => {
+        setVisibleLinks(prev => [...prev, index]);
+      }, 800 + (index * 150));
+    });
+  }, []);
+
+  return (
+    <div className="mt-12 flex justify-center gap-6">
+      {SOCIAL_LINKS.map((link, index) => (
+        <a
+          key={index}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-lg text-gray-400 hover:text-cyan-400 hover:border-cyan-500/50 hover:bg-cyan-500/5 transition-all duration-300 hover:scale-110 hover:-translate-y-1 text-xl ${
+            visibleLinks.includes(index)
+              ? 'opacity-100 scale-100'
+              : 'opacity-0 scale-50'
+          }`}
+          aria-label={link.label}
+          style={{ transition: 'all 0.5s ease-out' }}
+        >
+          {link.icon}
+        </a>
+      ))}
+    </div>
+  );
+};
+
+const ContactForm = ({ formState, formSubmission, onSubmit }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    );
+
+    if (formRef.current) {
+      observer.observe(formRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div 
+      ref={formRef}
+      className={`bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 max-w-2xl mx-auto backdrop-blur-sm transition-all duration-700 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+      }`}
+    >
+      <h2 
+        className={`text-xl font-semibold text-white mb-6 tracking-wide uppercase text-sm transition-all duration-700 delay-200 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        }`}
       >
-        {link.icon}
-      </a>
-    ))}
-  </div>
-);
+        Send a Message
+      </h2>
+      
+      <form className="space-y-5" onSubmit={onSubmit}>
+        <HoneypotField 
+          value={formState.honeypot} 
+          onChange={(e) => formState.setHoneypot(e.target.value)} 
+        />
+        
+        <FormField
+          name="name"
+          placeholder="Your Name"
+          value={formState.form.name}
+          onChange={formState.handleInputChange}
+          icon={<FaUser />}
+          required
+          delay={isVisible ? 300 : 0}
+        />
+        
+        <FormField
+          type="email"
+          name="email"
+          placeholder="Your Email"
+          value={formState.form.email}
+          onChange={formState.handleInputChange}
+          icon={<FaEnvelope />}
+          required
+          delay={isVisible ? 400 : 0}
+        />
+        
+        <FormField
+          type="textarea"
+          name="message"
+          placeholder="Your Message"
+          rows="6"
+          value={formState.form.message}
+          onChange={formState.handleInputChange}
+          required
+          delay={isVisible ? 500 : 0}
+        />
+        
+        <SubmitButton isSubmitting={formSubmission.isSubmitting} delay={isVisible ? 600 : 0} />
+      </form>
 
-const ContactForm = ({ formState, formSubmission, onSubmit }) => (
-  <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 max-w-2xl mx-auto backdrop-blur-sm">
-    <h2 className="text-xl font-semibold text-white mb-6 tracking-wide uppercase text-sm">Send a Message</h2>
-    
-    <form className="space-y-5" onSubmit={onSubmit}>
-      <HoneypotField 
-        value={formState.honeypot} 
-        onChange={(e) => formState.setHoneypot(e.target.value)} 
+      <StatusMessage 
+        success={formSubmission.success} 
+        errorMessage={formSubmission.errorMessage} 
       />
-      
-      <FormField
-        name="name"
-        placeholder="Your Name"
-        value={formState.form.name}
-        onChange={formState.handleInputChange}
-        icon={<FaUser />}
-        required
-      />
-      
-      <FormField
-        type="email"
-        name="email"
-        placeholder="Your Email"
-        value={formState.form.email}
-        onChange={formState.handleInputChange}
-        icon={<FaEnvelope />}
-        required
-      />
-      
-      <FormField
-        type="textarea"
-        name="message"
-        placeholder="Your Message"
-        rows="6"
-        value={formState.form.message}
-        onChange={formState.handleInputChange}
-        required
-      />
-      
-      <SubmitButton isSubmitting={formSubmission.isSubmitting} />
-    </form>
-
-    <StatusMessage 
-      success={formSubmission.success} 
-      errorMessage={formSubmission.errorMessage} 
-    />
-  </div>
-);
+    </div>
+  );
+};
 
 const MathVerificationPopup = ({ 
   isVisible, 
@@ -404,10 +478,10 @@ const MathVerificationPopup = ({
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-slate-900/95 border border-cyan-500/30 rounded-xl p-8 max-w-md w-full shadow-2xl shadow-cyan-500/20">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="bg-slate-900/95 border border-cyan-500/30 rounded-xl p-8 max-w-md w-full shadow-2xl shadow-cyan-500/20 animate-scale-in">
         <div className="text-center mb-6">
-          <h3 className="text-2xl font-bold text-white mb-3">
+          <h3 className="text-2xl font-bold text-white mb-3 animate-bounce-gentle">
             BEEP...BOOP 🤖
           </h3>
           <p className="text-gray-400 text-sm">
@@ -428,13 +502,13 @@ const MathVerificationPopup = ({
             onChange={(e) => onAnswerChange(e.target.value)}
             placeholder="Your answer"
             className={`w-full p-4 bg-white/5 border rounded-lg text-white placeholder-gray-500 text-center text-xl focus:outline-none transition-all duration-300 ${
-              mathError ? 'border-red-500/50 bg-red-500/10' : 'border-white/10 focus:border-cyan-500/50'
+              mathError ? 'border-red-500/50 bg-red-500/10 animate-shake' : 'border-white/10 focus:border-cyan-500/50 focus:shadow-lg focus:shadow-cyan-500/20'
             }`}
             autoFocus
           />
           
           {mathError && (
-            <p className="text-red-400 text-sm mt-3">
+            <p className="text-red-400 text-sm mt-3 animate-fade-in-up">
               Incorrect answer. Please try again.
             </p>
           )}
@@ -470,6 +544,68 @@ const MathVerificationPopup = ({
     </div>
   );
 };
+
+const AnimationStyles = () => (
+  <style jsx>{`
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scale-in {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    @keyframes bounce-gentle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .animate-fade-in {
+      animation: fade-in 0.3s ease-out;
+    }
+
+    .animate-fade-in-up {
+      animation: fade-in-up 0.5s ease-out;
+    }
+
+    .animate-scale-in {
+      animation: scale-in 0.3s ease-out;
+    }
+
+    .animate-shake {
+      animation: shake 0.5s ease-out;
+    }
+
+    .animate-bounce-gentle {
+      animation: bounce-gentle 1s ease-in-out infinite;
+    }
+  `}</style>
+);
 
 export default function Contact() {
   const formState = useFormState();
@@ -517,21 +653,23 @@ export default function Contact() {
   };
 
   return (
-    <section 
-      id="contact" 
-      className="min-h-screen py-20 sm:py-24 px-6 sm:px-12"
-    >
-      <div className="w-full max-w-4xl mx-auto text-center">
-        <SectionHeader />
-        
-        <ContactForm 
-          formState={formState}
-          formSubmission={formSubmission}
-          onSubmit={handleFormSubmit}
-        />
+    <>
+      <section 
+        id="contact" 
+        className="min-h-screen py-20 sm:py-24 px-6 sm:px-12"
+      >
+        <div className="w-full max-w-4xl mx-auto text-center">
+          <SectionHeader />
+          
+          <ContactForm 
+            formState={formState}
+            formSubmission={formSubmission}
+            onSubmit={handleFormSubmit}
+          />
 
-        <SocialLinks />
-      </div>
+          <SocialLinks />
+        </div>
+      </section>
 
       <MathVerificationPopup
         isVisible={showMathPopup}
@@ -544,6 +682,8 @@ export default function Contact() {
         onClose={handlePopupClose}
         onGenerateNew={mathChallenge.generateMathChallenge}
       />
-    </section>
+
+      <AnimationStyles />
+    </>
   );
 }
