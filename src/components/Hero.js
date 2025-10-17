@@ -4,7 +4,6 @@ import { FaJava, FaPython, FaReact } from "react-icons/fa";
 import { SiTypescript, SiNextdotjs } from "react-icons/si";
 import { GiRobotAntennas } from "react-icons/gi";
 import { IoMdCellular } from "react-icons/io";
-import FloatingAstronaut from "./FloatingAstronaut";
 
 const FADE_IN_DELAY = 100;
 const SCROLL_DURATION = 600;
@@ -31,9 +30,9 @@ const HeroHeading = () => {
   const [showTitle, setShowTitle] = useState(false);
 
   useEffect(() => {
-    const firstNameTimer = setTimeout(() => setShowFirstName(true), 400);
-    const lastNameTimer = setTimeout(() => setShowLastName(true), 800);
-    const titleTimer = setTimeout(() => setShowTitle(true), 1200);
+    const firstNameTimer = setTimeout(() => setShowFirstName(true), 200);
+    const lastNameTimer = setTimeout(() => setShowLastName(true), 600);
+    const titleTimer = setTimeout(() => setShowTitle(true), 1000);
 
     return () => {
       clearTimeout(firstNameTimer);
@@ -44,18 +43,6 @@ const HeroHeading = () => {
 
   return (
     <div className="relative space-y-6 pt-20">
-      <div 
-        className="mx-auto"
-        style={{ 
-          width: '35vh',
-          height: '25vh', 
-          transform: 'translate(10px, -10px)', // Offset
-          opacity: 0.15
-        }}
-      >
-        <FloatingAstronaut />
-      </div>
-
       <div className="relative">
         <h1 className="text-[clamp(2rem,10vw,8rem)] font-black leading-[0.9] tracking-tight">
           <span 
@@ -99,7 +86,7 @@ const SkillsMarquee = () => {
   const [showMarquee, setShowMarquee] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowMarquee(true), 1400);
+    const timer = setTimeout(() => setShowMarquee(true), 1200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -113,8 +100,11 @@ const SkillsMarquee = () => {
       style={{ overflow: 'hidden', maxWidth: '100%' }}
     >
       <div className="relative w-full" style={{ overflow: 'hidden' }}>
-        {/* No edge fades - clean seamless scroll */}
+        {/* Gradient fade on edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-900 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-900 to-transparent z-10 pointer-events-none" />
         
+        {/* Scrolling text with icons - contained properly */}
         <div className="flex" style={{ overflow: 'hidden' }}>
           <div className="flex animate-infinite-scroll" style={{ minWidth: 'max-content' }}>
             {duplicatedSkills.map((skill, index) => (
@@ -144,12 +134,11 @@ const SkillsMarquee = () => {
   );
 };
 
-
 const LocationBadge = () => {
   const [showLocation, setShowLocation] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowLocation(true), 1300);
+    const timer = setTimeout(() => setShowLocation(true), 1100);
     return () => clearTimeout(timer);
   }, []);
 
@@ -171,7 +160,7 @@ const ScrollIndicator = () => {
   const [showScroll, setShowScroll] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowScroll(true), 2200);
+    const timer = setTimeout(() => setShowScroll(true), 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -193,7 +182,7 @@ const CTAButton = () => {
   const [isGlitching, setIsGlitching] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowCTA(true), 2000);
+    const timer = setTimeout(() => setShowCTA(true), 1800);
     return () => clearTimeout(timer);
   }, []);
 
@@ -274,7 +263,6 @@ export default function Hero() {
   return (
     <>
       <style>{`
-        /* Floating shapes animations */
         @keyframes float {
           0%, 100% { transform: translateY(0px) rotate(45deg); }
           50% { transform: translateY(-20px) rotate(45deg); }
@@ -290,7 +278,6 @@ export default function Hero() {
           to { transform: rotate(360deg); }
         }
 
-        /* Glow effect for gradient background */
         @keyframes pulse-glow {
           0%, 100% { 
             opacity: 0.3;
@@ -302,19 +289,16 @@ export default function Hero() {
           }
         }
 
-        /* Scroll indicator animation */
         @keyframes float-vertical {
           0%, 100% { transform: translate(-50%, 0); }
           50% { transform: translate(-50%, -10px); }
         }
 
-        /* Skills marquee infinite scroll */
         @keyframes infinite-scroll {
           from { transform: translateX(0); }
           to { transform: translateX(-50%); }
         }
 
-        /* CTA button glitch effect */
         @keyframes glitch {
           0% {
             transform: translate(0);
@@ -385,7 +369,6 @@ export default function Hero() {
           }
         }
 
-        /* Animation utility classes */
         .animate-float {
           animation: float 6s ease-in-out infinite;
         }
@@ -422,7 +405,7 @@ export default function Hero() {
           animation: glitch-text 0.4s ease-in-out;
         }
 
-        /* Prevent horizontal overflow */
+        /* CRITICAL: Prevent horizontal overflow */
         body {
           overflow-x: hidden;
         }
