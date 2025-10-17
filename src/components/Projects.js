@@ -5,7 +5,6 @@ import {
   FaJava, 
   FaPython, 
   FaGit, 
-  FaAws, 
   FaGithub, 
   FaChevronLeft, 
   FaChevronRight,
@@ -13,7 +12,7 @@ import {
 } from "react-icons/fa";
 import { BiLogoPostgresql } from "react-icons/bi";
 import { SiTailwindcss, SiJavascript, SiSpring, SiTensorflow } from "react-icons/si";
-import { GrMysql } from "react-icons/gr"; 
+import { GrMysql } from "react-icons/gr";
 
 const BREAKPOINTS = {
   MOBILE: 640,
@@ -27,7 +26,6 @@ const PROJECTS_PER_VIEW = {
 };
 
 const TRANSITION_DURATION = 300;
-const GRADIENT_TEXT_CLASS = "bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text";
 
 const TECH_STACK = [
   { icon: <FaPython />, label: "Python" },
@@ -154,24 +152,32 @@ const useHover = () => {
 };
 
 const SectionHeader = () => (
-  <div className="space-y-6 sm:space-y-8 mb-16 sm:mb-20">
-    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white leading-tight">
-      My{" "}
-      <span className={GRADIENT_TEXT_CLASS}>
-        Projects
+  <div className="space-y-6 mb-16">
+    {/* Section number indicator */}
+    <div className="flex items-center justify-center gap-3 text-sm text-gray-400 tracking-widest">
+      <span className="w-8 h-px bg-gray-600"></span>
+      <span>03</span>
+      <span className="font-light font-mono">// work</span>
+      <span className="w-8 h-px bg-gray-600"></span>
+    </div>
+
+    <h1 className="text-[clamp(2rem,8vw,4rem)] font-bold text-white tracking-tight">
+      MY{" "}
+      <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">
+        PROJECTS
       </span>
     </h1>
     
-    <p className="text-lg sm:text-xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto">
-      A collection of projects showcasing software development skills and practical engineering experience
+    <p className="text-base sm:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto font-light">
+      Software development projects showcasing practical engineering skills and problem-solving.
     </p>
   </div>
 );
 
 const TechIconTooltip = ({ label }) => (
-  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-20">
-    <div className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 shadow-xl">
-      <div className="text-cyan-400 text-sm font-medium whitespace-nowrap">
+  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+    <div className="bg-slate-900 border border-cyan-500/30 rounded-lg px-3 py-2 shadow-xl">
+      <div className="text-cyan-400 text-xs font-medium whitespace-nowrap font-mono">
         {label}
       </div>
     </div>
@@ -179,32 +185,24 @@ const TechIconTooltip = ({ label }) => (
 );
 
 const TechIcon = ({ icon, label }) => {
-  const { isHovered, handleMouseEnter, handleMouseLeave } = useHover();
-
   return (
     <div className="relative group">
-      <div 
-        className="w-12 h-12 sm:w-14 sm:h-14 bg-slate-800/50 border border-slate-700/50 rounded-xl flex items-center justify-center transition-all duration-300 hover:border-cyan-500/50 hover:bg-slate-800/70 hover:scale-110 cursor-pointer"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <span className={`text-xl transition-colors duration-300 ${
-          isHovered ? 'text-cyan-400' : 'text-gray-400'
-        }`}>
+      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center transition-all duration-300 hover:border-cyan-500/50 hover:bg-cyan-500/5 hover:scale-110 cursor-pointer">
+        <span className="text-xl text-gray-400 group-hover:text-cyan-400 transition-colors duration-300">
           {icon}
         </span>
       </div>
-      {isHovered && <TechIconTooltip label={label} />}
+      <TechIconTooltip label={label} />
     </div>
   );
 };
 
 const TechStackSection = () => (
-  <div className="mb-16 sm:mb-20">
-    <h2 className="text-xl sm:text-2xl font-light text-white mb-8">
+  <div className="mb-16">
+    <h2 className="text-lg sm:text-xl font-semibold text-white mb-8 tracking-wide uppercase">
       Technologies & Tools
     </h2>
-    <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 max-w-4xl mx-auto">
+    <div className="flex flex-wrap items-center justify-center gap-4 max-w-4xl mx-auto">
       {TECH_STACK.map((tech, index) => (
         <TechIcon 
           key={index} 
@@ -217,34 +215,34 @@ const TechStackSection = () => (
 );
 
 const FeaturedBadge = () => (
-  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
+  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg z-10">
     Featured
   </div>
 );
 
 const ProjectCardHeader = ({ title, subtitle, description }) => (
   <div className="mb-4">
-    <h3 className="text-xl sm:text-2xl font-medium text-white mb-2">
+    <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">
       {title}
     </h3>
-    <p className="text-cyan-400 font-medium mb-3">
+    <p className="text-cyan-400 font-medium text-sm mb-3">
       {subtitle}
     </p>
-    <p className="text-gray-300 leading-relaxed">
+    <p className="text-gray-400 leading-relaxed text-sm">
       {description}
     </p>
   </div>
 );
 
 const TechnologyTag = ({ technology }) => (
-  <span className="px-3 py-1 bg-slate-700/50 text-cyan-300 text-sm rounded-full border border-slate-600/50 hover:border-cyan-500/50 transition-colors duration-300">
+  <span className="px-3 py-1.5 bg-cyan-500/5 text-cyan-300 text-xs font-medium rounded-md border border-cyan-500/20 hover:border-cyan-500/40 hover:bg-cyan-500/10 transition-all duration-300 cursor-default">
     {technology}
   </span>
 );
 
 const TechnologiesSection = ({ technologies }) => (
   <div className="flex-1 mb-6">
-    <h4 className="text-white font-medium mb-3">Technologies:</h4>
+    <h4 className="text-white font-semibold text-xs mb-3 tracking-wide uppercase">Technologies</h4>
     <div className="flex flex-wrap gap-2">
       {technologies.map((tech, idx) => (
         <TechnologyTag key={idx} technology={tech} />
@@ -254,15 +252,15 @@ const TechnologiesSection = ({ technologies }) => (
 );
 
 const ProjectLinks = ({ githubUrl, liveUrl }) => (
-  <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
+  <div className="flex items-center justify-between pt-4 border-t border-white/5">
     <a
       href={githubUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center space-x-2 text-gray-400 hover:text-cyan-400 transition-colors duration-300"
+      className="flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors duration-300 text-sm"
     >
-      <FaGithub className="w-5 h-5" />
-      <span>View Project</span>
+      <FaGithub className="w-4 h-4" />
+      <span>View Code</span>
     </a>
     
     {liveUrl && (
@@ -270,17 +268,17 @@ const ProjectLinks = ({ githubUrl, liveUrl }) => (
         href={liveUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 text-white rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-cyan-500/25"
+        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 text-white text-sm rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/20"
       >
         <span>Live Demo</span>
-        <FaExternalLinkAlt className="w-4 h-4" />
+        <FaExternalLinkAlt className="w-3 h-3" />
       </a>
     )}
   </div>
 );
 
 const ProjectCard = ({ project }) => (
-  <div className="group bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 sm:p-8 h-full flex flex-col transition-all duration-500 hover:border-cyan-500/30 hover:bg-slate-800/70">
+  <div className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 h-full flex flex-col transition-all duration-300 hover:border-cyan-500/30 hover:bg-white/[0.07] hover:shadow-lg hover:shadow-cyan-500/10 relative">
     {project.featured && <FeaturedBadge />}
     <ProjectCardHeader 
       title={project.title}
@@ -296,10 +294,10 @@ const NavigationButton = ({ direction, onClick, disabled, children }) => (
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`flex items-center justify-center space-x-2 w-28 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl transition-all duration-300 ${
+    className={`flex items-center justify-center gap-2 px-6 py-3 bg-white/5 border rounded-lg transition-all duration-300 font-mono text-sm ${
       !disabled 
-        ? 'hover:border-cyan-500/50 hover:bg-slate-800/70 text-gray-300 hover:text-cyan-400' 
-        : 'opacity-50 cursor-not-allowed text-gray-600'
+        ? 'border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/5 text-gray-400 hover:text-cyan-400' 
+        : 'border-white/5 opacity-30 cursor-not-allowed text-gray-600'
     }`}
   >
     {children}
@@ -307,14 +305,14 @@ const NavigationButton = ({ direction, onClick, disabled, children }) => (
 );
 
 const CarouselNavigation = ({ onPrevious, onNext, canGoPrevious, canGoNext }) => (
-  <div className="flex items-center justify-center space-x-6">
+  <div className="flex items-center justify-center gap-4">
     <NavigationButton
       direction="previous"
       onClick={onPrevious}
       disabled={!canGoPrevious}
     >
       <FaChevronLeft className="w-4 h-4" />
-      <span>Previous</span>
+      <span>Prev</span>
     </NavigationButton>
 
     <NavigationButton
@@ -329,7 +327,7 @@ const CarouselNavigation = ({ onPrevious, onNext, canGoPrevious, canGoNext }) =>
 );
 
 const ProjectsGrid = ({ projects, projectsPerView }) => {
-  const gridClass = `grid gap-6 sm:gap-8 mb-8 ${
+  const gridClass = `grid gap-6 mb-8 ${
     projectsPerView === 1 ? 'grid-cols-1' :
     projectsPerView === 2 ? 'grid-cols-2' : 'grid-cols-3'
   }`;
@@ -377,8 +375,8 @@ const ProjectsCarousel = () => {
 };
 
 const TimelineIndicator = () => (
-  <div className="flex justify-center mt-16 sm:mt-20">
-    <div className="w-1 h-16 bg-gradient-to-b from-cyan-400 to-transparent rounded-full"></div>
+  <div className="flex justify-center mt-16">
+    <div className="w-px h-16 bg-gradient-to-b from-cyan-400/50 to-transparent rounded-full"></div>
   </div>
 );
 
@@ -386,7 +384,7 @@ export default function Projects() {
   return (
     <section 
       id="projects" 
-      className="min-h-screen py-20 sm:py-24 md:py-28 px-4 sm:px-6 md:px-12 lg:px-20"
+      className="min-h-screen py-20 sm:py-24 px-6 sm:px-12"
     >
       <div className="w-full max-w-6xl mx-auto text-center">
         <SectionHeader />

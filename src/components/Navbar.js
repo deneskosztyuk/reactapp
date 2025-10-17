@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-scroll";
-import { FaGithub, FaLinkedin, FaBars, FaTimes } from "react-icons/fa";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 const SCROLL_THRESHOLD = 20;
 const SECTION_OFFSET = 200;
@@ -8,10 +8,10 @@ const SCROLL_DURATION = 600;
 const CLICK_OUTSIDE_DELAY = 100;
 
 const NAVIGATION_ITEMS = [
-  { to: "hero", label: "Home" },
-  { to: "work-experience", label: "Experience" },
-  { to: "projects", label: "Projects" },
-  { to: "contact", label: "Contact" }
+  { id: 1, to: "hero", label: "home" },
+  { id: 2, to: "work-experience", label: "experience" },
+  { id: 3, to: "projects", label: "projects" },
+  { id: 4, to: "contact", label: "contact" }
 ];
 
 const SOCIAL_LINKS = [
@@ -28,7 +28,7 @@ const SOCIAL_LINKS = [
 ];
 
 const NAVBAR_STYLES = {
-  scrolled: "bg-slate-900/95 backdrop-blur-md py-3 border-b border-slate-800/50 shadow-lg shadow-black/10",
+  scrolled: "bg-slate-900/80 backdrop-blur-lg py-3 border-b border-slate-800 shadow-xl",
   transparent: "bg-transparent py-4 sm:py-6"
 };
 
@@ -111,11 +111,9 @@ const Logo = () => (
       duration={SCROLL_DURATION}
       className="cursor-pointer"
     >
-      <div className="text-xl sm:text-2xl font-light text-white hover:text-cyan-400 transition-colors duration-300">
-        <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">
-          Velkommen
-        </span>
-      </div>
+      <h1 className="text-xl font-bold tracking-widest text-white hover:text-cyan-400 transition-colors duration-300">
+        Velkommen<span className="text-cyan-400"></span>
+      </h1>
     </Link>
   </div>
 );
@@ -127,15 +125,21 @@ const NavigationItem = ({ item, activeSection }) => (
       spy={true}
       smooth={true}
       duration={SCROLL_DURATION}
-      className={`relative text-sm lg:text-base font-medium transition-all duration-300 cursor-pointer ${
+      className={`group relative font-mono text-sm transition-all duration-300 cursor-pointer ${
         activeSection === item.to
-          ? "text-cyan-400"
-          : "text-gray-300 hover:text-cyan-300"
+          ? "text-white"
+          : "text-gray-400 hover:text-white"
       }`}
     >
-      {item.label}
+      <span className={`mr-1 transition-colors ${activeSection === item.to ? "text-cyan-400" : "text-gray-600"}`}>
+        0{item.id}
+      </span>
+      // {item.label}
       {activeSection === item.to && (
         <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"></span>
+      )}
+      {activeSection !== item.to && (
+        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 transition-all duration-300 group-hover:w-full"></span>
       )}
     </Link>
   </li>
@@ -147,7 +151,7 @@ const SocialLink = ({ link }) => (
     href={link.href}
     target="_blank"
     rel="noopener noreferrer"
-    className="text-gray-400 hover:text-cyan-400 transition-colors duration-300 transform hover:scale-110"
+    className="text-gray-500 hover:text-cyan-400 transition-colors duration-300 transform hover:scale-110"
     aria-label={link.label}
   >
     <div className="w-5 h-5">{link.icon}</div>
@@ -196,13 +200,13 @@ const MobileMenuItem = ({ item, index, activeSection, closeMobileMenu }) => (
       smooth={true}
       duration={SCROLL_DURATION}
       onClick={closeMobileMenu}
-      className={`block py-4 px-4 text-lg font-medium transition-all duration-300 cursor-pointer rounded-lg ${
+      className={`block py-4 px-4 text-lg font-mono transition-all duration-300 cursor-pointer rounded-lg ${
         activeSection === item.to
           ? "text-cyan-400 bg-cyan-400/10 border-l-4 border-cyan-400 shadow-lg shadow-cyan-400/20"
           : "text-gray-300 hover:text-cyan-300 hover:bg-slate-800/50 hover:pl-6"
       }`}
     >
-      {item.label}
+      <span className={activeSection === item.to ? "text-cyan-400" : "text-gray-600"}>0{item.id}</span> // {item.label}
     </Link>
   </li>
 );
@@ -358,7 +362,7 @@ const Navbar = () => {
 
   return (
     <nav className={navbarClass}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-center">
           <Logo />
           <DesktopNavigation activeSection={activeSection} />
@@ -372,8 +376,7 @@ const Navbar = () => {
       <MobileMenu 
         isMobileMenuOpen={isMobileMenuOpen} 
         activeSection={activeSection} 
-        closeMobileMenu={closeMobileMenu} 
-      />
+        closeMobileMenu={closeMobileMenu} />
       <NavbarStyles />
     </nav>
   );

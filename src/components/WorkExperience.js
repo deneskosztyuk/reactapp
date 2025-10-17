@@ -1,39 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { 
-  FaDatabase, 
   FaGlobe, 
   FaCog, 
-  FaRobot,
   FaCalendarAlt,
   FaMapMarkerAlt,
-  FaBriefcase,
-  FaChevronDown,
-  FaChevronUp
+  FaBriefcase
 } from "react-icons/fa";
-
-const TRANSITION_DURATION = 500;
-const GRADIENT_TEXT_CLASS = "bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text";
 
 const WORK_EXPERIENCES = [
   {
-    id: 'ucall-intern',
-    title: 'Backend Developer Intern',
-    company: 'Ucall Ltd',
-    period: 'Nov 2023 – Feb 2024',
-    location: 'Remote',
-    type: 'Part-time',
-    icon: <FaDatabase />,
-    description: 'Developed asynchronous processes and performance optimizations for a location-based B2B marketplace.',
-    achievements: [
-      'Implemented FastAPI background tasks for image management',
-      'Enhanced performance with code reviews and refactoring using clean code practices',
-      'Increased productivity by 30% through comprehensive testing'
-    ],
-    technologies: ['Python', 'FastAPI', 'Redis', 'PostgreSQL', 'pytest']
-  },
-  {
     id: 'freelance-projects',
-    title: 'Software Developer Contractor / Programming Tutor',
+    title: 'Software Freelance Contractor',
     company: 'Freelance Contractor',
     period: '2023 – Present',
     location: 'Remote',
@@ -41,12 +18,13 @@ const WORK_EXPERIENCES = [
     icon: <FaGlobe />,
     description: 'Delivered custom web apps and software solutions for various clients.',
     achievements: [
-      'Built dynamic web applications with modern frameworks - Next.js, React',
-      'Implemented RESTful APIs and database integrations using Java Spring, FastAPI',
-      'Provided 1:1 tutoring in Python, Java, and embedded C programming for students and hobbyists',
-      'Consulted on projects to identify improvements and resolve performance bottlenecks'
+      'Built web applications using Next.js, TypeScript, React, and PostgreSQL',
+      'Provided services as a Python Backend Engineer to troubleshoot and refactor 12 API endpoints for HMRC (UK Tax Authority) client request validation for a SaaS startup',
+      'Consulted on projects to identify and resolve performance bottlenecks',
+      'Designed custom Discord bots for gaming and tech communities using discord.js'
     ],
-    technologies: ['React', 'Node.js', 'Java', 'Spring Boot', 'Docker', 'AWS', 'discord.py']
+    technologies: ['React', 'Node.js', 'Java', 'Spring Boot', 'Git', 'TypeScript', 'discord.js'],
+    gradient: 'from-cyan-800 to-blue-950'
   },
   {
     id: 'jabil',
@@ -62,77 +40,70 @@ const WORK_EXPERIENCES = [
       'Installed and calibrated >15 autonomous robotic machines',
       'Trained 8 new technicians on RoHS & safety compliance'
     ],
-    technologies: ['PCB', 'Circuit Production', 'IoT', 'Embedded Systems', 'Robotics']
+    technologies: ['PCB', 'Circuit Production', 'IoT', 'Embedded Systems', 'Robotics'],
+    gradient: 'from-purple-800 to-pink-950'
   }
 ];
 
-const useExpansion = () => {
-  const [expandedId, setExpandedId] = useState(null);
-  
-  const toggle = (id) => setExpandedId(expandedId === id ? null : id);
-  const isExpanded = (id) => expandedId === id;
-  
-  return { toggle, isExpanded };
-};
-
 const SectionHeader = () => (
-  <div className="space-y-6 sm:space-y-8 mb-16">
-    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white">
-      Work{" "}
-      <span className={GRADIENT_TEXT_CLASS}>
-        Experience
+  <div className="space-y-6 mb-0 pb-12">
+    {/* Section number indicator */}
+    <div className="flex items-center justify-center gap-3 text-sm text-gray-400 tracking-widest">
+      <span className="w-8 h-px bg-gray-600"></span>
+      <span>02</span>
+      <span className="font-light font-mono">// experience</span>
+      <span className="w-8 h-px bg-gray-600"></span>
+    </div>
+
+    <h1 className="text-[clamp(2rem,8vw,4rem)] font-bold text-white tracking-tight">
+      WORK{" "}
+      <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">
+        EXPERIENCE
       </span>
     </h1>
-    <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
-      A journey through professional roles, academic projects, and real-world achievements.
+    
+    <p className="text-base sm:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto font-light">
+      Professional roles and real-world achievements in software development and engineering.
     </p>
   </div>
 );
 
 const ExperienceIcon = ({ icon }) => (
-  <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/25 transition-all duration-300">
-    <span className="text-white text-xl sm:text-2xl">
+  <div className="flex-shrink-0 w-14 h-14 bg-white/10 flex items-center justify-center transition-all duration-300">
+    <span className="text-white text-2xl">
       {icon}
     </span>
   </div>
 );
 
 const MetaInfo = ({ period, location, type }) => (
-  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400 mt-1">
-    <span className="flex items-center space-x-1">
+  <div className="flex flex-wrap items-center gap-3 text-sm text-white/70 mt-3 font-mono">
+    <span className="flex items-center gap-2">
       <FaCalendarAlt className="w-3 h-3" />
       <span>{period}</span>
     </span>
-    <span className="flex items-center space-x-1">
+    <span className="text-white/40">•</span>
+    <span className="flex items-center gap-2">
       <FaMapMarkerAlt className="w-3 h-3" />
       <span>{location}</span>
     </span>
-    <span className="flex items-center space-x-1">
+    <span className="text-white/40">•</span>
+    <span className="flex items-center gap-2">
       <FaBriefcase className="w-3 h-3" />
       <span>{type}</span>
     </span>
   </div>
 );
 
-const ExpandButton = ({ isExpanded }) => (
-  <button className="flex-shrink-0 ml-4 text-gray-400 hover:text-cyan-400 transition-colors duration-300">
-    {isExpanded ? (
-      <FaChevronUp className="w-5 h-5" />
-    ) : (
-      <FaChevronDown className="w-5 h-5" />
-    )}
-  </button>
-);
-
 const AchievementsList = ({ achievements }) => (
-  <div>
-    <h4 className="text-white font-medium mb-2">
-      Key Achievements:
+  <div className="mt-6">
+    <h4 className="text-white font-bold text-sm mb-3 tracking-wide uppercase">
+      Key Achievements
     </h4>
-    <ul className="space-y-2 text-gray-300">
+    <ul className="space-y-3 text-white/80 text-sm leading-relaxed">
       {achievements.map((achievement, index) => (
-        <li key={index} className="flex items-start space-x-2">
-          <span className="w-2 h-2 bg-cyan-400 rounded-full mt-1" />
+        <li key={index} className="flex items-start gap-3">
+          <span className="w-1.5 h-1.5 bg-white rounded-full mt-2 flex-shrink-0" />
           <span>{achievement}</span>
         </li>
       ))}
@@ -141,15 +112,15 @@ const AchievementsList = ({ achievements }) => (
 );
 
 const TechnologiesList = ({ technologies }) => (
-  <div>
-    <h4 className="text-white font-medium mb-2">
-      Technologies:
+  <div className="mt-6">
+    <h4 className="text-white font-bold text-sm mb-3 tracking-wide uppercase">
+      Technologies
     </h4>
     <div className="flex flex-wrap gap-2">
       {technologies.map((tech, index) => (
         <span
           key={index}
-          className="px-3 py-1 bg-slate-700/50 text-cyan-300 text-sm rounded-full border border-slate-600/50 hover:border-cyan-500/50 transition-colors duration-300"
+          className="px-3 py-1.5 bg-white/10 text-white text-xs font-medium hover:bg-white/20 transition-all duration-300 cursor-default"
         >
           {tech}
         </span>
@@ -158,18 +129,16 @@ const TechnologiesList = ({ technologies }) => (
   </div>
 );
 
-const ExperienceCardHeader = ({ experience, onToggle }) => (
-  <div
-    className="flex items-start justify-between cursor-pointer"
-    onClick={onToggle}
-  >
-    <div className="flex items-start space-x-4 sm:space-x-6 flex-1">
+const ExperienceCard = ({ experience }) => (
+  <div className={`bg-gradient-to-br ${experience.gradient} p-8 md:p-12 transition-all duration-300 hover:brightness-110`}>
+    {/* Header */}
+    <div className="flex items-start gap-6 mb-6">
       <ExperienceIcon icon={experience.icon} />
-      <div className="flex-1 text-left min-w-0">
-        <h3 className="text-lg sm:text-xl md:text-2xl font-medium text-white">
+      <div className="flex-1">
+        <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
           {experience.title}
         </h3>
-        <p className="text-base sm:text-lg text-cyan-400 font-medium">
+        <p className="text-lg text-white/90 font-semibold">
           {experience.company}
         </p>
         <MetaInfo 
@@ -179,73 +148,50 @@ const ExperienceCardHeader = ({ experience, onToggle }) => (
         />
       </div>
     </div>
-    <ExpandButton isExpanded={false} />
+
+    {/* Description */}
+    <p className="text-white/90 text-base leading-relaxed mb-6">
+      {experience.description}
+    </p>
+
+    {/* Achievements */}
+    <AchievementsList achievements={experience.achievements} />
+
+    {/* Technologies */}
+    <TechnologiesList technologies={experience.technologies} />
   </div>
 );
 
-const ExperienceCardContent = ({ experience, isExpanded }) => (
-  <div
-    className={`overflow-hidden transition-all duration-${TRANSITION_DURATION} ${
-      isExpanded
-        ? "max-h-96 opacity-100 mt-6"
-        : "max-h-0 opacity-0"
-    }`}
-  >
-    <div className="space-y-6 text-left">
-      <p className="text-gray-300 leading-relaxed">
-        {experience.description}
-      </p>
-      <AchievementsList achievements={experience.achievements} />
-      <TechnologiesList technologies={experience.technologies} />
-    </div>
-  </div>
-);
-
-const ExperienceCard = ({ experience, isExpanded, onToggle }) => {
-  const cardClass = `group bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 sm:p-8 transition-all duration-${TRANSITION_DURATION} ${
-    isExpanded
-      ? "border-cyan-500/50 bg-slate-800/70"
-      : "hover:border-cyan-500/30 hover:bg-slate-800/70"
-  }`;
-
-  return (
-    <div className={cardClass}>
-      <ExperienceCardHeader experience={experience} onToggle={onToggle} />
-      <ExperienceCardContent experience={experience} isExpanded={isExpanded} />
-    </div>
-  );
-};
-
-const ExperiencesList = ({ experiences, expansion }) => (
-  <div className="space-y-6 sm:space-y-8">
+const ExperiencesMosaic = ({ experiences }) => (
+  <div className="grid grid-cols-1 lg:grid-cols-2">
     {experiences.map(experience => (
-      <ExperienceCard
-        key={experience.id}
-        experience={experience}
-        isExpanded={expansion.isExpanded(experience.id)}
-        onToggle={() => expansion.toggle(experience.id)}
-      />
+      <ExperienceCard key={experience.id} experience={experience} />
     ))}
   </div>
 );
 
 const TimelineIndicator = () => (
-  <div className="flex justify-center mt-16 sm:mt-20">
-    <div className="w-1 h-16 bg-gradient-to-b from-cyan-400 to-transparent rounded-full"></div>
+  <div className="flex justify-center mt-16">
+    <div className="w-px h-16 bg-gradient-to-b from-cyan-400/50 to-transparent"></div>
   </div>
 );
 
 export default function WorkExperience() {
-  const expansion = useExpansion();
-
   return (
     <section
       id="work-experience"
-      className="min-h-screen py-20 sm:py-24 md:py-28 px-4 sm:px-6 md:px-12 lg:px-20"
+      className="min-h-screen py-20 sm:py-24"
     >
-      <div className="w-full max-w-4xl mx-auto text-center">
+      <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 text-center mb-12">
         <SectionHeader />
-        <ExperiencesList experiences={WORK_EXPERIENCES} expansion={expansion} />
+      </div>
+      
+      {/* Full-width mosaic - no container padding */}
+      <div className="w-full">
+        <ExperiencesMosaic experiences={WORK_EXPERIENCES} />
+      </div>
+      
+      <div className="w-full max-w-7xl mx-auto px-6 sm:px-12">
         <TimelineIndicator />
       </div>
     </section>

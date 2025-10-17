@@ -27,8 +27,7 @@ const SOCIAL_LINKS = [
   }
 ];
 
-const GRADIENT_TEXT_CLASS = "bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text";
-const BUTTON_BASE_CLASS = "w-full flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-medium rounded-xl hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-cyan-500/25";
+const BUTTON_BASE_CLASS = "w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-medium rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-cyan-500/25";
 
 const createFormData = (formValues, selectedFile = null) => {
   const formData = new FormData();
@@ -227,15 +226,23 @@ const useFormSubmission = () => {
 
 const SectionHeader = () => (
   <div className="space-y-6 mb-16">
-    <h1 className="text-3xl sm:text-4xl font-light text-white leading-tight">
-      Let's{" "}
-      <span className={GRADIENT_TEXT_CLASS}>
-        Connect
+    {/* Section number indicator */}
+    <div className="flex items-center justify-center gap-3 text-sm text-gray-400 tracking-widest">
+      <span className="w-8 h-px bg-gray-600"></span>
+      <span>04</span>
+      <span className="font-light font-mono">// contact</span>
+      <span className="w-8 h-px bg-gray-600"></span>
+    </div>
+
+    <h1 className="text-[clamp(2rem,8vw,4rem)] font-bold text-white tracking-tight">
+      LET'S{" "}
+      <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">
+        CONNECT
       </span>
     </h1>
     
-    <p className="text-lg text-gray-300 font-light leading-relaxed max-w-3xl mx-auto">
-      Ready to collaborate or have a question? I'd love to hear from you. Send me a message or connect through social media.
+    <p className="text-base sm:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto font-light">
+      Have a project in mind or want to collaborate? Drop me a message below or connect via social media.
     </p>
   </div>
 );
@@ -261,9 +268,9 @@ const FormField = ({ type = "text", name, placeholder, value, onChange, rows, re
   const Component = type === "textarea" ? "textarea" : "input";
   
   return (
-    <div className="relative">
+    <div className="relative group">
       {icon && (
-        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+        <div className="absolute left-4 top-4 text-gray-500 group-focus-within:text-cyan-400 transition-colors">
           {icon}
         </div>
       )}
@@ -274,7 +281,7 @@ const FormField = ({ type = "text", name, placeholder, value, onChange, rows, re
         value={value}
         onChange={onChange}
         rows={type === "textarea" ? rows : undefined}
-        className={`w-full ${icon ? 'pl-12' : 'pl-4'} pr-4 py-4 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500/50 transition-all duration-300 resize-none`}
+        className={`w-full ${icon ? 'pl-12' : 'pl-4'} pr-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] transition-all duration-300 resize-none`}
         required={required}
       />
     </div>
@@ -295,21 +302,21 @@ const SubmitButton = ({ isSubmitting }) => (
 const StatusMessage = ({ success, errorMessage }) => {
   if (success === true) {
     return (
-      <div className="mt-6 p-4 bg-green-900/20 border border-green-500/50 rounded-xl text-center text-green-400">
-        <div className="font-medium mb-1">Message Sent Successfully!</div>
-        <div className="text-sm">Thank you for reaching out. I'll get back to you soon.</div>
+      <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-center text-green-400">
+        <div className="font-semibold mb-1">Message Sent Successfully!</div>
+        <div className="text-sm text-green-300">Thank you for reaching out. I'll get back to you soon.</div>
       </div>
     );
   }
 
   if (success === false) {
     return (
-      <div className="mt-6 p-4 bg-red-900/20 border border-red-500/50 rounded-xl text-center text-red-400">
-        <div className="font-medium mb-2">Message Failed to Send</div>
+      <div className="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-center text-red-400">
+        <div className="font-semibold mb-2">Message Failed to Send</div>
         {errorMessage && (
-          <p className="text-sm mb-2">{errorMessage}</p>
+          <p className="text-sm mb-2 text-red-300">{errorMessage}</p>
         )}
-        <p className="text-sm">Please try using the direct contact links instead.</p>
+        <p className="text-sm text-red-300">Please try using the direct contact links instead.</p>
       </div>
     );
   }
@@ -318,14 +325,14 @@ const StatusMessage = ({ success, errorMessage }) => {
 };
 
 const SocialLinks = () => (
-  <div className="mt-8 flex justify-center space-x-6">
+  <div className="mt-12 flex justify-center gap-6">
     {SOCIAL_LINKS.map((link, index) => (
       <a
         key={index}
         href={link.href}
         target="_blank"
         rel="noopener noreferrer"
-        className={`text-${link.color}-500 hover:text-${link.color}-400 transition-colors text-3xl`}
+        className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-lg text-gray-400 hover:text-cyan-400 hover:border-cyan-500/50 hover:bg-cyan-500/5 transition-all duration-300 hover:scale-110 text-xl"
         aria-label={link.label}
       >
         {link.icon}
@@ -335,10 +342,10 @@ const SocialLinks = () => (
 );
 
 const ContactForm = ({ formState, formSubmission, onSubmit }) => (
-  <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 max-w-2xl mx-auto">
-    <h2 className="text-2xl font-medium text-white mb-6">Send Message</h2>
+  <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 max-w-2xl mx-auto backdrop-blur-sm">
+    <h2 className="text-xl font-semibold text-white mb-6 tracking-wide uppercase text-sm">Send a Message</h2>
     
-    <form className="space-y-6" onSubmit={onSubmit}>
+    <form className="space-y-5" onSubmit={onSubmit}>
       <HoneypotField 
         value={formState.honeypot} 
         onChange={(e) => formState.setHoneypot(e.target.value)} 
@@ -397,19 +404,19 @@ const MathVerificationPopup = ({
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-slate-800/95 border border-slate-700/50 rounded-xl p-6 max-w-md w-full shadow-2xl">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-slate-900/95 border border-cyan-500/30 rounded-xl p-8 max-w-md w-full shadow-2xl shadow-cyan-500/20">
         <div className="text-center mb-6">
-          <h3 className="text-xl font-medium text-white mb-2">
+          <h3 className="text-2xl font-bold text-white mb-3">
             BEEP...BOOP 🤖
           </h3>
-          <p className="text-gray-300">
-            Please solve this simple math problem to prove you're not a robot or spam!
+          <p className="text-gray-400 text-sm">
+            Solve this simple math problem to prove you're human!
           </p>
         </div>
         
         <div className="text-center mb-6">
-          <div className="text-3xl font-light text-cyan-400 mb-4">
+          <div className="text-4xl font-bold text-cyan-400 mb-6 font-mono">
             {mathChallenge.question} = ?
           </div>
           
@@ -420,14 +427,14 @@ const MathVerificationPopup = ({
             value={userAnswer}
             onChange={(e) => onAnswerChange(e.target.value)}
             placeholder="Your answer"
-            className={`w-full p-4 bg-slate-700/50 border rounded-xl text-white placeholder-gray-400 text-center text-lg focus:outline-none transition-all duration-300 ${
-              mathError ? 'border-red-500/50 bg-red-900/20' : 'border-slate-600/50 focus:border-cyan-500/50'
+            className={`w-full p-4 bg-white/5 border rounded-lg text-white placeholder-gray-500 text-center text-xl focus:outline-none transition-all duration-300 ${
+              mathError ? 'border-red-500/50 bg-red-500/10' : 'border-white/10 focus:border-cyan-500/50'
             }`}
             autoFocus
           />
           
           {mathError && (
-            <p className="text-red-400 text-sm mt-2">
+            <p className="text-red-400 text-sm mt-3">
               Incorrect answer. Please try again.
             </p>
           )}
@@ -436,14 +443,14 @@ const MathVerificationPopup = ({
         <div className="flex flex-col gap-3">
           <button
             onClick={onVerify}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-700 text-white rounded-xl hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-cyan-500/25 disabled:opacity-50 disabled:transform-none"
+            className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-700 text-white rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-cyan-500/25 disabled:opacity-50 disabled:transform-none font-medium"
             disabled={!userAnswer || isSubmitting}
           >
             {isSubmitting ? "Sending..." : "Verify & Send"}
           </button>
           <button
             onClick={onClose}
-            className="flex-1 px-6 py-3 bg-slate-700/50 text-gray-300 rounded-xl hover:bg-slate-700/70 transition-all duration-300 disabled:opacity-50"
+            className="px-6 py-3 bg-white/5 border border-white/10 text-gray-300 rounded-lg hover:bg-white/10 transition-all duration-300 disabled:opacity-50"
             disabled={isSubmitting}
           >
             Cancel
@@ -456,7 +463,7 @@ const MathVerificationPopup = ({
             className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
             disabled={isSubmitting}
           >
-            Generate new problem (Come on, this looks simple enough already!)
+            Generate new problem
           </button>
         </div>
       </div>
@@ -512,7 +519,7 @@ export default function Contact() {
   return (
     <section 
       id="contact" 
-      className="min-h-screen py-20 px-4"
+      className="min-h-screen py-20 sm:py-24 px-6 sm:px-12"
     >
       <div className="w-full max-w-4xl mx-auto text-center">
         <SectionHeader />

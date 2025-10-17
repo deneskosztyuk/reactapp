@@ -1,122 +1,124 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-scroll";
 
-const TYPEWRITER_SPEED = 80;
 const FADE_IN_DELAY = 100;
 const SCROLL_DURATION = 600;
 
-const GRADIENT_TEXT_CLASS = "bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text";
-const DEFAULT_TEXT_CLASS = "text-gray-300";
-
 const PERSONAL_INFO = {
-  name: "Denes Kosztyuk",
-  title: "Robotics | Embedded Systems | Fullstack",
+  firstName: "DENES",
+  lastName: "KOSZTYUK",
+  title: "SOFTWARE ENGINEER, ROBOTICS & FULLSTACK DEVELOPER.",
   location: "Stavanger, Norway / Remote",
-  description: "Computer Systems & Robotics Engineering graduate specializing in software and web applications, robotics and embedded systems. Professional experience through internship and in-depth experience with academic and personal projects.",
-  skills: "Embedded C, Python, Java, JavaScript, KiCad, EasyEDA, Docker, Git, PostgreSQL. Over two years freelance development experience."
-};
-
-const TypewriterText = ({ text, gradient = false }) => {
-  const [displayText, setDisplayText] = useState("");
-  const [showCursor, setShowCursor] = useState(true);
-
-  useEffect(() => {
-    let currentIndex = 0;
-    const interval = setInterval(() => {
-      if (currentIndex <= text.length) {
-        setDisplayText(text.slice(0, currentIndex));
-        currentIndex++;
-      } else {
-        clearInterval(interval);
-        setShowCursor(false);
-      }
-    }, TYPEWRITER_SPEED);
-
-    return () => clearInterval(interval);
-  }, [text]);
-
-  const textClass = gradient ? GRADIENT_TEXT_CLASS : DEFAULT_TEXT_CLASS;
-
-  return (
-    <span className={textClass}>
-      {displayText}
-      {showCursor && <span className="blinking-cursor text-cyan-400">|</span>}
-    </span>
-  );
+  skills: ["Java", "Python", "TypeScript", "React", "Next.js", "Robotics", "IoT"],
 };
 
 const HeroHeading = () => (
-  <div className="space-y-6 sm:space-y-8">
-    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light text-white leading-tight">
-      Hei, I'm{" "}
-      <span className="block mt-4 sm:mt-6">
-        <TypewriterText text={PERSONAL_INFO.name} gradient={true} />
-      </span>
-    </h1>
-    
-    <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl text-white font-light leading-relaxed max-w-3xl mx-auto">
-      <TypewriterText text={PERSONAL_INFO.title} />
-    </h2>
-    
-    <div className="flex items-center justify-center text-white text-base sm:text-lg mt-8">
-      <span className="mr-2">📍</span>
-      <span>{PERSONAL_INFO.location}</span>
-      <span className="ml-4">👨‍💻</span>
+  <div className="relative space-y-6 pt-20">
+    {/* Massive name typography */}
+    <div className="relative">
+      <h1 className="text-[clamp(2rem,10vw,8rem)] font-black leading-[0.9] tracking-tight">
+        <span className="block text-white opacity-90">
+          {PERSONAL_INFO.firstName}
+        </span>
+        <span className="block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">
+          {PERSONAL_INFO.lastName}
+        </span>
+      </h1>
+      
+      {/* Floating orb decoration - space vibe */}
+      <div className="absolute top-1/2 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-full blur-3xl opacity-30 animate-pulse"></div>
     </div>
+
+    {/* Professional title */}
+    <h2 className="text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-300 tracking-[0.2em] uppercase max-w-3xl mx-auto leading-relaxed">
+      {PERSONAL_INFO.title}
+    </h2>
   </div>
 );
 
-const HeroDescription = () => (
-  <div className="space-y-8 text-white leading-relaxed max-w-3xl mx-auto">
-    <p className="text-base sm:text-lg md:text-xl leading-loose">
-      {PERSONAL_INFO.description}
-    </p>
-    
-    <p className="text-base sm:text-lg md:text-xl leading-loose">
-      <span className="font-bold text-blue-500">Core Skills:</span> {PERSONAL_INFO.skills}
-    </p>
+const SkillsBadges = () => (
+  <div className="flex flex-wrap justify-center gap-4 mt-12 max-w-2xl mx-auto">
+    {PERSONAL_INFO.skills.map((skill, index) => (
+      <span
+        key={index}
+        className="px-4 py-2 text-xs sm:text-sm font-medium text-cyan-300 border border-cyan-500/30 rounded-md bg-cyan-500/5 hover:bg-cyan-500/10 hover:border-cyan-500/50 transition-all duration-300 cursor-default select-none shadow-sm hover:shadow-md hover:shadow-cyan-500/10"
+      >
+        {skill}
+      </span>
+    ))}
   </div>
 );
 
-const HeroCTA = () => (
-  <div className="pt-8 sm:pt-12">
-    <p className="text-lg sm:text-xl text-gray-200 mb-8">
-      Something caught your eye?
-    </p>
-    <Link
-      to="contact"
-      smooth={true}
-      duration={SCROLL_DURATION}
-      className="inline-flex items-center px-8 py-4 sm:px-10 sm:py-5 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-medium text-lg rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 cursor-pointer shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/30 transform hover:-translate-y-1"
-    >
-      <span>Let's have a chat</span>
-    </Link>
+const LocationBadge = () => (
+  <div className="group inline-flex items-center gap-3 px-6 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg shadow-md transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-cyan-500/20">
+    <span className="group-hover:animate-pulse">📍</span>
+    <span className="text-sm text-gray-300">{PERSONAL_INFO.location}</span>
   </div>
 );
 
 const ScrollIndicator = () => (
-  <div className="flex justify-center mt-20 sm:mt-24 md:mt-28">
-    <div className="animate-bounce">
-      <div className="w-6 h-10 border-2 border-gray-600 rounded-full flex justify-center">
-        <div className="w-1 h-3 bg-cyan-400 rounded-full mt-2 animate-pulse"></div>
-      </div>
+  <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+    <div className="w-6 h-10 border-2 border-cyan-500/30 rounded-full flex justify-center p-2 cursor-pointer hover:border-cyan-400 transition-colors">
+      <div className="w-1 h-3 bg-cyan-400 rounded-full animate-bounce"></div>
     </div>
   </div>
 );
 
+const CTAButton = () => (
+  <Link
+    to="contact"
+    smooth={true}
+    duration={SCROLL_DURATION}
+    className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-medium text-base rounded-full hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 cursor-pointer transform hover:scale-105"
+  >
+    <span>Let's collaborate</span>
+    <svg 
+      className="w-5 h-5 group-hover:translate-x-1 transition-transform" 
+      fill="none" 
+      viewBox="0 0 24 24" 
+      stroke="currentColor"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+    </svg>
+  </Link>
+);
+
+const FloatingShapes = () => (
+  <>
+    {/* Geometric shapes for space aesthetic */}
+    <div className="absolute top-1/4 left-10 w-20 h-20 border border-cyan-500/20 rounded-lg rotate-45 animate-float"></div>
+    <div className="absolute bottom-1/3 right-20 w-16 h-16 bg-purple-600/10 rounded-full blur-xl animate-float-delayed"></div>
+    <div className="absolute top-1/2 right-1/4 w-12 h-12 border-2 border-blue-500/20 rotate-12 animate-spin-slow"></div>
+  </>
+);
+
 const HeroStyles = () => (
   <style jsx>{`
-    @keyframes blinking-cursor {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(45deg); }
+      50% { transform: translateY(-20px) rotate(45deg); }
     }
 
-    .blinking-cursor {
-      animation: blinking-cursor 1s infinite;
+    @keyframes float-delayed {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-30px); }
     }
 
-    html {
-      scroll-behavior: smooth;
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .animate-float-delayed {
+      animation: float-delayed 8s ease-in-out infinite;
+    }
+
+    .animate-spin-slow {
+      animation: spin-slow 20s linear infinite;
     }
   `}</style>
 );
@@ -129,23 +131,29 @@ export default function Hero() {
     return () => clearTimeout(timer);
   }, []);
 
-  const containerClass = `w-full max-w-4xl mx-auto text-center transition-all duration-1000 ${
+  const containerClass = `relative w-full max-w-7xl mx-auto text-center transition-all duration-1000 ${
     fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
   }`;
 
   return (
     <section 
       id="hero"
-      className="min-h-screen flex items-center justify-center pt-20 sm:pt-24 md:pt-28 px-4 sm:px-6 md:px-12 lg:px-20"
+      className="relative min-h-screen flex items-center justify-center px-6 sm:px-12 pb-32 overflow-hidden"
     >
+      <FloatingShapes />
+      
       <div className={containerClass}>
-        <div className="space-y-12 sm:space-y-16 md:space-y-20">
+        <div className="space-y-16">
           <HeroHeading />
-          <HeroDescription />
-          <HeroCTA />
+          <LocationBadge />
+          <SkillsBadges />
+          <div className="pt-8">
+            <CTAButton />
+          </div>
         </div>
-        <ScrollIndicator />
       </div>
+
+      <ScrollIndicator />
       <HeroStyles />
     </section>
   );
