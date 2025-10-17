@@ -3,12 +3,14 @@ import React, { useState, useEffect, useRef } from 'react';
 const BackgroundLayout = ({ children }) => {
   const [stars, setStars] = useState([]);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [parallaxOffset, setParallaxOffset] = useState({ x: 0, y: 0 });
   const [innerPos, setInnerPos] = useState({ x: 0, y: 0 });
   const [outerPos, setOuterPos] = useState({ x: 0, y: 0 });
   const [cursorVisible, setCursorVisible] = useState(false);
   
   const innerRef = useRef({ x: 0, y: 0 });
   const outerRef = useRef({ x: 0, y: 0 });
+  const parallaxRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const generateStars = () => {
@@ -24,6 +26,7 @@ const BackgroundLayout = ({ children }) => {
           opacity: Math.random() * 0.6 + 0.2,
           twinkleDelay: Math.random() * 5,
           twinkleDuration: Math.random() * 6 + 4,
+          depth: Math.random() * 0.5 + 0.5,
         });
       }
       setStars(newStars);
@@ -63,6 +66,39 @@ const BackgroundLayout = ({ children }) => {
       document.removeEventListener('mouseenter', handleMouseEnter);
     };
   }, []);
+
+  // Parallax effect for stars
+  useEffect(() => {
+    let animationFrameId;
+    
+    const animate = () => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      
+      const offsetX = (mousePos.x - centerX) / centerX;
+      const offsetY = (mousePos.y - centerY) / centerY;
+      
+      const parallaxSpeed = 0.05;
+      const maxOffset = 12.5; // Increased by 25% (was 10, now 12.5)
+      
+      const targetX = -offsetX * maxOffset;
+      const targetY = -offsetY * maxOffset;
+      
+      parallaxRef.current.x += (targetX - parallaxRef.current.x) * parallaxSpeed;
+      parallaxRef.current.y += (targetY - parallaxRef.current.y) * parallaxSpeed;
+      
+      setParallaxOffset({
+        x: parallaxRef.current.x,
+        y: parallaxRef.current.y
+      });
+      
+      animationFrameId = requestAnimationFrame(animate);
+    };
+    
+    animate();
+    
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [mousePos]);
 
   useEffect(() => {
     let animationFrameId;
@@ -153,10 +189,21 @@ const BackgroundLayout = ({ children }) => {
 
       <div 
         className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black relative"
-        style={{ overflowX: 'hidden', maxWidth: '100vw', width: '100%' }}
+        style={{ 
+          overflowX: 'hidden', 
+          maxWidth: '100vw', 
+          width: '100%',
+          overflow: 'hidden' // Added to prevent any overflow
+        }}
       >
-        {/* Subtle starry background */}
-        <div className="absolute inset-0 pointer-events-none z-0">
+        {/* Subtle starry background with parallax */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-0 transition-transform duration-100 ease-out"
+          style={{
+            transform: `translate(${parallaxOffset.x}px, ${parallaxOffset.y}px)`,
+            overflow: 'hidden' // Added to contain stars
+          }}
+        >
           {stars.map((star) => (
             <div
               key={star.id}
@@ -169,6 +216,7 @@ const BackgroundLayout = ({ children }) => {
                 opacity: star.opacity,
                 animationDelay: `${star.twinkleDelay}s`,
                 animationDuration: `${star.twinkleDuration}s`,
+                transform: `translate(${parallaxOffset.x * star.depth}px, ${parallaxOffset.y * star.depth}px)`
               }}
             />
           ))}

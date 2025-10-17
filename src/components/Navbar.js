@@ -104,15 +104,15 @@ const useMobileMenu = () => {
 };
 
 const Logo = () => (
-  <div className="flex-shrink-0">
+  <div className="flex-shrink-0 mr-2 sm:mr-4">
     <Link
       to="hero"
       smooth={true}
       duration={SCROLL_DURATION}
-      className="cursor-pointer"
+      className="cursor-pointer block"
     >
-      <h1 className="text-xl font-bold tracking-widest text-white hover:text-cyan-400 transition-colors duration-300">
-        Velkommen<span className="text-cyan-400"></span>
+      <h1 className="font-bold text-white hover:text-cyan-400 transition-colors duration-300 whitespace-nowrap text-[16px] xs:text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl tracking-tight sm:tracking-normal md:tracking-wide lg:tracking-wider">
+        Velkommen til min webportefølje<span className="text-cyan-400"></span>
       </h1>
     </Link>
   </div>
@@ -159,7 +159,7 @@ const SocialLink = ({ link }) => (
 );
 
 const DesktopNavigation = ({ activeSection }) => (
-  <div className="hidden md:flex items-center space-x-8 lg:space-x-12">
+  <div className="hidden lg:flex items-center space-x-8 lg:space-x-12">
     <ul className="flex space-x-8 lg:space-x-10">
       {NAVIGATION_ITEMS.map((item) => (
         <NavigationItem key={item.to} item={item} activeSection={activeSection} />
@@ -175,7 +175,7 @@ const DesktopNavigation = ({ activeSection }) => (
 );
 
 const HamburgerButton = ({ isMobileMenuOpen, toggleMobileMenu }) => (
-  <div className="md:hidden pr-4">
+  <div className="lg:hidden pr-4">
     <button
       id="mobile-menu-button"
       onClick={toggleMobileMenu}
@@ -233,7 +233,7 @@ const MobileMenu = ({ isMobileMenuOpen, activeSection, closeMobileMenu }) => {
       
       <div 
         id="mobile-menu"
-        className="md:hidden relative z-50 bg-slate-900/98 backdrop-blur-lg border-t border-slate-800/50 shadow-2xl animate-slide-down"
+        className="lg:hidden relative z-50 bg-slate-900/98 backdrop-blur-lg border-t border-slate-800/50 shadow-2xl animate-slide-down"
       >
         <div className="px-4 py-6 space-y-6">
           <ul className="space-y-2">
