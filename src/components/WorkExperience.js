@@ -24,7 +24,7 @@ const WORK_EXPERIENCES = [
       'Designed custom Discord bots for gaming and tech communities using discord.js'
     ],
     technologies: ['React', 'Node.js', 'Java', 'Spring Boot', 'Git', 'TypeScript', 'discord.js'],
-    gradient: 'from-cyan-800 to-blue-950'
+    gradient: 'from-cyan-800 to-darkblue-950'
   },
   {
     id: 'jabil',
@@ -41,7 +41,7 @@ const WORK_EXPERIENCES = [
       'Trained 8 new technicians on RoHS & safety compliance'
     ],
     technologies: ['PCB', 'Circuit Production', 'IoT', 'Embedded Systems', 'Robotics'],
-    gradient: 'from-purple-800 to-pink-950'
+    gradient: 'from-purple-800 to-darkblue-950'
   }
 ];
 
@@ -244,8 +244,8 @@ const ExperienceCard = ({ experience, index }) => {
     return () => observer.disconnect();
   }, []);
 
-  // Alternate animation direction - left card slides from left, right card slides from right
-  const animationClass = index % 2 === 0
+  // Determine animation class based on index for alternating slide-in effect
+  const animationClass = index % 2 === 0 // even index
     ? isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
     : isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12';
 
@@ -329,7 +329,7 @@ export default function WorkExperience() {
         <SectionHeader />
       </div>
       
-      {/* Full-width mosaic - no container padding */}
+      {/* Full-width mosaic */}
       <div className="w-full">
         <ExperiencesMosaic experiences={WORK_EXPERIENCES} />
       </div>

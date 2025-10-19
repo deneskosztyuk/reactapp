@@ -72,14 +72,14 @@ const BackgroundLayout = ({ children }) => {
     let animationFrameId;
     
     const animate = () => {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
+      const centerX = window.innerWidth / 2; // center of the viewport X
+      const centerY = window.innerHeight / 2; // center of the viewport Y
       
       const offsetX = (mousePos.x - centerX) / centerX;
       const offsetY = (mousePos.y - centerY) / centerY;
       
-      const parallaxSpeed = 0.05;
-      const maxOffset = 12.5; // Increased by 25% (was 10, now 12.5)
+      const parallaxSpeed = 0.05; // parallax speed factor
+      const maxOffset = 20.0; // parallax maximum offset in pixels
       
       const targetX = -offsetX * maxOffset;
       const targetY = -offsetY * maxOffset;
