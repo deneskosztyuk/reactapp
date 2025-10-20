@@ -14,10 +14,12 @@ import { BiLogoPostgresql } from "react-icons/bi";
 import { SiTailwindcss, SiJavascript, SiSpring, SiTensorflow } from "react-icons/si";
 import { GrMysql } from "react-icons/gr";
 
+
 const BREAKPOINTS = {
   MOBILE: 640,
   TABLET: 1024
 };
+
 
 const PROJECTS_PER_VIEW = {
   MOBILE: 1,
@@ -25,7 +27,9 @@ const PROJECTS_PER_VIEW = {
   DESKTOP: 3
 };
 
-const TRANSITION_DURATION = 300;
+
+const TRANSITION_DURATION = 500;
+
 
 const TECH_STACK = [
   { icon: <FaPython />, label: "Python" },
@@ -40,6 +44,7 @@ const TECH_STACK = [
   { icon: <GrMysql />, label: "MySQL" },
   { icon: <FaGit />, label: "Git" }
 ];
+
 
 const PROJECT_DATA = [
   {
@@ -89,6 +94,7 @@ const PROJECT_DATA = [
   },
 ];
 
+
 const useResponsiveProjectsPerView = () => {
   const [projectsPerView, setProjectsPerView] = useState(PROJECTS_PER_VIEW.DESKTOP);
 
@@ -111,6 +117,7 @@ const useResponsiveProjectsPerView = () => {
 
   return projectsPerView;
 };
+
 
 const useCarousel = (totalItems, itemsPerView) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -142,9 +149,9 @@ const useCarousel = (totalItems, itemsPerView) => {
   };
 };
 
+
 const SectionHeader = () => (
   <div className="space-y-6 mb-16">
-    {/* Section number indicator */}
     <div className="flex items-center justify-center gap-3 text-sm text-gray-400 tracking-widest">
       <span className="w-8 h-px bg-gray-600"></span>
       <span>03</span>
@@ -165,8 +172,9 @@ const SectionHeader = () => (
   </div>
 );
 
+
 const TechIconTooltip = ({ label }) => (
-  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
     <div className="bg-slate-900 border border-cyan-500/30 rounded-lg px-3 py-2 shadow-xl">
       <div className="text-cyan-400 text-xs font-medium whitespace-nowrap font-mono">
         {label}
@@ -175,11 +183,12 @@ const TechIconTooltip = ({ label }) => (
   </div>
 );
 
+
 const TechIcon = ({ icon, label }) => {
   return (
     <div className="relative group">
-      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center transition-all duration-300 hover:border-cyan-500/50 hover:bg-cyan-500/5 hover:scale-110 cursor-pointer">
-        <span className="text-xl text-gray-400 group-hover:text-cyan-400 transition-colors duration-300">
+      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center transition-all duration-500 hover:border-cyan-500/50 hover:bg-cyan-500/5 hover:scale-110 cursor-pointer">
+        <span className="text-xl text-gray-400 group-hover:text-cyan-400 transition-colors duration-500">
           {icon}
         </span>
       </div>
@@ -187,6 +196,7 @@ const TechIcon = ({ icon, label }) => {
     </div>
   );
 };
+
 
 const TechStackSection = () => (
   <div className="mb-16">
@@ -205,11 +215,13 @@ const TechStackSection = () => (
   </div>
 );
 
+
 const FeaturedBadge = () => (
   <div className="absolute -top-3 -right-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg z-10">
     Featured
   </div>
 );
+
 
 const ProjectCardHeader = ({ title, subtitle, description }) => (
   <div className="mb-4">
@@ -225,11 +237,13 @@ const ProjectCardHeader = ({ title, subtitle, description }) => (
   </div>
 );
 
+
 const TechnologyTag = ({ technology }) => (
-  <span className="px-3 py-1.5 bg-cyan-500/5 text-cyan-300 text-xs font-medium rounded-md border border-cyan-500/20 hover:border-cyan-500/40 hover:bg-cyan-500/10 transition-all duration-300 cursor-default">
+  <span className="px-3 py-1.5 bg-cyan-500/5 text-cyan-300 text-xs font-medium rounded-md border border-cyan-500/20 hover:border-cyan-500/40 hover:bg-cyan-500/10 transition-all duration-500 cursor-default">
     {technology}
   </span>
 );
+
 
 const TechnologiesSection = ({ technologies }) => (
   <div className="flex-1 mb-6">
@@ -242,13 +256,14 @@ const TechnologiesSection = ({ technologies }) => (
   </div>
 );
 
+
 const ProjectLinks = ({ githubUrl, liveUrl }) => (
   <div className="flex items-center justify-between pt-4 border-t border-white/5">
     <a
       href={githubUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors duration-300 text-sm"
+      className="flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors duration-500 text-sm"
     >
       <FaGithub className="w-4 h-4" />
       <span>View Code</span>
@@ -259,7 +274,7 @@ const ProjectLinks = ({ githubUrl, liveUrl }) => (
         href={liveUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 text-white text-sm rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/20"
+        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 text-white text-sm rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-500 transform hover:scale-105 shadow-lg shadow-cyan-500/20"
       >
         <span>Live Demo</span>
         <FaExternalLinkAlt className="w-3 h-3" />
@@ -267,6 +282,7 @@ const ProjectLinks = ({ githubUrl, liveUrl }) => (
     )}
   </div>
 );
+
 
 const ProjectCard = ({ project, index }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -276,10 +292,9 @@ const ProjectCard = ({ project, index }) => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Delay based on index for sequential animation
           setTimeout(() => {
             setIsVisible(true);
-          }, index * 150); // 150ms delay between each card
+          }, index * 250);
           observer.disconnect();
         }
       },
@@ -299,7 +314,7 @@ const ProjectCard = ({ project, index }) => {
   return (
     <div 
       ref={cardRef}
-      className={`group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 h-full flex flex-col transition-all duration-700 hover:border-cyan-500/30 hover:bg-white/[0.07] hover:shadow-lg hover:shadow-cyan-500/10 relative ${
+      className={`group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 h-full flex flex-col transition-all duration-1000 hover:border-cyan-500/30 hover:bg-white/[0.07] hover:shadow-lg hover:shadow-cyan-500/10 relative ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
     >
@@ -315,11 +330,12 @@ const ProjectCard = ({ project, index }) => {
   );
 };
 
+
 const NavigationButton = ({ direction, onClick, disabled, children }) => (
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`flex items-center justify-center gap-2 px-6 py-3 bg-white/5 border rounded-lg transition-all duration-300 font-mono text-sm ${
+    className={`flex items-center justify-center gap-2 px-6 py-3 bg-white/5 border rounded-lg transition-all duration-500 font-mono text-sm ${
       !disabled 
         ? 'border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/5 text-gray-400 hover:text-cyan-400' 
         : 'border-white/5 opacity-30 cursor-not-allowed text-gray-600'
@@ -328,6 +344,7 @@ const NavigationButton = ({ direction, onClick, disabled, children }) => (
     {children}
   </button>
 );
+
 
 const CarouselNavigation = ({ onPrevious, onNext, canGoPrevious, canGoNext }) => (
   <div className="flex items-center justify-center gap-4">
@@ -351,6 +368,7 @@ const CarouselNavigation = ({ onPrevious, onNext, canGoPrevious, canGoNext }) =>
   </div>
 );
 
+
 const ProjectsGrid = ({ projects, projectsPerView, startIndex }) => {
   const gridClass = `grid gap-6 mb-8 ${
     projectsPerView === 1 ? 'grid-cols-1' :
@@ -367,6 +385,7 @@ const ProjectsGrid = ({ projects, projectsPerView, startIndex }) => {
     </div>
   );
 };
+
 
 const ProjectsCarousel = () => {
   const projectsPerView = useResponsiveProjectsPerView();
@@ -403,11 +422,13 @@ const ProjectsCarousel = () => {
   );
 };
 
+
 const TimelineIndicator = () => (
   <div className="flex justify-center mt-16">
     <div className="w-px h-16 bg-gradient-to-b from-cyan-400/50 to-transparent rounded-full"></div>
   </div>
 );
+
 
 export default function Projects() {
   return (

@@ -70,7 +70,7 @@ const SectionHeader = () => (
 
 const ExperienceIcon = ({ icon, isVisible }) => (
   <div 
-    className={`flex-shrink-0 w-14 h-14 bg-white/10 flex items-center justify-center transition-all duration-700 ${
+    className={`flex-shrink-0 w-14 h-14 bg-white/10 flex items-center justify-center transition-all duration-1000 ${ 
       isVisible 
         ? 'opacity-100 scale-100 rotate-0' 
         : 'opacity-0 scale-50 rotate-45'
@@ -90,7 +90,7 @@ const MetaInfo = ({ period, location, type, isVisible }) => {
       [0, 1, 2].forEach((index) => {
         setTimeout(() => {
           setShowItems(prev => [...prev, index]);
-        }, 300 + (index * 100));
+        }, 500 + (index * 200)); // Changed from 300 + (index * 100)
       });
     }
   }, [isVisible]);
@@ -107,7 +107,7 @@ const MetaInfo = ({ period, location, type, isVisible }) => {
         <React.Fragment key={index}>
           {index > 0 && (
             <span 
-              className={`text-white/40 transition-opacity duration-300 ${
+              className={`text-white/40 transition-opacity duration-500 ${ // Changed from 300 to 500
                 showItems.includes(index) ? 'opacity-100' : 'opacity-0'
               }`}
             >
@@ -115,7 +115,7 @@ const MetaInfo = ({ period, location, type, isVisible }) => {
             </span>
           )}
           <span 
-            className={`flex items-center gap-2 transition-all duration-500 ${
+            className={`flex items-center gap-2 transition-all duration-700 ${ // Changed from 500 to 700
               showItems.includes(index) 
                 ? 'opacity-100 translate-x-0' 
                 : 'opacity-0 -translate-x-4'
@@ -138,7 +138,7 @@ const AchievementsList = ({ achievements, isVisible }) => {
       achievements.forEach((_, index) => {
         setTimeout(() => {
           setVisibleAchievements(prev => [...prev, index]);
-        }, 600 + (index * 150));
+        }, 900 + (index * 250)); // Changed from 600 + (index * 150)
       });
     }
   }, [isVisible, achievements]);
@@ -146,7 +146,7 @@ const AchievementsList = ({ achievements, isVisible }) => {
   return (
     <div className="mt-6">
       <h4 
-        className={`text-white font-bold text-sm mb-3 tracking-wide uppercase transition-all duration-500 ${
+        className={`text-white font-bold text-sm mb-3 tracking-wide uppercase transition-all duration-700 ${ // Changed from 500 to 700
           isVisible 
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-4'
@@ -158,7 +158,7 @@ const AchievementsList = ({ achievements, isVisible }) => {
         {achievements.map((achievement, index) => (
           <li 
             key={index} 
-            className={`flex items-start gap-3 transition-all duration-500 ${
+            className={`flex items-start gap-3 transition-all duration-700 ${ // Changed from 500 to 700
               visibleAchievements.includes(index)
                 ? 'opacity-100 translate-x-0'
                 : 'opacity-0 -translate-x-8'
@@ -181,7 +181,7 @@ const TechnologiesList = ({ technologies, isVisible }) => {
       technologies.forEach((_, index) => {
         setTimeout(() => {
           setVisibleTech(prev => [...prev, index]);
-        }, 1200 + (index * 80));
+        }, 1600 + (index * 120)); // Changed from 1200 + (index * 80)
       });
     }
   }, [isVisible, technologies]);
@@ -189,7 +189,7 @@ const TechnologiesList = ({ technologies, isVisible }) => {
   return (
     <div className="mt-6">
       <h4 
-        className={`text-white font-bold text-sm mb-3 tracking-wide uppercase transition-all duration-500 ${
+        className={`text-white font-bold text-sm mb-3 tracking-wide uppercase transition-all duration-700 ${ // Changed from 500 to 700
           isVisible 
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-4'
@@ -201,7 +201,7 @@ const TechnologiesList = ({ technologies, isVisible }) => {
         {technologies.map((tech, index) => (
           <span
             key={index}
-            className={`px-3 py-1.5 bg-white/10 text-white text-xs font-medium hover:bg-white/20 transition-all duration-300 cursor-default hover:scale-110 ${
+            className={`px-3 py-1.5 bg-white/10 text-white text-xs font-medium hover:bg-white/20 transition-all duration-500 cursor-default hover:scale-110 ${ // Changed from 300 to 500
               visibleTech.includes(index)
                 ? 'opacity-100 scale-100'
                 : 'opacity-0 scale-75'
@@ -226,8 +226,8 @@ const ExperienceCard = ({ experience, index }) => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          setTimeout(() => setHeaderVisible(true), 200);
-          setTimeout(() => setDescriptionVisible(true), 400);
+          setTimeout(() => setHeaderVisible(true), 400); // Changed from 200 to 400
+          setTimeout(() => setDescriptionVisible(true), 700); // Changed from 400 to 700
           observer.disconnect();
         }
       },
@@ -244,22 +244,21 @@ const ExperienceCard = ({ experience, index }) => {
     return () => observer.disconnect();
   }, []);
 
-  // Determine animation class based on index for alternating slide-in effect
-  const animationClass = index % 2 === 0 // even index
+  const animationClass = index % 2 === 0
     ? isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
     : isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12';
 
   return (
     <div 
       ref={cardRef}
-      className={`bg-gradient-to-br ${experience.gradient} p-8 md:p-12 transition-all duration-700 hover:brightness-110 ${animationClass}`}
+      className={`bg-gradient-to-br ${experience.gradient} p-8 md:p-12 transition-all duration-1000 hover:brightness-110 ${animationClass}`} 
     >
       {/* Header */}
       <div className="flex items-start gap-6 mb-6">
         <ExperienceIcon icon={experience.icon} isVisible={headerVisible} />
         <div className="flex-1">
           <h3 
-            className={`text-2xl md:text-3xl font-bold text-white mb-2 transition-all duration-700 ${
+            className={`text-2xl md:text-3xl font-bold text-white mb-2 transition-all duration-1000 ${ 
               headerVisible 
                 ? 'opacity-100 translate-y-0' 
                 : 'opacity-0 translate-y-4'
@@ -268,7 +267,7 @@ const ExperienceCard = ({ experience, index }) => {
             {experience.title}
           </h3>
           <p 
-            className={`text-lg text-white/90 font-semibold transition-all duration-700 delay-100 ${
+            className={`text-lg text-white/90 font-semibold transition-all duration-1000 delay-150 ${ // Changed from 700/delay-100 to 1000/delay-150
               headerVisible 
                 ? 'opacity-100 translate-y-0' 
                 : 'opacity-0 translate-y-4'
@@ -287,7 +286,7 @@ const ExperienceCard = ({ experience, index }) => {
 
       {/* Description */}
       <p 
-        className={`text-white/90 text-base leading-relaxed mb-6 transition-all duration-700 ${
+        className={`text-white/90 text-base leading-relaxed mb-6 transition-all duration-1000 ${ // transition duration changed from 700 to 1000
           descriptionVisible 
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-4'
@@ -304,6 +303,7 @@ const ExperienceCard = ({ experience, index }) => {
     </div>
   );
 };
+
 
 const ExperiencesMosaic = ({ experiences }) => (
   <div className="grid grid-cols-1 lg:grid-cols-2">

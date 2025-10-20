@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-scroll";
 import { FaJava, FaPython, FaReact } from "react-icons/fa";
-import { SiTypescript, SiNextdotjs } from "react-icons/si";
+import { SiTypescript, SiNextdotjs, SiPostgresql, SiPostman, SiJira } from "react-icons/si";
+import { TbDatabase, TbTerminal2 } from "react-icons/tb";
 import { GiRobotAntennas } from "react-icons/gi";
 import { IoMdCellular } from "react-icons/io";
 
+
 const FADE_IN_DELAY = 100;
 const SCROLL_DURATION = 600;
+
 
 const PERSONAL_INFO = {
   firstName: "DENES",
@@ -21,8 +24,14 @@ const PERSONAL_INFO = {
     { name: "Next.js", icon: <SiNextdotjs /> },
     { name: "Robotics", icon: <GiRobotAntennas /> },
     { name: "IoT", icon: <IoMdCellular /> },
+    { name: "SQL", icon: <TbDatabase /> },
+    { name: "PostgreSQL", icon: <SiPostgresql /> },
+    { name: "Postman", icon: <SiPostman /> },
+    { name: "PowerShell", icon: <TbTerminal2 /> },
+    { name: "Jira", icon: <SiJira /> },
   ],
 };
+
 
 const HeroHeading = () => {
   const [showFirstName, setShowFirstName] = useState(false);
@@ -30,9 +39,9 @@ const HeroHeading = () => {
   const [showTitle, setShowTitle] = useState(false);
 
   useEffect(() => {
-    const firstNameTimer = setTimeout(() => setShowFirstName(true), 200);
-    const lastNameTimer = setTimeout(() => setShowLastName(true), 600);
-    const titleTimer = setTimeout(() => setShowTitle(true), 1000);
+    const firstNameTimer = setTimeout(() => setShowFirstName(true), 400);
+    const lastNameTimer = setTimeout(() => setShowLastName(true), 900);
+    const titleTimer = setTimeout(() => setShowTitle(true), 1400);
 
     return () => {
       clearTimeout(firstNameTimer);
@@ -46,7 +55,7 @@ const HeroHeading = () => {
       <div className="relative">
         <h1 className="text-[clamp(2rem,10vw,8rem)] font-black leading-[0.9] tracking-tight">
           <span 
-            className={`block text-white opacity-90 transition-all duration-700 ${
+            className={`block text-white opacity-90 transition-all duration-1000 ${
               showFirstName 
                 ? 'opacity-90 translate-x-0 blur-0' 
                 : 'opacity-0 -translate-x-12 blur-sm'
@@ -56,7 +65,7 @@ const HeroHeading = () => {
           </span>
           
           <span 
-            className={`block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text transition-all duration-700 ${
+            className={`block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text transition-all duration-1000 ${
               showLastName 
                 ? 'opacity-100 translate-x-0 blur-0' 
                 : 'opacity-0 translate-x-12 blur-sm'
@@ -70,7 +79,7 @@ const HeroHeading = () => {
       </div>
 
       <h2 
-        className={`text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-300 tracking-[0.2em] uppercase max-w-3xl mx-auto leading-relaxed transition-all duration-1000 ${
+        className={`text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-300 tracking-[0.2em] uppercase max-w-3xl mx-auto leading-relaxed transition-all duration-1200 ${
           showTitle 
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-4'
@@ -82,11 +91,12 @@ const HeroHeading = () => {
   );
 };
 
+
 const SkillsMarquee = () => {
   const [showMarquee, setShowMarquee] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowMarquee(true), 1200);
+    const timer = setTimeout(() => setShowMarquee(true), 1600);
     return () => clearTimeout(timer);
   }, []);
 
@@ -94,17 +104,15 @@ const SkillsMarquee = () => {
 
   return (
     <div 
-      className={`w-full max-w-4xl mx-auto mt-12 transition-all duration-1000 ${
+      className={`w-full max-w-4xl mx-auto mt-12 transition-all duration-1200 ${
         showMarquee ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
       style={{ overflow: 'hidden', maxWidth: '100%' }}
     >
       <div className="relative w-full" style={{ overflow: 'hidden' }}>
-        {/* Gradient fade on edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-900 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-900 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-900 via-gray-900/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-900 via-gray-900/80 to-transparent z-10 pointer-events-none" />
         
-        {/* Scrolling text with icons - contained properly */}
         <div className="flex" style={{ overflow: 'hidden' }}>
           <div className="flex animate-infinite-scroll" style={{ minWidth: 'max-content' }}>
             {duplicatedSkills.map((skill, index) => (
@@ -134,17 +142,18 @@ const SkillsMarquee = () => {
   );
 };
 
+
 const LocationBadge = () => {
   const [showLocation, setShowLocation] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowLocation(true), 1100);
+    const timer = setTimeout(() => setShowLocation(true), 1500);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div 
-      className={`group inline-flex items-center gap-3 px-6 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg shadow-md transition-all duration-700 cursor-pointer hover:-translate-y-1 hover:shadow-cyan-500/20 hover:scale-105 ${
+      className={`group inline-flex items-center gap-3 px-6 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg shadow-md transition-all duration-1000 cursor-pointer hover:-translate-y-1 hover:shadow-cyan-500/20 hover:scale-105 ${
         showLocation 
           ? 'opacity-100 translate-y-0' 
           : 'opacity-0 translate-y-8'
@@ -156,17 +165,18 @@ const LocationBadge = () => {
   );
 };
 
+
 const ScrollIndicator = () => {
   const [showScroll, setShowScroll] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowScroll(true), 2000);
+    const timer = setTimeout(() => setShowScroll(true), 2500);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div 
-      className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-all duration-700 ${
+      className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-all duration-1000 ${
         showScroll ? 'opacity-100' : 'opacity-0'
       }`}
     >
@@ -177,12 +187,13 @@ const ScrollIndicator = () => {
   );
 };
 
+
 const CTAButton = () => {
   const [showCTA, setShowCTA] = useState(false);
   const [isGlitching, setIsGlitching] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowCTA(true), 1800);
+    const timer = setTimeout(() => setShowCTA(true), 2200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -200,7 +211,7 @@ const CTAButton = () => {
       to="contact"
       smooth={true}
       duration={SCROLL_DURATION}
-      className={`group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-medium text-base rounded-full hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-700 cursor-pointer transform hover:scale-105 relative overflow-hidden ${
+      className={`group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-medium text-base rounded-full hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-1000 cursor-pointer transform hover:scale-105 relative overflow-hidden ${
         showCTA 
           ? 'opacity-100 translate-y-0' 
           : 'opacity-0 translate-y-8'
@@ -219,34 +230,36 @@ const CTAButton = () => {
   );
 };
 
+
 const FloatingShapes = () => {
   const [showShapes, setShowShapes] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowShapes(true), 500);
+    const timer = setTimeout(() => setShowShapes(true), 700);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
       <div 
-        className={`absolute top-1/4 left-10 w-20 h-20 border border-cyan-500/20 rounded-lg rotate-45 animate-float transition-opacity duration-1000 ${
+        className={`absolute top-1/4 left-10 w-20 h-20 border border-cyan-500/20 rounded-lg rotate-45 animate-float transition-opacity duration-1200 ${
           showShapes ? 'opacity-100' : 'opacity-0'
         }`}
       />
       <div 
-        className={`absolute bottom-1/3 right-20 w-16 h-16 bg-purple-600/10 rounded-full blur-xl animate-float-delayed transition-opacity duration-1000 delay-200 ${
+        className={`absolute bottom-1/3 right-20 w-16 h-16 bg-purple-600/10 rounded-full blur-xl animate-float-delayed transition-opacity duration-1200 delay-200 ${
           showShapes ? 'opacity-100' : 'opacity-0'
         }`}
       />
       <div 
-        className={`absolute top-1/2 right-1/4 w-12 h-12 border-2 border-blue-500/20 rotate-12 animate-spin-slow transition-opacity duration-1000 delay-400 ${
+        className={`absolute top-1/2 right-1/4 w-12 h-12 border-2 border-blue-500/20 rotate-12 animate-spin-slow transition-opacity duration-1200 delay-400 ${
           showShapes ? 'opacity-100' : 'opacity-0'
         }`}
       />
     </>
   );
 };
+
 
 export default function Hero() {
   const [fadeIn, setFadeIn] = useState(false);
@@ -256,7 +269,7 @@ export default function Hero() {
     return () => clearTimeout(timer);
   }, []);
 
-  const containerClass = `relative w-full max-w-7xl mx-auto text-center transition-all duration-1000 ${
+  const containerClass = `relative w-full max-w-7xl mx-auto text-center transition-all duration-1200 ${
     fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
   }`;
 
@@ -405,7 +418,6 @@ export default function Hero() {
           animation: glitch-text 0.4s ease-in-out;
         }
 
-        /* CRITICAL: Prevent horizontal overflow */
         body {
           overflow-x: hidden;
         }

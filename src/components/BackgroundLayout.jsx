@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+
 const BackgroundLayout = ({ children }) => {
   const [stars, setStars] = useState([]);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -7,10 +8,39 @@ const BackgroundLayout = ({ children }) => {
   const [innerPos, setInnerPos] = useState({ x: 0, y: 0 });
   const [outerPos, setOuterPos] = useState({ x: 0, y: 0 });
   const [cursorVisible, setCursorVisible] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   
   const innerRef = useRef({ x: 0, y: 0 });
   const outerRef = useRef({ x: 0, y: 0 });
   const parallaxRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const checkIfDesktop = () => {
+      const hasHover = window.matchMedia('(hover: hover)').matches;
+      const hasPointer = window.matchMedia('(pointer: fine)').matches;
+      const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
+      
+      setIsDesktop(hasHover && hasPointer && isLargeScreen);
+    };
+
+    checkIfDesktop();
+
+    const hoverQuery = window.matchMedia('(hover: hover)');
+    const pointerQuery = window.matchMedia('(pointer: fine)');
+    const screenQuery = window.matchMedia('(min-width: 1024px)');
+
+    const handleChange = () => checkIfDesktop();
+
+    hoverQuery.addEventListener('change', handleChange);
+    pointerQuery.addEventListener('change', handleChange);
+    screenQuery.addEventListener('change', handleChange);
+
+    return () => {
+      hoverQuery.removeEventListener('change', handleChange);
+      pointerQuery.removeEventListener('change', handleChange);
+      screenQuery.removeEventListener('change', handleChange);
+    };
+  }, []);
 
   useEffect(() => {
     const generateStars = () => {
@@ -43,6 +73,8 @@ const BackgroundLayout = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    if (!isDesktop) return;
+
     const handleMouseMove = (e) => {
       setMousePos({ x: e.clientX, y: e.clientY });
       setCursorVisible(true);
@@ -65,21 +97,22 @@ const BackgroundLayout = ({ children }) => {
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, []);
+  }, [isDesktop]);
 
-  // Parallax effect for stars
   useEffect(() => {
+    if (!isDesktop) return;
+
     let animationFrameId;
     
     const animate = () => {
-      const centerX = window.innerWidth / 2; // center of the viewport X
-      const centerY = window.innerHeight / 2; // center of the viewport Y
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
       
       const offsetX = (mousePos.x - centerX) / centerX;
       const offsetY = (mousePos.y - centerY) / centerY;
       
-      const parallaxSpeed = 0.05; // parallax speed factor
-      const maxOffset = 20.0; // parallax maximum offset in pixels
+      const parallaxSpeed = 0.05;
+      const maxOffset = 20.0;
       
       const targetX = -offsetX * maxOffset;
       const targetY = -offsetY * maxOffset;
@@ -98,9 +131,11 @@ const BackgroundLayout = ({ children }) => {
     animate();
     
     return () => cancelAnimationFrame(animationFrameId);
-  }, [mousePos]);
+  }, [mousePos, isDesktop]);
 
   useEffect(() => {
+    if (!isDesktop) return;
+
     let animationFrameId;
     
     const animate = () => {
@@ -120,9 +155,11 @@ const BackgroundLayout = ({ children }) => {
     animate();
     
     return () => cancelAnimationFrame(animationFrameId);
-  }, [mousePos]);
+  }, [mousePos, isDesktop]);
 
   useEffect(() => {
+    if (!isDesktop) return;
+
     let animationFrameId;
     
     const animate = () => {
@@ -142,7 +179,7 @@ const BackgroundLayout = ({ children }) => {
     animate();
     
     return () => cancelAnimationFrame(animationFrameId);
-  }, [mousePos]);
+  }, [mousePos, isDesktop]);
 
   return (
     <>
@@ -193,15 +230,14 @@ const BackgroundLayout = ({ children }) => {
           overflowX: 'hidden', 
           maxWidth: '100vw', 
           width: '100%',
-          overflow: 'hidden' // Added to prevent any overflow
+          overflow: 'hidden'
         }}
       >
-        {/* Subtle starry background with parallax */}
         <div 
           className="absolute inset-0 pointer-events-none z-0 transition-transform duration-100 ease-out"
           style={{
-            transform: `translate(${parallaxOffset.x}px, ${parallaxOffset.y}px)`,
-            overflow: 'hidden' // Added to contain stars
+            transform: isDesktop ? `translate(${parallaxOffset.x}px, ${parallaxOffset.y}px)` : 'none',
+            overflow: 'hidden'
           }}
         >
           {stars.map((star) => (
@@ -216,14 +252,13 @@ const BackgroundLayout = ({ children }) => {
                 opacity: star.opacity,
                 animationDelay: `${star.twinkleDelay}s`,
                 animationDuration: `${star.twinkleDuration}s`,
-                transform: `translate(${parallaxOffset.x * star.depth}px, ${parallaxOffset.y * star.depth}px)`
+                transform: isDesktop ? `translate(${parallaxOffset.x * star.depth}px, ${parallaxOffset.y * star.depth}px)` : 'none'
               }}
             />
           ))}
         </div>
 
-        {/* Custom cursor followers */}
-        {cursorVisible && (
+        {isDesktop && cursorVisible && (
           <>
             <div
               className="custom-cursor-outer"
@@ -243,7 +278,6 @@ const BackgroundLayout = ({ children }) => {
           </>
         )}
 
-        {/* Content */}
         <div className="relative z-10" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
           {children}
         </div>
@@ -251,5 +285,6 @@ const BackgroundLayout = ({ children }) => {
     </>
   );
 };
+
 
 export default BackgroundLayout;
