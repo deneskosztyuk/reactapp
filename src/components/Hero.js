@@ -11,7 +11,7 @@ const SCROLL_DURATION = 600;
 const PERSONAL_INFO = {
   firstName: "DENES",
   lastName: "KOSZTYUK",
-  title: "SOFTWARE ENGINEER, ROBOTICS & FULLSTACK DEVELOPER.",
+  title: "QA, ROBOTICS & SOFTWARE ENGINEER.",
   location: "Stavanger, Norway / Remote",
   skills: [
     { name: "Java", icon: <FaJava /> },
