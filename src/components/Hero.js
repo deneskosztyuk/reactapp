@@ -172,7 +172,7 @@ const HeroHeading = () => {
   return (
     <div className="relative space-y-5 pt-16">
       <div className="relative">
-        <h1 className="text-[clamp(1.6rem,8vw,6.5rem)] font-black leading-[0.9] tracking-tight">
+        <h1 className="text-[clamp(3.20rem,12.0vw,8.5rem)] font-black leading-[0.9] tracking-tight sm:text-[clamp(1.6rem,8vw,6.5rem)]">
           <NameText text={PERSONAL_INFO.firstName} isVisible={showFirstName} direction="left" />
           <NameText text={PERSONAL_INFO.lastName} isVisible={showLastName} direction="right" />
         </h1>
