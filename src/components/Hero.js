@@ -331,9 +331,8 @@ const CTAButton = () => {
     >
       <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
       <span className={`relative z-10 ${isGlitching ? 'animate-glitch-text' : ''}`}>
-        Let's collaborate
+        Send me a message.
       </span>
-      <ArrowIcon />
     </Link>
   );
 };
