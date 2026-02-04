@@ -1,35 +1,36 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-scroll";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
+import type { NavigationItem, SocialLink } from "../types";
 
 const SCROLL_THRESHOLD = 20;
 const SECTION_OFFSET = 200;
 const SCROLL_DURATION = 600;
 const CLICK_OUTSIDE_DELAY = 100;
 
-const NAVIGATION_ITEMS = [
+const NAVIGATION_ITEMS: NavigationItem[] = [
   { id: 1, to: "hero", label: "home" },
   { id: 2, to: "work-experience", label: "experience" },
   { id: 3, to: "projects", label: "projects" },
-  { id: 4, to: "contact", label: "contact" }
+  { id: 4, to: "contact", label: "contact" },
 ];
 
-const SOCIAL_LINKS = [
+const SOCIAL_LINKS: SocialLink[] = [
   {
     href: "https://github.com/deneskosztyuk",
     icon: <FaGithub />,
-    label: "GitHub"
+    label: "GitHub",
   },
   {
     href: "https://www.linkedin.com/in/deneskosztyuk/",
     icon: <FaLinkedin />,
-    label: "LinkedIn"
-  }
+    label: "LinkedIn",
+  },
 ];
 
 const NAVBAR_STYLES = {
   scrolled: "bg-slate-900/80 backdrop-blur-lg py-3 border-b border-slate-800 shadow-xl",
-  transparent: "bg-transparent py-4 sm:py-6"
+  transparent: "bg-transparent py-4 sm:py-6",
 };
 
 const useScrollDetection = () => {
@@ -50,18 +51,20 @@ const useActiveSection = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + SECTION_OFFSET;
-      
+
       for (const section of NAVIGATION_ITEMS) {
         const element = document.getElementById(section.to);
-        if (element && 
-            element.offsetTop <= scrollPosition && 
-            element.offsetTop + element.offsetHeight > scrollPosition) {
+        if (
+          element &&
+          element.offsetTop <= scrollPosition &&
+          element.offsetTop + element.offsetHeight > scrollPosition
+        ) {
           setActiveSection(section.to);
           break;
         }
       }
     };
-    
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -73,29 +76,33 @@ const useMobileMenu = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      const mobileMenuButton = document.getElementById('mobile-menu-button');
-      const mobileMenu = document.getElementById('mobile-menu');
-      
-      if (isMobileMenuOpen && 
-          !mobileMenu?.contains(e.target) && 
-          !mobileMenuButton?.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const target = e.target as Node | null;
+
+      if (
+        isMobileMenuOpen &&
+        target &&
+        !mobileMenu?.contains(target) &&
+        !mobileMenuButton?.contains(target)
+      ) {
         setIsMobileMenuOpen(false);
       }
     };
-    
+
     if (isMobileMenuOpen) {
       setTimeout(() => {
         document.addEventListener("click", handleClickOutside);
       }, CLICK_OUTSIDE_DELAY);
     }
-    
+
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isMobileMenuOpen]);
 
-  const toggleMobileMenu = (e) => {
+  const toggleMobileMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMobileMenuOpen((prev) => !prev);
   };
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
@@ -105,12 +112,7 @@ const useMobileMenu = () => {
 
 const Logo = () => (
   <div className="flex-shrink-0 mr-2 sm:mr-4">
-    <Link
-      to="hero"
-      smooth={true}
-      duration={SCROLL_DURATION}
-      className="cursor-pointer block"
-    >
+    <Link to="hero" smooth={true} duration={SCROLL_DURATION} className="cursor-pointer block">
       <h1 className="font-bold text-white hover:text-cyan-400 transition-colors duration-300 whitespace-nowrap text-[16px] xs:text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl tracking-tight sm:tracking-normal md:tracking-wide lg:tracking-wider">
         Velkommen til min webportefølje.<span className="text-cyan-400"></span>
       </h1>
@@ -118,7 +120,12 @@ const Logo = () => (
   </div>
 );
 
-const NavigationItem = ({ item, activeSection }) => (
+interface NavigationItemProps {
+  item: NavigationItem;
+  activeSection: string;
+}
+
+const NavigationItemComponent = ({ item, activeSection }: NavigationItemProps) => (
   <li key={item.to}>
     <Link
       to={item.to}
@@ -126,12 +133,14 @@ const NavigationItem = ({ item, activeSection }) => (
       smooth={true}
       duration={SCROLL_DURATION}
       className={`group relative font-mono text-sm transition-all duration-300 cursor-pointer ${
-        activeSection === item.to
-          ? "text-white"
-          : "text-gray-400 hover:text-white"
+        activeSection === item.to ? "text-white" : "text-gray-400 hover:text-white"
       }`}
     >
-      <span className={`mr-1 transition-colors ${activeSection === item.to ? "text-cyan-400" : "text-gray-600"}`}>
+      <span
+        className={`mr-1 transition-colors ${
+          activeSection === item.to ? "text-cyan-400" : "text-gray-600"
+        }`}
+      >
         0{item.id}
       </span>
       // {item.label}
@@ -145,7 +154,11 @@ const NavigationItem = ({ item, activeSection }) => (
   </li>
 );
 
-const SocialLink = ({ link }) => (
+interface SocialLinkProps {
+  link: SocialLink;
+}
+
+const SocialLinkComponent = ({ link }: SocialLinkProps) => (
   <a
     key={link.label}
     href={link.href}
@@ -158,23 +171,32 @@ const SocialLink = ({ link }) => (
   </a>
 );
 
-const DesktopNavigation = ({ activeSection }) => (
+interface DesktopNavigationProps {
+  activeSection: string;
+}
+
+const DesktopNavigation = ({ activeSection }: DesktopNavigationProps) => (
   <div className="hidden lg:flex items-center space-x-8 lg:space-x-12">
     <ul className="flex space-x-8 lg:space-x-10">
       {NAVIGATION_ITEMS.map((item) => (
-        <NavigationItem key={item.to} item={item} activeSection={activeSection} />
+        <NavigationItemComponent key={item.to} item={item} activeSection={activeSection} />
       ))}
     </ul>
-    
+
     <div className="flex items-center space-x-4 border-l border-slate-700/50 pl-6 ml-4">
       {SOCIAL_LINKS.map((link) => (
-        <SocialLink key={link.label} link={link} />
+        <SocialLinkComponent key={link.label} link={link} />
       ))}
     </div>
   </div>
 );
 
-const HamburgerButton = ({ isMobileMenuOpen, toggleMobileMenu }) => (
+interface HamburgerButtonProps {
+  isMobileMenuOpen: boolean;
+  toggleMobileMenu: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const HamburgerButton = ({ isMobileMenuOpen, toggleMobileMenu }: HamburgerButtonProps) => (
   <div className="lg:hidden pr-4">
     <button
       id="mobile-menu-button"
@@ -184,15 +206,22 @@ const HamburgerButton = ({ isMobileMenuOpen, toggleMobileMenu }) => (
       type="button"
     >
       <div className="hamburger-container">
-        <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
-        <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
-        <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
+        <span className={`hamburger-line ${isMobileMenuOpen ? "active" : ""}`}></span>
+        <span className={`hamburger-line ${isMobileMenuOpen ? "active" : ""}`}></span>
+        <span className={`hamburger-line ${isMobileMenuOpen ? "active" : ""}`}></span>
       </div>
     </button>
   </div>
 );
 
-const MobileMenuItem = ({ item, index, activeSection, closeMobileMenu }) => (
+interface MobileMenuItemProps {
+  item: NavigationItem;
+  index: number;
+  activeSection: string;
+  closeMobileMenu: () => void;
+}
+
+const MobileMenuItem = ({ item, index, activeSection, closeMobileMenu }: MobileMenuItemProps) => (
   <li key={item.to} className={`animate-slide-in-${index}`}>
     <Link
       to={item.to}
@@ -206,12 +235,20 @@ const MobileMenuItem = ({ item, index, activeSection, closeMobileMenu }) => (
           : "text-gray-300 hover:text-cyan-300 hover:bg-slate-800/50 hover:pl-6"
       }`}
     >
-      <span className={activeSection === item.to ? "text-cyan-400" : "text-gray-600"}>0{item.id}</span> // {item.label}
+      <span className={activeSection === item.to ? "text-cyan-400" : "text-gray-600"}>
+        0{item.id}
+      </span>{" "}
+      // {item.label}
     </Link>
   </li>
 );
 
-const MobileSocialLink = ({ link, index }) => (
+interface MobileSocialLinkProps {
+  link: SocialLink;
+  index: number;
+}
+
+const MobileSocialLink = ({ link, index }: MobileSocialLinkProps) => (
   <a
     key={link.label}
     href={link.href}
@@ -224,30 +261,39 @@ const MobileSocialLink = ({ link, index }) => (
   </a>
 );
 
-const MobileMenu = ({ isMobileMenuOpen, activeSection, closeMobileMenu }) => {
+interface MobileMenuProps {
+  isMobileMenuOpen: boolean;
+  activeSection: string;
+  closeMobileMenu: () => void;
+}
+
+const MobileMenu = ({ isMobileMenuOpen, activeSection, closeMobileMenu }: MobileMenuProps) => {
   if (!isMobileMenuOpen) return null;
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 animate-fade-in" onClick={closeMobileMenu}></div>
-      
-      <div 
+      <div
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 animate-fade-in"
+        onClick={closeMobileMenu}
+      ></div>
+
+      <div
         id="mobile-menu"
         className="lg:hidden relative z-50 bg-slate-900/98 backdrop-blur-lg border-t border-slate-800/50 shadow-2xl animate-slide-down"
       >
         <div className="px-4 py-6 space-y-6">
           <ul className="space-y-2">
             {NAVIGATION_ITEMS.map((item, index) => (
-              <MobileMenuItem 
+              <MobileMenuItem
                 key={item.to}
-                item={item} 
-                index={index} 
-                activeSection={activeSection} 
-                closeMobileMenu={closeMobileMenu} 
+                item={item}
+                index={index}
+                activeSection={activeSection}
+                closeMobileMenu={closeMobileMenu}
               />
             ))}
           </ul>
-          
+
           <div className="pt-6 border-t border-slate-800/50 animate-slide-in-social">
             <div className="flex space-x-8 justify-center">
               {SOCIAL_LINKS.map((link, index) => (
@@ -365,17 +411,14 @@ const Navbar = () => {
           <div className="flex justify-between items-center">
             <Logo />
             <DesktopNavigation activeSection={activeSection} />
-            <HamburgerButton 
-              isMobileMenuOpen={isMobileMenuOpen} 
-              toggleMobileMenu={toggleMobileMenu} 
-            />
+            <HamburgerButton isMobileMenuOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
           </div>
         </div>
-        
-        <MobileMenu 
-          isMobileMenuOpen={isMobileMenuOpen} 
-          activeSection={activeSection} 
-          closeMobileMenu={closeMobileMenu} 
+
+        <MobileMenu
+          isMobileMenuOpen={isMobileMenuOpen}
+          activeSection={activeSection}
+          closeMobileMenu={closeMobileMenu}
         />
       </nav>
     </>

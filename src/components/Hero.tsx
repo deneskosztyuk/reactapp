@@ -1,12 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-scroll";
 import { FaJava, FaPython, FaReact } from "react-icons/fa";
-import { SiTypescript, SiNextdotjs, SiPostgresql, SiPostman, SiJira } from "react-icons/si";
+import { SiJira, SiNextdotjs, SiPostgresql, SiPostman, SiTypescript } from "react-icons/si";
 import { TbDatabase, TbTerminal2 } from "react-icons/tb";
 import { GiRobotAntennas } from "react-icons/gi";
 import { IoMdCellular } from "react-icons/io";
 
-const ANIMATION_TIMINGS = {
+interface AnimationTimings {
+  fadeInDelay: number;
+  scrollDuration: number;
+  firstNameDelay: number;
+  lastNameDelay: number;
+  titleContainerDelay: number;
+  initialAnimationDuration: number;
+  titleRotationInterval: number;
+  marqueeDelay: number;
+  locationDelay: number;
+  scrollIndicatorDelay: number;
+  ctaDelay: number;
+  glitchInterval: number;
+  glitchDuration: number;
+  shapesDelay: number;
+}
+
+interface EasingConfig {
+  spring: string;
+  smooth: string;
+}
+
+interface Skill {
+  name: string;
+  icon: React.ReactNode;
+}
+
+interface PersonalInfo {
+  firstName: string;
+  lastName: string;
+  titles: string[];
+  location: string;
+  skills: Skill[];
+}
+
+const ANIMATION_TIMINGS: AnimationTimings = {
   fadeInDelay: 100,
   scrollDuration: 600,
   firstNameDelay: 400,
@@ -23,12 +58,12 @@ const ANIMATION_TIMINGS = {
   shapesDelay: 700,
 };
 
-const EASING = {
-  spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-  smooth: 'cubic-bezier(0.16, 1, 0.3, 1)',
+const EASING: EasingConfig = {
+  spring: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+  smooth: "cubic-bezier(0.16, 1, 0.3, 1)",
 };
 
-const PERSONAL_INFO = {
+const PERSONAL_INFO: PersonalInfo = {
   firstName: "DENES",
   lastName: "KOSZTYUK",
   titles: ["FULLSTACK", "ROBOTICS", "SOFTWARE ENGINEER"],
@@ -49,7 +84,7 @@ const PERSONAL_INFO = {
   ],
 };
 
-const useDelayedVisibility = (delay) => {
+const useDelayedVisibility = (delay: number) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -60,7 +95,7 @@ const useDelayedVisibility = (delay) => {
   return isVisible;
 };
 
-const useTitleRotation = (titlesCount, interval, shouldStart) => {
+const useTitleRotation = (titlesCount: number, interval: number, shouldStart: boolean) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -76,7 +111,7 @@ const useTitleRotation = (titlesCount, interval, shouldStart) => {
   return currentIndex;
 };
 
-const usePeriodicGlitch = (interval, duration) => {
+const usePeriodicGlitch = (interval: number, duration: number) => {
   const [isGlitching, setIsGlitching] = useState(false);
 
   useEffect(() => {
@@ -91,37 +126,50 @@ const usePeriodicGlitch = (interval, duration) => {
   return isGlitching;
 };
 
-const splitTitleIntoCharacters = (title) => {
-  return title.split('').map((char, index) => ({
-    char: char === ' ' ? '\u00A0' : char,
-    index
+const splitTitleIntoCharacters = (title: string) => {
+  return title.split("").map((char, index) => ({
+    char: char === " " ? "\u00A0" : char,
+    index,
   }));
 };
 
-const AnimatedCharacter = ({ char, index, delay }) => (
+interface AnimatedCharacterProps {
+  char: string;
+  index: number;
+  delay: number;
+}
+
+const AnimatedCharacter = ({ char, index, delay }: AnimatedCharacterProps) => (
   <span
     className="inline-block animate-char-slide-up"
     style={{
       animationDelay: `${index * delay}s`,
-      animationFillMode: 'backwards'
+      animationFillMode: "backwards",
     }}
   >
     {char}
   </span>
 );
 
-const NameText = ({ text, isVisible, direction = "left" }) => {
+interface NameTextProps {
+  text: string;
+  isVisible: boolean;
+  direction?: "left" | "right";
+}
+
+const NameText = ({ text, isVisible, direction = "left" }: NameTextProps) => {
   const baseClasses = "block transition-all duration-1000 ease-out";
-  const gradientClasses = direction === "right" 
-    ? "bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text"
-    : "text-white opacity-90";
+  const gradientClasses =
+    direction === "right"
+      ? "bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text"
+      : "text-white opacity-90";
   const translateClass = direction === "left" ? "-translate-x-12" : "translate-x-12";
   const visibilityClasses = isVisible
     ? `${direction === "right" ? "opacity-100" : "opacity-90"} translate-x-0 scale-100`
     : `opacity-0 ${translateClass} scale-95`;
 
   return (
-    <span 
+    <span
       className={`${baseClasses} ${gradientClasses} ${visibilityClasses}`}
       style={{ transitionTimingFunction: EASING.spring }}
     >
@@ -130,17 +178,25 @@ const NameText = ({ text, isVisible, direction = "left" }) => {
   );
 };
 
-const TitleDisplay = ({ title, titleIndex, isActive, isInitialLoad }) => {
+interface TitleDisplayProps {
+  title: string;
+  titleIndex: number;
+  isActive: boolean;
+  isInitialLoad: boolean;
+}
+
+const TitleDisplay = ({ title, titleIndex, isActive, isInitialLoad }: TitleDisplayProps) => {
   const characters = splitTitleIntoCharacters(title);
-  const baseClasses = "absolute inset-x-0 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-300 tracking-[0.2em] uppercase max-w-3xl mx-auto leading-relaxed font-light flex justify-center";
-  const visibilityClasses = !isInitialLoad && (isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8');
+  const baseClasses =
+    "absolute inset-x-0 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-300 tracking-[0.2em] uppercase max-w-3xl mx-auto leading-relaxed font-light flex justify-center";
+  const visibilityClasses = !isInitialLoad && (isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8");
 
   return (
-    <h2 
+    <h2
       key={titleIndex}
       className={`${baseClasses} ${visibilityClasses}`}
       style={{
-        transition: isInitialLoad ? 'none' : 'opacity 0.3s ease-out, transform 0.6s ease-out',
+        transition: isInitialLoad ? "none" : "opacity 0.3s ease-out, transform 0.6s ease-out",
       }}
     >
       {isInitialLoad ? (
@@ -179,9 +235,11 @@ const HeroHeading = () => {
         <GlowOrb />
       </div>
 
-      <div className={`relative h-20 overflow-hidden mt-12 pt-6 transition-opacity duration-1000 ${
-        showTitleContainer ? 'opacity-100' : 'opacity-0'
-      }`}>
+      <div
+        className={`relative h-20 overflow-hidden mt-12 pt-6 transition-opacity duration-1000 ${
+          showTitleContainer ? "opacity-100" : "opacity-0"
+        }`}
+      >
         {PERSONAL_INFO.titles.map((title, titleIndex) => (
           <TitleDisplay
             key={titleIndex}
@@ -196,17 +254,30 @@ const HeroHeading = () => {
   );
 };
 
-const SkillBadge = ({ skill, keyPrefix }) => (
+interface SkillBadgeProps {
+  skill: Skill;
+}
+
+const SkillBadge = ({ skill }: SkillBadgeProps) => (
   <span className="inline-flex items-center gap-2.5 px-6 text-lg sm:text-xl font-black text-white opacity-10 tracking-wide flex-shrink-0 transition-opacity duration-300 hover:opacity-20">
     <span className="text-xl sm:text-2xl">{skill.icon}</span>
     <span className="whitespace-nowrap">{skill.name}</span>
   </span>
 );
 
-const MarqueeTrack = ({ skills, keyPrefix }) => (
-  <div className="flex animate-infinite-scroll" style={{ minWidth: 'max-content' }} aria-hidden={keyPrefix === 'second'}>
+interface MarqueeTrackProps {
+  skills: Skill[];
+  keyPrefix: string;
+}
+
+const MarqueeTrack = ({ skills, keyPrefix }: MarqueeTrackProps) => (
+  <div
+    className="flex animate-infinite-scroll"
+    style={{ minWidth: "max-content" }}
+    aria-hidden={keyPrefix === "second"}
+  >
     {skills.map((skill, index) => (
-      <SkillBadge key={`${keyPrefix}-${index}`} skill={skill} keyPrefix={keyPrefix} />
+      <SkillBadge key={`${keyPrefix}-${index}`} skill={skill} />
     ))}
   </div>
 );
@@ -216,25 +287,26 @@ const SkillsMarquee = () => {
   const duplicatedSkills = [...PERSONAL_INFO.skills, ...PERSONAL_INFO.skills];
 
   const containerClasses = `w-full max-w-4xl mx-auto mt-12 transition-all duration-1200 ease-out ${
-    showMarquee ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+    showMarquee ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
   }`;
 
-  const maskStyles = {
-    overflow: 'hidden',
-    maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
-    WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)'
+  const maskStyles: React.CSSProperties = {
+    overflow: "hidden",
+    maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+    WebkitMaskImage:
+      "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
   };
 
   return (
-    <div 
+    <div
       className={containerClasses}
-      style={{ 
-        overflow: 'hidden', 
-        maxWidth: '100%',
-        transitionTimingFunction: EASING.smooth
+      style={{
+        overflow: "hidden",
+        maxWidth: "100%",
+        transitionTimingFunction: EASING.smooth,
       }}
     >
-      <div className="relative w-full" style={{ overflow: 'hidden' }}>
+      <div className="relative w-full" style={{ overflow: "hidden" }}>
         <div className="flex" style={maskStyles}>
           <MarqueeTrack skills={duplicatedSkills} keyPrefix="first" />
           <MarqueeTrack skills={duplicatedSkills} keyPrefix="second" />
@@ -248,7 +320,7 @@ const LocationBadge = () => {
   const showLocation = useDelayedVisibility(ANIMATION_TIMINGS.locationDelay);
 
   const badgeClasses = `group inline-flex items-center gap-2.5 px-5 py-2.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg shadow-lg transition-all duration-700 cursor-pointer hover:bg-white/10 hover:border-cyan-500/30 hover:shadow-cyan-500/20 ${
-    showLocation ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+    showLocation ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
   }`;
 
   return (
@@ -259,11 +331,15 @@ const LocationBadge = () => {
   );
 };
 
-const ChevronIcon = ({ opacity }) => (
-  <svg 
-    className={`w-4 h-4 text-gray-400/${opacity} group-hover:text-cyan-400/${opacity + 20} transition-colors duration-300`}
-    fill="none" 
-    viewBox="0 0 24 24" 
+interface ChevronIconProps {
+  opacity: number;
+}
+
+const ChevronIcon = ({ opacity }: ChevronIconProps) => (
+  <svg
+    className={`w-4 h-4 text-white/${opacity} group-hover:text-cyan-400/${opacity + 20} transition-colors duration-300`}
+    fill="none"
+    viewBox="0 0 24 24"
     stroke="currentColor"
   >
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -280,7 +356,7 @@ const ScrollIndicator = () => {
   const showScroll = useDelayedVisibility(ANIMATION_TIMINGS.scrollIndicatorDelay);
 
   const linkClasses = `absolute bottom-2 left-1/2 -translate-x-1/2 transition-all duration-1000 ease-out group ${
-    showScroll ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+    showScroll ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
   }`;
 
   return (
@@ -302,24 +378,13 @@ const ScrollIndicator = () => {
   );
 };
 
-const ArrowIcon = () => (
-  <svg 
-    className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" 
-    fill="none" 
-    viewBox="0 0 24 24" 
-    stroke="currentColor"
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-  </svg>
-);
-
 const CTAButton = () => {
   const showCTA = useDelayedVisibility(ANIMATION_TIMINGS.ctaDelay);
   const isGlitching = usePeriodicGlitch(ANIMATION_TIMINGS.glitchInterval, ANIMATION_TIMINGS.glitchDuration);
 
   const buttonClasses = `group inline-flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-semibold text-sm rounded-full transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-1 relative overflow-hidden ${
-    showCTA ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
-  } ${isGlitching ? 'animate-glitch' : ''}`;
+    showCTA ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
+  } ${isGlitching ? "animate-glitch" : ""}`;
 
   return (
     <Link
@@ -330,55 +395,63 @@ const CTAButton = () => {
       style={{ transitionTimingFunction: EASING.smooth }}
     >
       <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
-      <span className={`relative z-10 ${isGlitching ? 'animate-glitch-text' : ''}`}>
+      <span className={`relative z-10 ${isGlitching ? "animate-glitch-text" : ""}`}>
         Send me a message.
       </span>
     </Link>
   );
 };
 
-const FloatingShape = ({ position, size, style, delay }) => {
+type FloatingPosition = "top-left" | "bottom-right" | "middle-right";
+type FloatingSize = "large" | "medium" | "small";
+
+interface FloatingShapeProps {
+  position: FloatingPosition;
+  size: FloatingSize;
+  style: string;
+  delay?: number;
+}
+
+const FloatingShape = ({ position, size, style, delay }: FloatingShapeProps) => {
   const showShapes = useDelayedVisibility(ANIMATION_TIMINGS.shapesDelay);
 
-  const positionClasses = {
-    'top-left': 'top-1/4 left-10',
-    'bottom-right': 'bottom-1/3 right-20',
-    'middle-right': 'top-1/2 right-1/4',
+  const positionClasses: Record<FloatingPosition, string> = {
+    "top-left": "top-1/4 left-10",
+    "bottom-right": "bottom-1/3 right-20",
+    "middle-right": "top-1/2 right-1/4",
   };
 
-  const sizeClasses = {
-    large: 'w-16 h-16',
-    medium: 'w-12 h-12',
-    small: 'w-10 h-10',
+  const sizeClasses: Record<FloatingSize, string> = {
+    large: "w-16 h-16",
+    medium: "w-12 h-12",
+    small: "w-10 h-10",
   };
 
   const baseClasses = `absolute ${positionClasses[position]} ${sizeClasses[size]} transition-opacity duration-1200`;
-  const visibilityClass = showShapes ? 'opacity-100' : 'opacity-0';
-  const delayClass = delay ? `delay-${delay}` : '';
+  const visibilityClass = showShapes ? "opacity-100" : "opacity-0";
+  const delayClass = delay ? `delay-${delay}` : "";
 
-  return (
-    <div className={`${baseClasses} ${visibilityClass} ${delayClass} ${style}`} />
-  );
+  return <div className={`${baseClasses} ${visibilityClass} ${delayClass} ${style}`} />;
 };
 
 const FloatingShapes = () => (
   <>
-    <FloatingShape 
-      position="top-left" 
-      size="large" 
-      style="border border-cyan-500/20 rounded-lg rotate-45 animate-float" 
+    <FloatingShape
+      position="top-left"
+      size="large"
+      style="border border-cyan-500/20 rounded-lg rotate-45 animate-float"
     />
-    <FloatingShape 
-      position="bottom-right" 
-      size="medium" 
-      style="bg-purple-600/10 rounded-full blur-xl animate-float-delayed" 
-      delay="200"
+    <FloatingShape
+      position="bottom-right"
+      size="medium"
+      style="bg-purple-600/10 rounded-full blur-xl animate-float-delayed"
+      delay={200}
     />
-    <FloatingShape 
-      position="middle-right" 
-      size="small" 
-      style="border-2 border-blue-500/20 rotate-12 animate-spin-slow" 
-      delay="400"
+    <FloatingShape
+      position="middle-right"
+      size="small"
+      style="border-2 border-blue-500/20 rotate-12 animate-spin-slow"
+      delay={400}
     />
   </>
 );
@@ -563,17 +636,16 @@ const Hero = () => {
   const fadeIn = useDelayedVisibility(ANIMATION_TIMINGS.fadeInDelay);
 
   const containerClass = `relative w-full max-w-7xl mx-auto text-center transition-all duration-1200 ${
-    fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+    fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
   }`;
 
   return (
     <>
       <AnimationStyles />
-      <section 
+      <section
         id="hero"
         className="relative min-h-screen flex items-center justify-center px-6 sm:px-12 pb-32 overflow-hidden max-w-full"
       >
-
         <FloatingShapes />
         <div className={containerClass}>
           <div className="space-y-12">

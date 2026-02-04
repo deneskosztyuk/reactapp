@@ -1,37 +1,51 @@
-import { useState, useEffect, useRef } from "react";
-import { FaLinkedin, FaGithub, FaEnvelope, FaUser, FaPaperPlane } from "react-icons/fa";
+import React, { useEffect, useRef, useState } from "react";
+import { FaEnvelope, FaGithub, FaLinkedin, FaPaperPlane, FaUser } from "react-icons/fa";
+import type { FormValues, MathChallenge } from "../types";
+
+interface Web3FormsResponse {
+  success: boolean;
+  message?: string;
+  data?: unknown;
+}
+
+interface SubmitResult {
+  success: boolean;
+  error?: string;
+}
 
 const FORM_CONFIG = {
-  ACCESS_KEY: process.env.REACT_APP_WEB3FORMS_ACCESS_KEY,
-  API_ENDPOINT: "https://api.web3forms.com/submit"
+  ACCESS_KEY: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+  API_ENDPOINT: "https://api.web3forms.com/submit",
 };
 
 const MATH_CONFIG = {
   MAX_NUMBER: 15,
   MAX_SMALL_NUMBER: 8,
-  OPERATIONS: ['+', '-', '×']
-};
+  OPERATIONS: ["+", "-", "×"],
+} as const;
 
 const SOCIAL_LINKS = [
   {
     href: "https://www.linkedin.com/in/deneskosztyuk/",
     icon: <FaLinkedin />,
-    label: "LinkedIn"
+    label: "LinkedIn",
   },
   {
     href: "https://github.com/deneskosztyuk",
     icon: <FaGithub />,
-    label: "GitHub"
-  }
+    label: "GitHub",
+  },
 ];
 
-const BUTTON_BASE_CLASS = "w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-medium rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-cyan-500/25";
+const BUTTON_BASE_CLASS =
+  "w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-medium rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-cyan-500/25";
 
-const createFormData = (formValues, selectedFile = null) => {
+const createFormData = (formValues: FormValues, selectedFile: File | null = null) => {
   const formData = new FormData();
   const trimmedName = formValues.name.trim();
-  
-  formData.append("access_key", FORM_CONFIG.ACCESS_KEY);
+  const accessKey = FORM_CONFIG.ACCESS_KEY ?? "";
+
+  formData.append("access_key", accessKey);
   formData.append("name", trimmedName);
   formData.append("email", formValues.email.trim());
   formData.append("message", formValues.message.trim());
@@ -39,32 +53,32 @@ const createFormData = (formValues, selectedFile = null) => {
   formData.append("botcheck", "");
   formData.append("replyto", formValues.email.trim());
   formData.append("from_name", trimmedName);
-  
+
   if (selectedFile) {
     formData.append("attachment", selectedFile);
   }
-  
+
   return formData;
 };
 
-const createJsonPayload = (formValues) => ({
-  access_key: FORM_CONFIG.ACCESS_KEY,
+const createJsonPayload = (formValues: FormValues) => ({
+  access_key: FORM_CONFIG.ACCESS_KEY ?? "",
   name: formValues.name.trim(),
   email: formValues.email.trim(),
   message: formValues.message.trim(),
   subject: `New Contact Form Submission from ${formValues.name.trim()}`,
   replyto: formValues.email.trim(),
   from_name: formValues.name.trim(),
-  botcheck: ""
+  botcheck: "",
 });
 
 const useFormState = () => {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [form, setForm] = useState<FormValues>({ name: "", email: "", message: "" });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [honeypot, setHoneypot] = useState("");
 
-  const handleInputChange = (e) => {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const resetForm = () => {
@@ -84,30 +98,31 @@ const useFormState = () => {
     handleInputChange,
     setHoneypot,
     resetForm,
-    isFormValid
+    isFormValid,
   };
 };
 
 const useMathChallenge = () => {
-  const [mathChallenge, setMathChallenge] = useState({ question: "", answer: 0 });
+  const [mathChallenge, setMathChallenge] = useState<MathChallenge>({ question: "", answer: 0 });
   const [userAnswer, setUserAnswer] = useState("");
   const [mathError, setMathError] = useState(false);
 
-  const operations = {
-    '+': (a, b) => ({ answer: a + b, question: `${a} + ${b}` }),
-    '-': (a, b) => {
+  const operations: Record<(typeof MATH_CONFIG.OPERATIONS)[number], (a: number, b: number) => MathChallenge> = {
+    "+": (a, b) => ({ answer: a + b, question: `${a} + ${b}` }),
+    "-": (a, b) => {
       const larger = Math.max(a, b);
       const smaller = Math.min(a, b);
       return { answer: larger - smaller, question: `${larger} - ${smaller}` };
     },
-    '×': (a, b) => ({ answer: a * b, question: `${a} × ${b}` })
+    "×": (a, b) => ({ answer: a * b, question: `${a} × ${b}` }),
   };
 
   const generateMathChallenge = () => {
     const operation = MATH_CONFIG.OPERATIONS[Math.floor(Math.random() * MATH_CONFIG.OPERATIONS.length)];
-    
-    let num1, num2;
-    if (operation === '×') {
+
+    let num1: number;
+    let num2: number;
+    if (operation === "×") {
       num1 = Math.floor(Math.random() * MATH_CONFIG.MAX_SMALL_NUMBER) + 1;
       num2 = Math.floor(Math.random() * MATH_CONFIG.MAX_SMALL_NUMBER) + 1;
     } else {
@@ -116,15 +131,15 @@ const useMathChallenge = () => {
     }
 
     const { answer, question } = operations[operation](num1, num2);
-    
+
     setMathChallenge({ question, answer });
     setUserAnswer("");
     setMathError(false);
   };
 
-  const validateAnswer = () => parseInt(userAnswer) === mathChallenge.answer;
+  const validateAnswer = () => Number.parseInt(userAnswer, 10) === mathChallenge.answer;
 
-  const handleAnswerChange = (value) => {
+  const handleAnswerChange = (value: string) => {
     setUserAnswer(value);
     setMathError(false);
   };
@@ -142,71 +157,77 @@ const useMathChallenge = () => {
     validateAnswer,
     handleAnswerChange,
     setMathError,
-    resetChallenge
+    resetChallenge,
   };
 };
 
 const useFormSubmission = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [success, setSuccess] = useState(null);
+  const [success, setSuccess] = useState<boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const submitWithFormData = async (formValues, selectedFile) => {
+  const submitWithFormData = async (
+    formValues: FormValues,
+    selectedFile: File | null
+  ): Promise<{ response: Response; result: Web3FormsResponse }> => {
     const formData = createFormData(formValues, selectedFile);
     const response = await fetch(FORM_CONFIG.API_ENDPOINT, {
       method: "POST",
-      body: formData
+      body: formData,
     });
-    return { response, result: await response.json() };
+    return { response, result: (await response.json()) as Web3FormsResponse };
   };
 
-  const submitWithJson = async (formValues) => {
+  const submitWithJson = async (
+    formValues: FormValues
+  ): Promise<{ response: Response; result: Web3FormsResponse }> => {
     const response = await fetch(FORM_CONFIG.API_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        Accept: "application/json",
       },
-      body: JSON.stringify(createJsonPayload(formValues))
+      body: JSON.stringify(createJsonPayload(formValues)),
     });
-    return { response, result: await response.json() };
+    return { response, result: (await response.json()) as Web3FormsResponse };
   };
 
-  const submitForm = async (formValues, selectedFile) => {
+  const submitForm = async (formValues: FormValues, selectedFile: File | null): Promise<SubmitResult> => {
     setIsSubmitting(true);
     setSuccess(null);
     setErrorMessage("");
 
     try {
-      let response, result;
+      let response: Response;
+      let result: Web3FormsResponse;
 
       try {
         ({ response, result } = await submitWithFormData(formValues, selectedFile));
-        
+
         if (response.ok && result.success) {
           setSuccess(true);
           return { success: true };
         }
-        
+
         if (response.status === 400) {
           ({ response, result } = await submitWithJson(formValues));
         }
-      } catch (error) {
+      } catch {
         ({ response, result } = await submitWithJson(formValues));
       }
 
       if (response.ok && result.success) {
         setSuccess(true);
         return { success: true };
-      } else {
-        throw new Error(result.message || `HTTP ${response.status}: ${response.statusText}`);
       }
 
+      throw new Error(result.message || `HTTP ${response.status}: ${response.statusText}`);
     } catch (error) {
       console.error("Form submission error:", error);
+      const message = error instanceof Error ? error.message : "Failed to send message. Please try the direct contact links below.";
       setSuccess(false);
-      setErrorMessage(error.message || "Failed to send message. Please try the direct contact links below.");
-      return { success: false, error: error.message };
+      setErrorMessage(message);
+      return { success: false, error: message };
     } finally {
       setIsSubmitting(false);
     }
@@ -218,13 +239,12 @@ const useFormSubmission = () => {
     errorMessage,
     submitForm,
     setSuccess,
-    setErrorMessage
+    setErrorMessage,
   };
 };
 
 const SectionHeader = () => (
   <div className="space-y-6 mb-16">
-    {/* Section number indicator */}
     <div className="flex items-center justify-center gap-3 text-sm text-gray-400 tracking-widest">
       <span className="w-8 h-px bg-gray-600"></span>
       <span>04</span>
@@ -238,31 +258,58 @@ const SectionHeader = () => (
         CONNECT
       </span>
     </h1>
-    
+
     <p className="text-base sm:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto font-light">
-      Have a project in mind or want to collaborate? Drop me a message below or connect via social media.
+      Anything caught your eye? Send me a message below or connect via social media below.
     </p>
   </div>
 );
 
-const HoneypotField = ({ value, onChange }) => (
+interface HoneypotFieldProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const HoneypotField = ({ value, onChange }: HoneypotFieldProps) => (
   <input
     type="text"
     name="botcheck"
     value={value}
     onChange={onChange}
-    style={{ 
-      position: 'absolute', 
-      left: '-9999px', 
-      opacity: 0, 
-      pointerEvents: 'none' 
+    style={{
+      position: "absolute",
+      left: "-9999px",
+      opacity: 0,
+      pointerEvents: "none",
     }}
-    tabIndex="-1"
+    tabIndex={-1}
     autoComplete="off"
   />
 );
 
-const FormField = ({ type = "text", name, placeholder, value, onChange, rows, required = false, icon, delay = 0 }) => {
+interface FormFieldProps {
+  type?: "text" | "email" | "textarea";
+  name: string;
+  placeholder: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  rows?: number;
+  required?: boolean;
+  icon?: React.ReactNode;
+  delay?: number;
+}
+
+const FormField = ({
+  type = "text",
+  name,
+  placeholder,
+  value,
+  onChange,
+  rows,
+  required = false,
+  icon,
+  delay = 0,
+}: FormFieldProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const Component = type === "textarea" ? "textarea" : "input";
 
@@ -270,11 +317,13 @@ const FormField = ({ type = "text", name, placeholder, value, onChange, rows, re
     const timer = setTimeout(() => setIsVisible(true), delay);
     return () => clearTimeout(timer);
   }, [delay]);
-  
+
   return (
-    <div className={`relative group transition-all duration-700 ${
-      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-    }`}>
+    <div
+      className={`relative group transition-all duration-700 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+      }`}
+    >
       {icon && (
         <div className="absolute left-4 top-4 text-white/50 group-focus-within:text-cyan-400 transition-all duration-300 group-focus-within:scale-110">
           {icon}
@@ -287,14 +336,19 @@ const FormField = ({ type = "text", name, placeholder, value, onChange, rows, re
         value={value}
         onChange={onChange}
         rows={type === "textarea" ? rows : undefined}
-        className={`w-full ${icon ? 'pl-12' : 'pl-4'} pr-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] focus:shadow-lg focus:shadow-cyan-500/10 transition-all duration-300 resize-none`}
+        className={`w-full ${icon ? "pl-12" : "pl-4"} pr-4 py-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] focus:shadow-lg focus:shadow-cyan-500/10 transition-all duration-300 resize-none`}
         required={required}
       />
     </div>
   );
 };
 
-const SubmitButton = ({ isSubmitting, delay = 0 }) => {
+interface SubmitButtonProps {
+  isSubmitting: boolean;
+  delay?: number;
+}
+
+const SubmitButton = ({ isSubmitting, delay = 0 }: SubmitButtonProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -306,8 +360,8 @@ const SubmitButton = ({ isSubmitting, delay = 0 }) => {
     <button
       type="submit"
       disabled={isSubmitting}
-      className={`${BUTTON_BASE_CLASS} ${isSubmitting ? 'opacity-50 transform-none' : ''} transition-all duration-700 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      className={`${BUTTON_BASE_CLASS} ${isSubmitting ? "opacity-50 transform-none" : ""} transition-all duration-700 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       }`}
     >
       <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
@@ -316,7 +370,12 @@ const SubmitButton = ({ isSubmitting, delay = 0 }) => {
   );
 };
 
-const StatusMessage = ({ success, errorMessage }) => {
+interface StatusMessageProps {
+  success: boolean | null;
+  errorMessage: string;
+}
+
+const StatusMessage = ({ success, errorMessage }: StatusMessageProps) => {
   if (success === true) {
     return (
       <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-center text-green-400 animate-fade-in-up">
@@ -330,9 +389,7 @@ const StatusMessage = ({ success, errorMessage }) => {
     return (
       <div className="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-center text-red-400 animate-fade-in-up">
         <div className="font-semibold mb-2">Message Failed to Send</div>
-        {errorMessage && (
-          <p className="text-sm mb-2 text-red-300">{errorMessage}</p>
-        )}
+        {errorMessage && <p className="text-sm mb-2 text-red-300">{errorMessage}</p>}
         <p className="text-sm text-red-300">Please try using the direct contact links instead.</p>
       </div>
     );
@@ -342,13 +399,13 @@ const StatusMessage = ({ success, errorMessage }) => {
 };
 
 const SocialLinks = () => {
-  const [visibleLinks, setVisibleLinks] = useState([]);
+  const [visibleLinks, setVisibleLinks] = useState<number[]>([]);
 
   useEffect(() => {
     SOCIAL_LINKS.forEach((_, index) => {
       setTimeout(() => {
-        setVisibleLinks(prev => [...prev, index]);
-      }, 800 + (index * 150));
+        setVisibleLinks((prev) => [...prev, index]);
+      }, 800 + index * 150);
     });
   }, []);
 
@@ -361,12 +418,10 @@ const SocialLinks = () => {
           target="_blank"
           rel="noopener noreferrer"
           className={`w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-lg text-gray-400 hover:text-cyan-400 hover:border-cyan-500/50 hover:bg-cyan-500/5 transition-all duration-300 hover:scale-110 hover:-translate-y-1 text-xl ${
-            visibleLinks.includes(index)
-              ? 'opacity-100 scale-100'
-              : 'opacity-0 scale-50'
+            visibleLinks.includes(index) ? "opacity-100 scale-100" : "opacity-0 scale-50"
           }`}
           aria-label={link.label}
-          style={{ transition: 'all 0.5s ease-out' }}
+          style={{ transition: "all 0.5s ease-out" }}
         >
           {link.icon}
         </a>
@@ -375,9 +430,15 @@ const SocialLinks = () => {
   );
 };
 
-const ContactForm = ({ formState, formSubmission, onSubmit }) => {
+interface ContactFormProps {
+  formState: ReturnType<typeof useFormState>;
+  formSubmission: ReturnType<typeof useFormSubmission>;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+}
+
+const ContactForm = ({ formState, formSubmission, onSubmit }: ContactFormProps) => {
   const [isVisible, setIsVisible] = useState(false);
-  const formRef = useRef(null);
+  const formRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -389,7 +450,7 @@ const ContactForm = ({ formState, formSubmission, onSubmit }) => {
       },
       {
         threshold: 0.1,
-        rootMargin: '50px'
+        rootMargin: "50px",
       }
     );
 
@@ -401,26 +462,23 @@ const ContactForm = ({ formState, formSubmission, onSubmit }) => {
   }, []);
 
   return (
-    <div 
+    <div
       ref={formRef}
       className={`max-w-2xl mx-auto transition-all duration-700 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
       }`}
     >
-      <h2 
-        className={`text-xl font-semibold text-white mb-6 tracking-wide uppercase text-sm transition-all duration-700 delay-200 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      <h2
+        className={`font-semibold text-white mb-6 tracking-wide uppercase text-sm transition-all duration-700 delay-200 ${
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         }`}
       >
         Send a Message
       </h2>
-      
+
       <form className="space-y-5" onSubmit={onSubmit}>
-        <HoneypotField 
-          value={formState.honeypot} 
-          onChange={(e) => formState.setHoneypot(e.target.value)} 
-        />
-        
+        <HoneypotField value={formState.honeypot} onChange={(e) => formState.setHoneypot(e.target.value)} />
+
         <FormField
           name="name"
           placeholder="Your Name"
@@ -430,7 +488,7 @@ const ContactForm = ({ formState, formSubmission, onSubmit }) => {
           required
           delay={isVisible ? 300 : 0}
         />
-        
+
         <FormField
           type="email"
           name="email"
@@ -441,59 +499,64 @@ const ContactForm = ({ formState, formSubmission, onSubmit }) => {
           required
           delay={isVisible ? 400 : 0}
         />
-        
+
         <FormField
           type="textarea"
           name="message"
           placeholder="Your Message"
-          rows="6"
+          rows={6}
           value={formState.form.message}
           onChange={formState.handleInputChange}
           required
           delay={isVisible ? 500 : 0}
         />
-        
+
         <SubmitButton isSubmitting={formSubmission.isSubmitting} delay={isVisible ? 600 : 0} />
       </form>
 
-      <StatusMessage 
-        success={formSubmission.success} 
-        errorMessage={formSubmission.errorMessage} 
-      />
+      <StatusMessage success={formSubmission.success} errorMessage={formSubmission.errorMessage} />
     </div>
   );
 };
 
-const MathVerificationPopup = ({ 
-  isVisible, 
-  mathChallenge, 
-  userAnswer, 
-  mathError, 
+interface MathVerificationPopupProps {
+  isVisible: boolean;
+  mathChallenge: MathChallenge;
+  userAnswer: string;
+  mathError: boolean;
+  isSubmitting: boolean;
+  onAnswerChange: (value: string) => void;
+  onVerify: () => void | Promise<void>;
+  onClose: () => void;
+  onGenerateNew: () => void;
+}
+
+const MathVerificationPopup = ({
+  isVisible,
+  mathChallenge,
+  userAnswer,
+  mathError,
   isSubmitting,
-  onAnswerChange, 
-  onVerify, 
-  onClose, 
-  onGenerateNew 
-}) => {
+  onAnswerChange,
+  onVerify,
+  onClose,
+  onGenerateNew,
+}: MathVerificationPopupProps) => {
   if (!isVisible) return null;
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
       <div className="bg-slate-900/95 border border-cyan-500/30 rounded-xl p-8 max-w-md w-full shadow-2xl shadow-cyan-500/20 animate-scale-in">
         <div className="text-center mb-6">
-          <h3 className="text-2xl font-bold text-white mb-3 animate-bounce-gentle">
-            BEEP...BOOP 🤖
-          </h3>
-          <p className="text-gray-400 text-sm">
-            Solve this simple math problem to prove you're human!
-          </p>
+          <h3 className="text-2xl font-bold text-white mb-3 animate-bounce-gentle">BEEP...BOOP 🤖</h3>
+          <p className="text-gray-400 text-sm">Solve this simple math problem to prove you're human!</p>
         </div>
-        
+
         <div className="text-center mb-6">
           <div className="text-4xl font-bold text-cyan-400 mb-6 font-mono">
             {mathChallenge.question} = ?
           </div>
-          
+
           <input
             type="number"
             inputMode="numeric"
@@ -502,18 +565,16 @@ const MathVerificationPopup = ({
             onChange={(e) => onAnswerChange(e.target.value)}
             placeholder="Your answer"
             className={`w-full p-4 bg-white/5 border rounded-lg text-white placeholder-gray-500 text-center text-xl focus:outline-none transition-all duration-300 ${
-              mathError ? 'border-red-500/50 bg-red-500/10 animate-shake' : 'border-white/10 focus:border-cyan-500/50 focus:shadow-lg focus:shadow-cyan-500/20'
+              mathError
+                ? "border-red-500/50 bg-red-500/10 animate-shake"
+                : "border-white/10 focus:border-cyan-500/50 focus:shadow-lg focus:shadow-cyan-500/20"
             }`}
             autoFocus
           />
-          
-          {mathError && (
-            <p className="text-red-400 text-sm mt-3 animate-fade-in-up">
-              Incorrect answer. Please try again.
-            </p>
-          )}
+
+          {mathError && <p className="text-red-400 text-sm mt-3 animate-fade-in-up">Incorrect answer. Please try again.</p>}
         </div>
-        
+
         <div className="flex flex-col gap-3">
           <button
             onClick={onVerify}
@@ -530,7 +591,7 @@ const MathVerificationPopup = ({
             Cancel
           </button>
         </div>
-        
+
         <div className="text-center mt-4">
           <button
             onClick={onGenerateNew}
@@ -546,7 +607,7 @@ const MathVerificationPopup = ({
 };
 
 const AnimationStyles = () => (
-  <style jsx>{`
+  <style>{`
     @keyframes fade-in {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -613,20 +674,20 @@ export default function Contact() {
   const formSubmission = useFormSubmission();
   const [showMathPopup, setShowMathPopup] = useState(false);
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     if (formState.honeypot) {
       console.log("Bot detected via honeypot");
       return;
     }
-    
+
     if (!formState.isFormValid()) {
       formSubmission.setSuccess(false);
       formSubmission.setErrorMessage("Please fill in all required fields.");
       return;
     }
-    
+
     mathChallenge.generateMathChallenge();
     setShowMathPopup(true);
     formSubmission.setErrorMessage("");
@@ -635,9 +696,9 @@ export default function Contact() {
   const handleMathVerification = async () => {
     if (mathChallenge.validateAnswer()) {
       setShowMathPopup(false);
-      
+
       const result = await formSubmission.submitForm(formState.form, formState.selectedFile);
-      
+
       if (result.success) {
         formState.resetForm();
         mathChallenge.resetChallenge();
@@ -654,18 +715,11 @@ export default function Contact() {
 
   return (
     <>
-      <section 
-        id="contact" 
-        className="min-h-screen py-20 sm:py-24 px-6 sm:px-12"
-      >
+      <section id="contact" className="min-h-screen py-20 sm:py-24 px-6 sm:px-12">
         <div className="w-full max-w-4xl mx-auto text-center">
           <SectionHeader />
-          
-          <ContactForm 
-            formState={formState}
-            formSubmission={formSubmission}
-            onSubmit={handleFormSubmit}
-          />
+
+          <ContactForm formState={formState} formSubmission={formSubmission} onSubmit={handleFormSubmit} />
 
           <SocialLinks />
         </div>

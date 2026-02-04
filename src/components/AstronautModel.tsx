@@ -1,15 +1,17 @@
-import React, { useRef, useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
+import type { Group } from "three";
+import type { GLTF } from "three-stdlib";
 
 function AnimatedAstronaut() {
-  const { scene } = useGLTF("/Astronaut.glb");
-  const astro = useRef();
-  
+  const { scene } = useGLTF("/Astronaut.glb") as GLTF;
+  const astro = useRef<Group | null>(null);
+
   const clonedScene = useMemo(() => scene.clone(), [scene]);
 
-  const tiltX = Math.PI / 23;   
-  const tiltZ = Math.PI / 8;   
+  const tiltX = Math.PI / 23;
+  const tiltZ = Math.PI / 8;
 
   useFrame(({ clock }) => {
     if (!astro.current) return;
@@ -33,17 +35,14 @@ function AnimatedAstronaut() {
 
 export default function AstronautModel() {
   return (
-    <div 
-      className="w-full h-full"
-      style={{ pointerEvents: 'none' }}
-    >
-      <Canvas 
+    <div className="w-full h-full" style={{ pointerEvents: "none" }}>
+      <Canvas
         camera={{ position: [-2, 3, 7], fov: 77 }}
-        style={{ pointerEvents: 'none', width: '100%', height: '100%' }}
-        gl={{ 
-          alpha: true, 
+        style={{ pointerEvents: "none", width: "100%", height: "100%" }}
+        gl={{
+          alpha: true,
           antialias: true,
-          powerPreference: "high-performance"
+          powerPreference: "high-performance",
         }}
         dpr={[1, 1.5]}
       >

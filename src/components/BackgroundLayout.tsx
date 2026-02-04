@@ -1,53 +1,57 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from "react";
+import type { Position, Star } from "../types";
 
+interface BackgroundLayoutProps {
+  children: React.ReactNode;
+}
 
-const BackgroundLayout = ({ children }) => {
-  const [stars, setStars] = useState([]);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [parallaxOffset, setParallaxOffset] = useState({ x: 0, y: 0 });
-  const [innerPos, setInnerPos] = useState({ x: 0, y: 0 });
-  const [outerPos, setOuterPos] = useState({ x: 0, y: 0 });
+const BackgroundLayout = ({ children }: BackgroundLayoutProps) => {
+  const [stars, setStars] = useState<Star[]>([]);
+  const [mousePos, setMousePos] = useState<Position>({ x: 0, y: 0 });
+  const [parallaxOffset, setParallaxOffset] = useState<Position>({ x: 0, y: 0 });
+  const [innerPos, setInnerPos] = useState<Position>({ x: 0, y: 0 });
+  const [outerPos, setOuterPos] = useState<Position>({ x: 0, y: 0 });
   const [cursorVisible, setCursorVisible] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  
-  const innerRef = useRef({ x: 0, y: 0 });
-  const outerRef = useRef({ x: 0, y: 0 });
-  const parallaxRef = useRef({ x: 0, y: 0 });
+
+  const innerRef = useRef<Position>({ x: 0, y: 0 });
+  const outerRef = useRef<Position>({ x: 0, y: 0 });
+  const parallaxRef = useRef<Position>({ x: 0, y: 0 });
 
   useEffect(() => {
     const checkIfDesktop = () => {
-      const hasHover = window.matchMedia('(hover: hover)').matches;
-      const hasPointer = window.matchMedia('(pointer: fine)').matches;
-      const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
-      
+      const hasHover = window.matchMedia("(hover: hover)").matches;
+      const hasPointer = window.matchMedia("(pointer: fine)").matches;
+      const isLargeScreen = window.matchMedia("(min-width: 1024px)").matches;
+
       setIsDesktop(hasHover && hasPointer && isLargeScreen);
     };
 
     checkIfDesktop();
 
-    const hoverQuery = window.matchMedia('(hover: hover)');
-    const pointerQuery = window.matchMedia('(pointer: fine)');
-    const screenQuery = window.matchMedia('(min-width: 1024px)');
+    const hoverQuery = window.matchMedia("(hover: hover)");
+    const pointerQuery = window.matchMedia("(pointer: fine)");
+    const screenQuery = window.matchMedia("(min-width: 1024px)");
 
     const handleChange = () => checkIfDesktop();
 
-    hoverQuery.addEventListener('change', handleChange);
-    pointerQuery.addEventListener('change', handleChange);
-    screenQuery.addEventListener('change', handleChange);
+    hoverQuery.addEventListener("change", handleChange);
+    pointerQuery.addEventListener("change", handleChange);
+    screenQuery.addEventListener("change", handleChange);
 
     return () => {
-      hoverQuery.removeEventListener('change', handleChange);
-      pointerQuery.removeEventListener('change', handleChange);
-      screenQuery.removeEventListener('change', handleChange);
+      hoverQuery.removeEventListener("change", handleChange);
+      pointerQuery.removeEventListener("change", handleChange);
+      screenQuery.removeEventListener("change", handleChange);
     };
   }, []);
 
   useEffect(() => {
     const generateStars = () => {
-      const newStars = [];
+      const newStars: Star[] = [];
       const numStars = 200;
-      
-      for (let i = 0; i < numStars; i++) {
+
+      for (let i = 0; i < numStars; i += 1) {
         newStars.push({
           id: i,
           x: Math.random() * 100,
@@ -68,14 +72,14 @@ const BackgroundLayout = ({ children }) => {
       generateStars();
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
     if (!isDesktop) return;
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
       setCursorVisible(true);
     };
@@ -88,96 +92,96 @@ const BackgroundLayout = ({ children }) => {
       setCursorVisible(true);
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
-    document.addEventListener('mouseenter', handleMouseEnter);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('mouseenter', handleMouseEnter);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("mouseenter", handleMouseEnter);
     };
   }, [isDesktop]);
 
   useEffect(() => {
     if (!isDesktop) return;
 
-    let animationFrameId;
-    
+    let animationFrameId: number;
+
     const animate = () => {
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
-      
+
       const offsetX = (mousePos.x - centerX) / centerX;
       const offsetY = (mousePos.y - centerY) / centerY;
-      
+
       const parallaxSpeed = 0.05;
       const maxOffset = 20.0;
-      
+
       const targetX = -offsetX * maxOffset;
       const targetY = -offsetY * maxOffset;
-      
+
       parallaxRef.current.x += (targetX - parallaxRef.current.x) * parallaxSpeed;
       parallaxRef.current.y += (targetY - parallaxRef.current.y) * parallaxSpeed;
-      
+
       setParallaxOffset({
         x: parallaxRef.current.x,
-        y: parallaxRef.current.y
+        y: parallaxRef.current.y,
       });
-      
+
       animationFrameId = requestAnimationFrame(animate);
     };
-    
+
     animate();
-    
+
     return () => cancelAnimationFrame(animationFrameId);
   }, [mousePos, isDesktop]);
 
   useEffect(() => {
     if (!isDesktop) return;
 
-    let animationFrameId;
-    
+    let animationFrameId: number;
+
     const animate = () => {
       const innerSpeed = 0.2;
-      
+
       innerRef.current.x += (mousePos.x - innerRef.current.x) * innerSpeed;
       innerRef.current.y += (mousePos.y - innerRef.current.y) * innerSpeed;
-      
+
       setInnerPos({
         x: innerRef.current.x,
-        y: innerRef.current.y
+        y: innerRef.current.y,
       });
-      
+
       animationFrameId = requestAnimationFrame(animate);
     };
-    
+
     animate();
-    
+
     return () => cancelAnimationFrame(animationFrameId);
   }, [mousePos, isDesktop]);
 
   useEffect(() => {
     if (!isDesktop) return;
 
-    let animationFrameId;
-    
+    let animationFrameId: number;
+
     const animate = () => {
       const outerSpeed = 0.08;
-      
+
       outerRef.current.x += (mousePos.x - outerRef.current.x) * outerSpeed;
       outerRef.current.y += (mousePos.y - outerRef.current.y) * outerSpeed;
-      
+
       setOuterPos({
         x: outerRef.current.x,
-        y: outerRef.current.y
+        y: outerRef.current.y,
       });
-      
+
       animationFrameId = requestAnimationFrame(animate);
     };
-    
+
     animate();
-    
+
     return () => cancelAnimationFrame(animationFrameId);
   }, [mousePos, isDesktop]);
 
@@ -224,20 +228,22 @@ const BackgroundLayout = ({ children }) => {
         }
       `}</style>
 
-      <div 
+      <div
         className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black relative"
-        style={{ 
-          overflowX: 'hidden', 
-          maxWidth: '100vw', 
-          width: '100%',
-          overflow: 'hidden'
+        style={{
+          overflowX: "hidden",
+          maxWidth: "100vw",
+          width: "100%",
+          overflow: "hidden",
         }}
       >
-        <div 
+        <div
           className="absolute inset-0 pointer-events-none z-0 transition-transform duration-100 ease-out"
           style={{
-            transform: isDesktop ? `translate(${parallaxOffset.x}px, ${parallaxOffset.y}px)` : 'none',
-            overflow: 'hidden'
+            transform: isDesktop
+              ? `translate(${parallaxOffset.x}px, ${parallaxOffset.y}px)`
+              : "none",
+            overflow: "hidden",
           }}
         >
           {stars.map((star) => (
@@ -252,7 +258,9 @@ const BackgroundLayout = ({ children }) => {
                 opacity: star.opacity,
                 animationDelay: `${star.twinkleDelay}s`,
                 animationDuration: `${star.twinkleDuration}s`,
-                transform: isDesktop ? `translate(${parallaxOffset.x * star.depth}px, ${parallaxOffset.y * star.depth}px)` : 'none'
+                transform: isDesktop
+                  ? `translate(${parallaxOffset.x * star.depth}px, ${parallaxOffset.y * star.depth}px)`
+                  : "none",
               }}
             />
           ))}
@@ -267,7 +275,7 @@ const BackgroundLayout = ({ children }) => {
                 top: `${outerPos.y}px`,
               }}
             />
-            
+
             <div
               className="custom-cursor-inner"
               style={{
@@ -278,13 +286,12 @@ const BackgroundLayout = ({ children }) => {
           </>
         )}
 
-        <div className="relative z-10" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
+        <div className="relative z-10" style={{ maxWidth: "100%", overflowX: "hidden" }}>
           {children}
         </div>
       </div>
     </>
   );
 };
-
 
 export default BackgroundLayout;
