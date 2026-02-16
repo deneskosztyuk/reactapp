@@ -69,22 +69,12 @@ const WORK_EXPERIENCES: WorkExperienceType[] = [
 ];
 
 const SectionHeader = () => (
-  <div className="space-y-6 mb-0 pb-16 text-center">
-    <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[11px] uppercase tracking-[0.3em] text-white/50">
-      Work Experience
+  <div className="flex items-center justify-center gap-3 text-lg text-gray-400 tracking-widest">
+      <span className="w-8 h-px bg-gray-600"></span>
+      <span>03</span>
+      <span className="font-light font-mono">// professional experience</span>
+      <span className="w-8 h-px bg-gray-600"></span>
     </div>
-
-    <h1 className="text-[clamp(2.6rem,7vw,4.6rem)] font-semibold text-white tracking-[-0.02em] leading-[1.02]">
-      Building products with
-      <span className="inline-block bg-gradient-to-r from-cyan-300 via-sky-300 to-emerald-300 text-transparent bg-clip-text">
-        {" "}precision
-      </span>
-    </h1>
-
-    <p className="text-sm sm:text-base text-white/55 leading-relaxed max-w-2xl mx-auto font-light">
-      Focused on pragmatic engineering, scalable platforms, and measurable impact.
-    </p>
-  </div>
 );
 
 interface ExperienceIconProps {

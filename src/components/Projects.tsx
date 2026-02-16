@@ -145,7 +145,7 @@ const useCarousel = (totalItems: number, itemsPerView: number) => {
 
 const SectionHeader = () => (
   <div className="space-y-6 mb-16">
-    <div className="flex items-center justify-center gap-3 text-sm text-gray-400 tracking-widest">
+    <div className="flex items-center justify-center gap-3 text-lg text-gray-400 tracking-widest">
       <span className="w-8 h-px bg-gray-600"></span>
       <span>03</span>
       <span className="font-light font-mono">// work</span>
