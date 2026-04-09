@@ -71,7 +71,7 @@ const WORK_EXPERIENCES: WorkExperienceType[] = [
 const SectionHeader = () => (
   <div className="flex items-center justify-center gap-3 text-lg text-gray-400 tracking-widest">
       <span className="w-8 h-px bg-gray-600"></span>
-      <span>03</span>
+      <span>02</span>
       <span className="font-light font-mono">// professional experience</span>
       <span className="w-8 h-px bg-gray-600"></span>
     </div>

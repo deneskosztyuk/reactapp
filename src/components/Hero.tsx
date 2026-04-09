@@ -63,6 +63,17 @@ const EASING: EasingConfig = {
   smooth: "cubic-bezier(0.16, 1, 0.3, 1)",
 };
 
+const SURNAME_MESH_GRADIENT_STYLE: React.CSSProperties = {
+  backgroundImage: [
+    "radial-gradient(circle at 18% 24%, rgba(147, 197, 253, 0.98) 0, rgba(147, 197, 253, 0.98) 24%, transparent 56%)",
+    "radial-gradient(circle at 52% 80%, rgba(96, 165, 250, 0.95) 0, rgba(96, 165, 250, 0.95) 26%, transparent 58%)",
+    "radial-gradient(circle at 88% 30%, rgba(59, 130, 246, 0.92) 0, rgba(59, 130, 246, 0.92) 24%, transparent 55%)",
+  ].join(", "),
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "140% 140%",
+};
+
 const PERSONAL_INFO: PersonalInfo = {
   firstName: "DENES",
   lastName: "KOSZTYUK",
@@ -161,8 +172,9 @@ const NameText = ({ text, isVisible, direction = "left" }: NameTextProps) => {
   const baseClasses = "block transition-all duration-1000 ease-out";
   const gradientClasses =
     direction === "right"
-      ? "bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text"
+      ? "text-transparent bg-clip-text"
       : "text-white opacity-90";
+  const textStyle = direction === "right" ? SURNAME_MESH_GRADIENT_STYLE : undefined;
   const translateClass = direction === "left" ? "-translate-x-12" : "translate-x-12";
   const visibilityClasses = isVisible
     ? `${direction === "right" ? "opacity-100" : "opacity-90"} translate-x-0 scale-100`
@@ -171,7 +183,10 @@ const NameText = ({ text, isVisible, direction = "left" }: NameTextProps) => {
   return (
     <span
       className={`${baseClasses} ${gradientClasses} ${visibilityClasses}`}
-      style={{ transitionTimingFunction: EASING.spring }}
+      style={{
+        transitionTimingFunction: EASING.spring,
+        ...textStyle,
+      }}
     >
       {text}
     </span>

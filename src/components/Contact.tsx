@@ -13,10 +13,23 @@ interface SubmitResult {
   error?: string;
 }
 
+interface SubmitResponse {
+  success?: boolean;
+  error?: string;
+  message?: string;
+}
+
 const FORM_CONFIG = {
-  ACCESS_KEY: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
-  API_ENDPOINT: "https://api.web3forms.com/submit",
+  API_ENDPOINT: "/api/submit-form",
 };
+
+const FORM_LIMITS = {
+  NAME: 80,
+  EMAIL: 120,
+  MESSAGE: 4000,
+} as const;
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const MATH_CONFIG = {
   MAX_NUMBER: 15,
@@ -40,41 +53,39 @@ const SOCIAL_LINKS = [
 const BUTTON_BASE_CLASS =
   "w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-medium rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-cyan-500/25";
 
-const createFormData = (formValues: FormValues, selectedFile: File | null = null) => {
-  const formData = new FormData();
-  const trimmedName = formValues.name.trim();
-  const accessKey = FORM_CONFIG.ACCESS_KEY ?? "";
-
-  formData.append("access_key", accessKey);
-  formData.append("name", trimmedName);
-  formData.append("email", formValues.email.trim());
-  formData.append("message", formValues.message.trim());
-  formData.append("subject", `New Contact Form Submission from ${trimmedName}`);
-  formData.append("botcheck", "");
-  formData.append("replyto", formValues.email.trim());
-  formData.append("from_name", trimmedName);
-
-  if (selectedFile) {
-    formData.append("attachment", selectedFile);
-  }
-
-  return formData;
-};
-
-const createJsonPayload = (formValues: FormValues) => ({
-  access_key: FORM_CONFIG.ACCESS_KEY ?? "",
+const createSubmissionPayload = (formValues: FormValues, honeypot: string) => ({
   name: formValues.name.trim(),
   email: formValues.email.trim(),
   message: formValues.message.trim(),
-  subject: `New Contact Form Submission from ${formValues.name.trim()}`,
-  replyto: formValues.email.trim(),
-  from_name: formValues.name.trim(),
-  botcheck: "",
+  botcheck: honeypot.trim(),
 });
+
+const getFormValidationError = (formValues: FormValues) => {
+  const trimmedName = formValues.name.trim();
+  const trimmedEmail = formValues.email.trim();
+  const trimmedMessage = formValues.message.trim();
+
+  if (!trimmedName || !trimmedEmail || !trimmedMessage) {
+    return "Please fill in all required fields.";
+  }
+
+  if (trimmedName.length > FORM_LIMITS.NAME) {
+    return `Name must be ${FORM_LIMITS.NAME} characters or fewer.`;
+  }
+
+  if (trimmedEmail.length > FORM_LIMITS.EMAIL || !EMAIL_PATTERN.test(trimmedEmail)) {
+    return "Please enter a valid email address.";
+  }
+
+  if (trimmedMessage.length > FORM_LIMITS.MESSAGE) {
+    return `Message must be ${FORM_LIMITS.MESSAGE} characters or fewer.`;
+  }
+
+  return null;
+};
 
 const useFormState = () => {
   const [form, setForm] = useState<FormValues>({ name: "", email: "", message: "" });
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [honeypot, setHoneypot] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -83,21 +94,20 @@ const useFormState = () => {
 
   const resetForm = () => {
     setForm({ name: "", email: "", message: "" });
-    setSelectedFile(null);
     setHoneypot("");
   };
 
-  const isFormValid = () => {
-    return form.name.trim() && form.email.trim() && form.message.trim();
-  };
+  const getValidationError = () => getFormValidationError(form);
+
+  const isFormValid = () => getValidationError() === null;
 
   return {
     form,
-    selectedFile,
     honeypot,
     handleInputChange,
     setHoneypot,
     resetForm,
+    getValidationError,
     isFormValid,
   };
 };
@@ -166,62 +176,29 @@ const useFormSubmission = () => {
   const [success, setSuccess] = useState<boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const submitWithFormData = async (
-    formValues: FormValues,
-    selectedFile: File | null
-  ): Promise<{ response: Response; result: Web3FormsResponse }> => {
-    const formData = createFormData(formValues, selectedFile);
-    const response = await fetch(FORM_CONFIG.API_ENDPOINT, {
-      method: "POST",
-      body: formData,
-    });
-    return { response, result: (await response.json()) as Web3FormsResponse };
-  };
-
-  const submitWithJson = async (
-    formValues: FormValues
-  ): Promise<{ response: Response; result: Web3FormsResponse }> => {
-    const response = await fetch(FORM_CONFIG.API_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(createJsonPayload(formValues)),
-    });
-    return { response, result: (await response.json()) as Web3FormsResponse };
-  };
-
-  const submitForm = async (formValues: FormValues, selectedFile: File | null): Promise<SubmitResult> => {
+  const submitForm = async (formValues: FormValues, honeypot: string): Promise<SubmitResult> => {
     setIsSubmitting(true);
     setSuccess(null);
     setErrorMessage("");
 
     try {
-      let response: Response;
-      let result: Web3FormsResponse;
+      const response = await fetch(FORM_CONFIG.API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(createSubmissionPayload(formValues, honeypot)),
+      });
 
-      try {
-        ({ response, result } = await submitWithFormData(formValues, selectedFile));
-
-        if (response.ok && result.success) {
-          setSuccess(true);
-          return { success: true };
-        }
-
-        if (response.status === 400) {
-          ({ response, result } = await submitWithJson(formValues));
-        }
-      } catch {
-        ({ response, result } = await submitWithJson(formValues));
-      }
+      const result = (await response.json()) as SubmitResponse;
 
       if (response.ok && result.success) {
         setSuccess(true);
         return { success: true };
       }
 
-      throw new Error(result.message || `HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(result.error || result.message || `HTTP ${response.status}: ${response.statusText}`);
     } catch (error) {
       console.error("Form submission error:", error);
       const message = error instanceof Error ? error.message : "Failed to send message. Please try the direct contact links below.";
@@ -251,13 +228,6 @@ const SectionHeader = () => (
       <span className="font-light font-mono">// contact</span>
       <span className="w-8 h-px bg-gray-600"></span>
     </div>
-
-    <h1 className="text-[clamp(2rem,8vw,4rem)] font-bold text-white tracking-tight">
-      LET'S{" "}
-      <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">
-        CONNECT
-      </span>
-    </h1>
 
     <p className="text-base sm:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto font-light">
       Anything caught your eye? Send me a message below or connect via social media below.
@@ -682,9 +652,11 @@ export default function Contact() {
       return;
     }
 
-    if (!formState.isFormValid()) {
+      const validationError = formState.getValidationError();
+
+      if (validationError) {
       formSubmission.setSuccess(false);
-      formSubmission.setErrorMessage("Please fill in all required fields.");
+        formSubmission.setErrorMessage(validationError);
       return;
     }
 
@@ -697,7 +669,7 @@ export default function Contact() {
     if (mathChallenge.validateAnswer()) {
       setShowMathPopup(false);
 
-      const result = await formSubmission.submitForm(formState.form, formState.selectedFile);
+      const result = await formSubmission.submitForm(formState.form, formState.honeypot);
 
       if (result.success) {
         formState.resetForm();

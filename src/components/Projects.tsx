@@ -152,13 +152,6 @@ const SectionHeader = () => (
       <span className="w-8 h-px bg-gray-600"></span>
     </div>
 
-    <h1 className="text-[clamp(2rem,8vw,4rem)] font-bold text-white tracking-tight">
-      MY{" "}
-      <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">
-        PROJECTS
-      </span>
-    </h1>
-
     <p className="text-base sm:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto font-light">
       Software development projects showcasing practical engineering skills and problem-solving.
     </p>

@@ -4,7 +4,6 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 import type { NavigationItem, SocialLink } from "../types";
 
 const SCROLL_THRESHOLD = 20;
-const SECTION_OFFSET = 200;
 const SCROLL_DURATION = 600;
 const CLICK_OUTSIDE_DELAY = 100;
 
@@ -37,9 +36,31 @@ const useScrollDetection = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    let animationFrameId = 0;
+
+    const updateScrollState = () => {
+      setIsScrolled((currentValue) => {
+        const nextValue = window.scrollY > SCROLL_THRESHOLD;
+        return currentValue === nextValue ? currentValue : nextValue;
+      });
+      animationFrameId = 0;
+    };
+
+    const handleScroll = () => {
+      if (animationFrameId !== 0) return;
+      animationFrameId = requestAnimationFrame(updateScrollState);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+
+      if (animationFrameId !== 0) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, []);
 
   return isScrolled;
@@ -49,24 +70,68 @@ const useActiveSection = () => {
   const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + SECTION_OFFSET;
+    const sectionElements = NAVIGATION_ITEMS.map((item) => document.getElementById(item.to)).filter(
+      (element): element is HTMLElement => element !== null
+    );
 
-      for (const section of NAVIGATION_ITEMS) {
-        const element = document.getElementById(section.to);
-        if (
-          element &&
-          element.offsetTop <= scrollPosition &&
-          element.offsetTop + element.offsetHeight > scrollPosition
-        ) {
-          setActiveSection(section.to);
-          break;
+    if (sectionElements.length === 0) {
+      return;
+    }
+
+    if (typeof IntersectionObserver === "undefined") {
+      const fallbackScrollListener = () => {
+        const viewportMiddle = window.scrollY + window.innerHeight * 0.4;
+
+        for (const section of sectionElements) {
+          const sectionTop = section.offsetTop;
+          const sectionBottom = sectionTop + section.offsetHeight;
+
+          if (sectionTop <= viewportMiddle && sectionBottom > viewportMiddle) {
+            setActiveSection((currentSection) =>
+              currentSection === section.id ? currentSection : section.id
+            );
+            break;
+          }
         }
-      }
-    };
+      };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+      fallbackScrollListener();
+      window.addEventListener("scroll", fallbackScrollListener, { passive: true });
+
+      return () => window.removeEventListener("scroll", fallbackScrollListener);
+    }
+
+    const sectionVisibility = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          sectionVisibility.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+        });
+
+        const mostVisibleSection = NAVIGATION_ITEMS.map((item) => ({
+          id: item.to,
+          ratio: sectionVisibility.get(item.to) ?? 0,
+        }))
+          .filter((item) => item.ratio > 0)
+          .sort((left, right) => right.ratio - left.ratio)[0];
+
+        if (!mostVisibleSection) {
+          return;
+        }
+
+        setActiveSection((currentSection) =>
+          currentSection === mostVisibleSection.id ? currentSection : mostVisibleSection.id
+        );
+      },
+      {
+        rootMargin: "-25% 0px -40% 0px",
+        threshold: [0.15, 0.3, 0.45, 0.6, 0.75],
+      }
+    );
+
+    sectionElements.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
   }, []);
 
   return activeSection;
@@ -76,6 +141,8 @@ const useMobileMenu = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    let timeoutId: number | undefined;
+
     const handleClickOutside = (e: MouseEvent) => {
       const mobileMenuButton = document.getElementById("mobile-menu-button");
       const mobileMenu = document.getElementById("mobile-menu");
@@ -92,12 +159,18 @@ const useMobileMenu = () => {
     };
 
     if (isMobileMenuOpen) {
-      setTimeout(() => {
+      timeoutId = window.setTimeout(() => {
         document.addEventListener("click", handleClickOutside);
       }, CLICK_OUTSIDE_DELAY);
     }
 
-    return () => document.removeEventListener("click", handleClickOutside);
+    return () => {
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+      }
+
+      document.removeEventListener("click", handleClickOutside);
+    };
   }, [isMobileMenuOpen]);
 
   const toggleMobileMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -143,7 +216,7 @@ const NavigationItemComponent = ({ item, activeSection }: NavigationItemProps) =
       >
         0{item.id}
       </span>
-      // {item.label}
+      // <span className="lowercase">{item.label}</span>
       {activeSection === item.to && (
         <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"></span>
       )}
@@ -238,7 +311,7 @@ const MobileMenuItem = ({ item, index, activeSection, closeMobileMenu }: MobileM
       <span className={activeSection === item.to ? "text-cyan-400" : "text-gray-600"}>
         0{item.id}
       </span>{" "}
-      // {item.label}
+      // <span className="lowercase">{item.label}</span>
     </Link>
   </li>
 );

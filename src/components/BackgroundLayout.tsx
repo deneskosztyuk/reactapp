@@ -5,18 +5,37 @@ interface BackgroundLayoutProps {
   children: React.ReactNode;
 }
 
+const STAR_COUNT = 200;
+const PARALLAX_MAX_OFFSET = 20;
+const PARALLAX_SPEED = 0.05;
+const INNER_CURSOR_SPEED = 0.2;
+const OUTER_CURSOR_SPEED = 0.08;
+
+const createStars = (): Star[] => {
+  return Array.from({ length: STAR_COUNT }, (_, index) => ({
+    id: index,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 2 + 1,
+    opacity: Math.random() * 0.6 + 0.2,
+    twinkleDelay: Math.random() * 5,
+    twinkleDuration: Math.random() * 6 + 4,
+    depth: Math.random() * 0.5 + 0.5,
+  }));
+};
+
 const BackgroundLayout = ({ children }: BackgroundLayoutProps) => {
-  const [stars, setStars] = useState<Star[]>([]);
-  const [mousePos, setMousePos] = useState<Position>({ x: 0, y: 0 });
-  const [parallaxOffset, setParallaxOffset] = useState<Position>({ x: 0, y: 0 });
-  const [innerPos, setInnerPos] = useState<Position>({ x: 0, y: 0 });
-  const [outerPos, setOuterPos] = useState<Position>({ x: 0, y: 0 });
+  const [stars, setStars] = useState<Star[]>(() => createStars());
   const [cursorVisible, setCursorVisible] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
-  const innerRef = useRef<Position>({ x: 0, y: 0 });
-  const outerRef = useRef<Position>({ x: 0, y: 0 });
-  const parallaxRef = useRef<Position>({ x: 0, y: 0 });
+  const parallaxLayerRef = useRef<HTMLDivElement | null>(null);
+  const innerCursorElementRef = useRef<HTMLDivElement | null>(null);
+  const outerCursorElementRef = useRef<HTMLDivElement | null>(null);
+  const mouseTargetRef = useRef<Position>({ x: 0, y: 0 });
+  const innerCursorPositionRef = useRef<Position>({ x: 0, y: 0 });
+  const outerCursorPositionRef = useRef<Position>({ x: 0, y: 0 });
+  const parallaxOffsetRef = useRef<Position>({ x: 0, y: 0 });
 
   useEffect(() => {
     const checkIfDesktop = () => {
@@ -47,40 +66,43 @@ const BackgroundLayout = ({ children }: BackgroundLayoutProps) => {
   }, []);
 
   useEffect(() => {
-    const generateStars = () => {
-      const newStars: Star[] = [];
-      const numStars = 200;
-
-      for (let i = 0; i < numStars; i += 1) {
-        newStars.push({
-          id: i,
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-          size: Math.random() * 2 + 1,
-          opacity: Math.random() * 0.6 + 0.2,
-          twinkleDelay: Math.random() * 5,
-          twinkleDuration: Math.random() * 6 + 4,
-          depth: Math.random() * 0.5 + 0.5,
-        });
-      }
-      setStars(newStars);
-    };
-
-    generateStars();
-
-    const handleResize = () => {
-      generateStars();
-    };
+    const handleResize = () => setStars(createStars());
 
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
+    if (!isDesktop) {
+      setCursorVisible(false);
+      mouseTargetRef.current = { x: 0, y: 0 };
+      innerCursorPositionRef.current = { x: 0, y: 0 };
+      outerCursorPositionRef.current = { x: 0, y: 0 };
+      parallaxOffsetRef.current = { x: 0, y: 0 };
+
+      if (parallaxLayerRef.current) {
+        parallaxLayerRef.current.style.transform = "translate3d(0px, 0px, 0px)";
+      }
+
+      return;
+    }
+
+    const centerPosition = {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+    };
+
+    mouseTargetRef.current = centerPosition;
+    innerCursorPositionRef.current = centerPosition;
+    outerCursorPositionRef.current = centerPosition;
+  }, [isDesktop]);
+
+  useEffect(() => {
     if (!isDesktop) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+    const handleMouseMove = (event: MouseEvent) => {
+      mouseTargetRef.current = { x: event.clientX, y: event.clientY };
       setCursorVisible(true);
     };
 
@@ -88,11 +110,12 @@ const BackgroundLayout = ({ children }: BackgroundLayoutProps) => {
       setCursorVisible(false);
     };
 
-    const handleMouseEnter = () => {
+    const handleMouseEnter = (event: MouseEvent) => {
+      mouseTargetRef.current = { x: event.clientX, y: event.clientY };
       setCursorVisible(true);
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
 
@@ -106,94 +129,63 @@ const BackgroundLayout = ({ children }: BackgroundLayoutProps) => {
   useEffect(() => {
     if (!isDesktop) return;
 
-    let animationFrameId: number;
+    let animationFrameId = 0;
 
-    const animate = () => {
+    const animateScene = () => {
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
 
-      const offsetX = (mousePos.x - centerX) / centerX;
-      const offsetY = (mousePos.y - centerY) / centerY;
+      const offsetX = centerX === 0 ? 0 : (mouseTargetRef.current.x - centerX) / centerX;
+      const offsetY = centerY === 0 ? 0 : (mouseTargetRef.current.y - centerY) / centerY;
+      const targetX = -offsetX * PARALLAX_MAX_OFFSET;
+      const targetY = -offsetY * PARALLAX_MAX_OFFSET;
 
-      const parallaxSpeed = 0.05;
-      const maxOffset = 20.0;
+      parallaxOffsetRef.current.x += (targetX - parallaxOffsetRef.current.x) * PARALLAX_SPEED;
+      parallaxOffsetRef.current.y += (targetY - parallaxOffsetRef.current.y) * PARALLAX_SPEED;
 
-      const targetX = -offsetX * maxOffset;
-      const targetY = -offsetY * maxOffset;
+      if (parallaxLayerRef.current) {
+        parallaxLayerRef.current.style.transform = `translate3d(${parallaxOffsetRef.current.x}px, ${parallaxOffsetRef.current.y}px, 0)`;
+      }
 
-      parallaxRef.current.x += (targetX - parallaxRef.current.x) * parallaxSpeed;
-      parallaxRef.current.y += (targetY - parallaxRef.current.y) * parallaxSpeed;
+      innerCursorPositionRef.current.x +=
+        (mouseTargetRef.current.x - innerCursorPositionRef.current.x) * INNER_CURSOR_SPEED;
+      innerCursorPositionRef.current.y +=
+        (mouseTargetRef.current.y - innerCursorPositionRef.current.y) * INNER_CURSOR_SPEED;
 
-      setParallaxOffset({
-        x: parallaxRef.current.x,
-        y: parallaxRef.current.y,
-      });
+      if (innerCursorElementRef.current) {
+        innerCursorElementRef.current.style.transform = `translate3d(${innerCursorPositionRef.current.x}px, ${innerCursorPositionRef.current.y}px, 0) translate(-50%, -50%)`;
+      }
 
-      animationFrameId = requestAnimationFrame(animate);
+      outerCursorPositionRef.current.x +=
+        (mouseTargetRef.current.x - outerCursorPositionRef.current.x) * OUTER_CURSOR_SPEED;
+      outerCursorPositionRef.current.y +=
+        (mouseTargetRef.current.y - outerCursorPositionRef.current.y) * OUTER_CURSOR_SPEED;
+
+      if (outerCursorElementRef.current) {
+        outerCursorElementRef.current.style.transform = `translate3d(${outerCursorPositionRef.current.x}px, ${outerCursorPositionRef.current.y}px, 0) translate(-50%, -50%)`;
+      }
+
+      animationFrameId = requestAnimationFrame(animateScene);
     };
 
-    animate();
+    animationFrameId = requestAnimationFrame(animateScene);
 
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [mousePos, isDesktop]);
-
-  useEffect(() => {
-    if (!isDesktop) return;
-
-    let animationFrameId: number;
-
-    const animate = () => {
-      const innerSpeed = 0.2;
-
-      innerRef.current.x += (mousePos.x - innerRef.current.x) * innerSpeed;
-      innerRef.current.y += (mousePos.y - innerRef.current.y) * innerSpeed;
-
-      setInnerPos({
-        x: innerRef.current.x,
-        y: innerRef.current.y,
-      });
-
-      animationFrameId = requestAnimationFrame(animate);
+    return () => {
+      if (animationFrameId !== 0) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
-
-    animate();
-
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [mousePos, isDesktop]);
-
-  useEffect(() => {
-    if (!isDesktop) return;
-
-    let animationFrameId: number;
-
-    const animate = () => {
-      const outerSpeed = 0.08;
-
-      outerRef.current.x += (mousePos.x - outerRef.current.x) * outerSpeed;
-      outerRef.current.y += (mousePos.y - outerRef.current.y) * outerSpeed;
-
-      setOuterPos({
-        x: outerRef.current.x,
-        y: outerRef.current.y,
-      });
-
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [mousePos, isDesktop]);
+  }, [isDesktop]);
 
   return (
     <>
       <style>{`
         @keyframes twinkle {
-          0%, 100% { 
+          0%, 100% {
             opacity: 0.2;
             transform: scale(1);
           }
-          50% { 
+          50% {
             opacity: 1;
             transform: scale(1.1);
           }
@@ -210,9 +202,9 @@ const BackgroundLayout = ({ children }: BackgroundLayoutProps) => {
           border: 2px solid rgba(255, 255, 255, 0.4);
           border-radius: 50%;
           pointer-events: none;
-          transform: translate(-50%, -50%);
           z-index: 9998;
           mix-blend-mode: difference;
+          will-change: transform, opacity;
         }
 
         .custom-cursor-inner {
@@ -222,9 +214,9 @@ const BackgroundLayout = ({ children }: BackgroundLayoutProps) => {
           background: rgba(255, 255, 255, 0.9);
           border-radius: 50%;
           pointer-events: none;
-          transform: translate(-50%, -50%);
           z-index: 9999;
           box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+          will-change: transform, opacity;
         }
       `}</style>
 
@@ -238,12 +230,11 @@ const BackgroundLayout = ({ children }: BackgroundLayoutProps) => {
         }}
       >
         <div
+          ref={parallaxLayerRef}
           className="absolute inset-0 pointer-events-none z-0 transition-transform duration-100 ease-out"
           style={{
-            transform: isDesktop
-              ? `translate(${parallaxOffset.x}px, ${parallaxOffset.y}px)`
-              : "none",
             overflow: "hidden",
+            willChange: isDesktop ? "transform" : undefined,
           }}
         >
           {stars.map((star) => (
@@ -258,30 +249,23 @@ const BackgroundLayout = ({ children }: BackgroundLayoutProps) => {
                 opacity: star.opacity,
                 animationDelay: `${star.twinkleDelay}s`,
                 animationDuration: `${star.twinkleDuration}s`,
-                transform: isDesktop
-                  ? `translate(${parallaxOffset.x * star.depth}px, ${parallaxOffset.y * star.depth}px)`
-                  : "none",
               }}
             />
           ))}
         </div>
 
-        {isDesktop && cursorVisible && (
+        {isDesktop && (
           <>
             <div
+              ref={outerCursorElementRef}
               className="custom-cursor-outer"
-              style={{
-                left: `${outerPos.x}px`,
-                top: `${outerPos.y}px`,
-              }}
+              style={{ opacity: cursorVisible ? 1 : 0 }}
             />
 
             <div
+              ref={innerCursorElementRef}
               className="custom-cursor-inner"
-              style={{
-                left: `${innerPos.x}px`,
-                top: `${innerPos.y}px`,
-              }}
+              style={{ opacity: cursorVisible ? 1 : 0 }}
             />
           </>
         )}

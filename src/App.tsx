@@ -1,5 +1,4 @@
 import React from "react";
-import { SmoothScroll } from "react-smooth-scrolll";
 import BackgroundLayout from "./components/BackgroundLayout";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -12,15 +11,13 @@ import { Analytics } from "@vercel/analytics/react";
 export default function App() {
   return (
     <div style={{ overflowX: "hidden", maxWidth: "100vw", width: "100%" }}>
-      <SmoothScroll scrollSpeed={1} smoothness={0.1}>
-        <BackgroundLayout>
-          <Navbar />
-          <Hero />
-          <WorkExperience />
-          <Projects />
-          <Contact />
-        </BackgroundLayout>
-      </SmoothScroll>
+      <BackgroundLayout>
+        <Navbar />
+        <Hero />
+        <WorkExperience />
+        <Projects />
+        <Contact />
+      </BackgroundLayout>
       <Analytics />
       <SpeedInsights />
     </div>
