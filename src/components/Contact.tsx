@@ -2,11 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaEnvelope, FaGithub, FaLinkedin, FaPaperPlane, FaUser } from "react-icons/fa";
 import type { FormValues, MathChallenge } from "../types";
 
-interface Web3FormsResponse {
-  success: boolean;
-  message?: string;
-  data?: unknown;
-}
+declare const __WEB3FORMS_ACCESS_KEY__: string;
 
 interface SubmitResult {
   success: boolean;
@@ -20,7 +16,8 @@ interface SubmitResponse {
 }
 
 const FORM_CONFIG = {
-  API_ENDPOINT: "/api/submit-form",
+  API_ENDPOINT: "https://api.web3forms.com/submit",
+  ACCESS_KEY: __WEB3FORMS_ACCESS_KEY__,
 };
 
 const FORM_LIMITS = {
@@ -54,11 +51,20 @@ const BUTTON_BASE_CLASS =
   "w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-700 text-white font-medium rounded-lg hover:from-cyan-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-cyan-500/25";
 
 const createSubmissionPayload = (formValues: FormValues, honeypot: string) => ({
+  access_key: FORM_CONFIG.ACCESS_KEY,
   name: formValues.name.trim(),
   email: formValues.email.trim(),
   message: formValues.message.trim(),
   botcheck: honeypot.trim(),
 });
+
+const parseSubmitResponse = async (response: Response): Promise<SubmitResponse | null> => {
+  try {
+    return JSON.parse(await response.text()) as SubmitResponse;
+  } catch {
+    return null;
+  }
+};
 
 const getFormValidationError = (formValues: FormValues) => {
   const trimmedName = formValues.name.trim();
@@ -182,6 +188,10 @@ const useFormSubmission = () => {
     setErrorMessage("");
 
     try {
+      if (!FORM_CONFIG.ACCESS_KEY) {
+        throw new Error("Contact form configuration is missing.");
+      }
+
       const response = await fetch(FORM_CONFIG.API_ENDPOINT, {
         method: "POST",
         headers: {
@@ -191,14 +201,14 @@ const useFormSubmission = () => {
         body: JSON.stringify(createSubmissionPayload(formValues, honeypot)),
       });
 
-      const result = (await response.json()) as SubmitResponse;
+      const result = await parseSubmitResponse(response);
 
-      if (response.ok && result.success) {
+      if (response.ok && result?.success) {
         setSuccess(true);
         return { success: true };
       }
 
-      throw new Error(result.error || result.message || `HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(result?.error || result?.message || `HTTP ${response.status}: ${response.statusText}`);
     } catch (error) {
       console.error("Form submission error:", error);
       const message = error instanceof Error ? error.message : "Failed to send message. Please try the direct contact links below.";
