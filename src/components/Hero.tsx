@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-scroll";
-import { FaJava, FaPython, FaReact } from "react-icons/fa";
-import { SiJira, SiNextdotjs, SiPostgresql, SiPostman, SiTypescript } from "react-icons/si";
-import { TbDatabase, TbTerminal2 } from "react-icons/tb";
-import { GiRobotAntennas } from "react-icons/gi";
+import { FaMicrochip } from "react-icons/fa";
+import { GiProcessor } from "react-icons/gi";
 import { IoMdCellular } from "react-icons/io";
+import { MdDeveloperBoard } from "react-icons/md";
+import { PiCircuitry, PiWaveform } from "react-icons/pi";
+import { SiC, SiCplusplus, SiKicad, SiRust } from "react-icons/si";
+import { TbClockCog, TbDeviceDesktopCode } from "react-icons/tb";
 
 interface AnimationTimings {
   fadeInDelay: number;
@@ -80,18 +82,18 @@ const PERSONAL_INFO: PersonalInfo = {
   titles: ["FULLSTACK", "ROBOTICS", "SOFTWARE ENGINEER"],
   location: "Stavanger, Norway / Remote",
   skills: [
-    { name: "Java", icon: <FaJava /> },
-    { name: "Python", icon: <FaPython /> },
-    { name: "TypeScript", icon: <SiTypescript /> },
-    { name: "React", icon: <FaReact /> },
-    { name: "Next.js", icon: <SiNextdotjs /> },
-    { name: "Robotics", icon: <GiRobotAntennas /> },
+    { name: "Rust", icon: <SiRust /> },
+    { name: "C", icon: <SiC /> },
+    { name: "C++", icon: <SiCplusplus /> },
+    { name: "Embedded Systems", icon: <MdDeveloperBoard /> },
+    { name: "Firmware Development", icon: <TbDeviceDesktopCode /> },
+    { name: "Hardware Design", icon: <PiCircuitry /> },
+    { name: "Microcontrollers", icon: <FaMicrochip /> },
     { name: "IoT", icon: <IoMdCellular /> },
-    { name: "SQL", icon: <TbDatabase /> },
-    { name: "PostgreSQL", icon: <SiPostgresql /> },
-    { name: "Postman", icon: <SiPostman /> },
-    { name: "PowerShell", icon: <TbTerminal2 /> },
-    { name: "Jira", icon: <SiJira /> },
+    { name: "FPGA", icon: <GiProcessor /> },
+    { name: "PCB Design", icon: <SiKicad /> },
+    { name: "Signal Processing", icon: <PiWaveform /> },
+    { name: "Real-Time Systems", icon: <TbClockCog /> },
   ],
 };
 

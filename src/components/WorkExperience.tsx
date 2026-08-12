@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import {
   FaBriefcase,
   FaCalendarAlt,
@@ -7,6 +7,8 @@ import {
   FaMapMarkerAlt,
   FaMicrochip,
 } from "react-icons/fa";
+import TechnologyTags from "./TechnologyTags";
+import useInView from "../lib/useInView";
 import type { WorkExperience as WorkExperienceType } from "../types";
 
 const WORK_EXPERIENCES: WorkExperienceType[] = [
@@ -27,7 +29,6 @@ const WORK_EXPERIENCES: WorkExperienceType[] = [
       "Implemented backend services in Rust for high-performance data processing",
     ],
     technologies: ["Vue.js", "Rust", "Git", "Lua", "AWS", "GitHub Actions", "CI/CD"],
-    gradient: "from-slate-900/40 via-slate-900/60 to-slate-900/80",
   },
   {
     id: "freelance-projects",
@@ -46,7 +47,6 @@ const WORK_EXPERIENCES: WorkExperienceType[] = [
       "Designed custom Discord bots for gaming and tech communities using discord.js",
     ],
     technologies: ["React", "Node.js", "Java", "Spring Boot", "Git", "TypeScript", "discord.js"],
-    gradient: "from-slate-900/40 via-slate-900/60 to-slate-900/80",
   },
   {
     id: "jabil",
@@ -64,305 +64,121 @@ const WORK_EXPERIENCES: WorkExperienceType[] = [
       "Trained 8 new technicians on RoHS & safety compliance",
     ],
     technologies: ["PCB", "Circuit Production", "IoT", "Embedded Systems", "Robotics"],
-    gradient: "from-slate-900/40 via-slate-900/60 to-slate-900/80",
   },
 ];
 
-const SectionHeader = () => (
-  <div className="flex items-center justify-center gap-3 text-lg text-gray-400 tracking-widest">
-      <span className="w-8 h-px bg-gray-600"></span>
-      <span>02</span>
-      <span className="font-light font-mono">// professional experience</span>
-      <span className="w-8 h-px bg-gray-600"></span>
-    </div>
-);
-
 interface ExperienceIconProps {
-  icon: React.ReactNode;
-  isVisible: boolean;
+  icon: ReactNode;
 }
 
-const ExperienceIcon = ({ icon, isVisible }: ExperienceIconProps) => (
-  <div
-    className={`flex-shrink-0 w-11 h-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center transition-all duration-700 group-hover:border-cyan-400/40 group-hover:bg-white/10 ${
-      isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-    }`}
+const ExperienceIcon = ({ icon }: ExperienceIconProps) => (
+  <span
+    aria-hidden="true"
+    className="flex h-10 w-10 flex-none items-center justify-center rounded-md border border-white/10 bg-white/[0.04] text-base text-cyan-300"
   >
-    <span className="text-cyan-300/90 text-lg transition-transform duration-500 group-hover:scale-110">
-      {icon}
-    </span>
-  </div>
+    {icon}
+  </span>
 );
 
-interface MetaInfoProps {
+interface ExperienceMetaProps {
   period: string;
   location: string;
   type: string;
-  isVisible: boolean;
 }
 
-const MetaInfo = ({ period, location, type, isVisible }: MetaInfoProps) => {
-  const [showItems, setShowItems] = useState<number[]>([]);
+const ExperienceMeta = ({ period, location, type }: ExperienceMetaProps) => (
+  <ul className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.12em] text-white/60 md:block md:space-y-3">
+    <li className="flex items-center gap-2">
+      <FaCalendarAlt aria-hidden="true" className="h-3 w-3 text-cyan-300/70" />
+      <span>{period}</span>
+    </li>
+    <li className="flex items-center gap-2">
+      <FaMapMarkerAlt aria-hidden="true" className="h-3 w-3 text-cyan-300/70" />
+      <span>{location}</span>
+    </li>
+    <li className="flex items-center gap-2">
+      <FaBriefcase aria-hidden="true" className="h-3 w-3 text-cyan-300/70" />
+      <span>{type}</span>
+    </li>
+  </ul>
+);
 
-  useEffect(() => {
-    if (isVisible) {
-      [0, 1, 2].forEach((index) => {
-        setTimeout(() => {
-          setShowItems((prev) => [...prev, index]);
-        }, 500 + index * 200);
-      });
-    }
-  }, [isVisible]);
-
-  const items = [
-    { icon: <FaCalendarAlt className="w-3 h-3" />, text: period },
-    { icon: <FaMapMarkerAlt className="w-3 h-3" />, text: location },
-    { icon: <FaBriefcase className="w-3 h-3" />, text: type },
-  ];
-
-  return (
-    <div className="flex flex-wrap items-center gap-3 text-[11px] text-white/45 mt-3 font-mono tracking-[0.12em]">
-      {items.map((item, index) => (
-        <React.Fragment key={index}>
-          {index > 0 && (
-            <span
-              className={`text-white/15 transition-opacity duration-400 ${
-                showItems.includes(index) ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              •
-            </span>
-          )}
-          <span
-            className={`flex items-center gap-1.5 transition-all duration-500 ${
-              showItems.includes(index) ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-            }`}
-          >
-            {item.icon}
-            <span className="uppercase">{item.text}</span>
-          </span>
-        </React.Fragment>
-      ))}
-    </div>
-  );
-};
-
-interface AchievementsListProps {
-  achievements: string[];
-  isVisible: boolean;
-}
-
-const AchievementsList = ({ achievements, isVisible }: AchievementsListProps) => {
-  const [visibleAchievements, setVisibleAchievements] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (isVisible) {
-      achievements.forEach((_, index) => {
-        setTimeout(() => {
-          setVisibleAchievements((prev) => [...prev, index]);
-        }, 900 + index * 250);
-      });
-    }
-  }, [isVisible, achievements]);
-
-  return (
-    <div className="mt-6">
-      <h4
-        className={`text-white/40 font-semibold text-[11px] mb-3 tracking-[0.28em] uppercase transition-all duration-600 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-        }`}
-      >
-        Key Achievements
-      </h4>
-      <ul className="space-y-2.5 text-white/65 text-sm leading-relaxed">
-        {achievements.map((achievement, index) => (
-          <li
-            key={index}
-            className={`flex items-start gap-3 pl-3 border-l-2 border-white/10 transition-all duration-600 hover:border-cyan-300/40 ${
-              visibleAchievements.includes(index)
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-6"
-            }`}
-          >
-            <span className="text-cyan-300/70 text-xs mt-0.5">▸</span>
-            <span>{achievement}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-interface TechnologiesListProps {
-  technologies: string[];
-  isVisible: boolean;
-}
-
-const TechnologiesList = ({ technologies, isVisible }: TechnologiesListProps) => {
-  const [visibleTech, setVisibleTech] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (isVisible) {
-      technologies.forEach((_, index) => {
-        setTimeout(() => {
-          setVisibleTech((prev) => [...prev, index]);
-        }, 1600 + index * 120);
-      });
-    }
-  }, [isVisible, technologies]);
-
-  return (
-    <div className="mt-6 pt-5 border-t border-white/10">
-      <h4
-        className={`text-white/40 font-semibold text-[11px] mb-3 tracking-[0.28em] uppercase transition-all duration-600 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-        }`}
-      >
-        Technologies
-      </h4>
-      <div className="flex flex-wrap gap-2">
-        {technologies.map((tech, index) => (
-          <span
-            key={index}
-            className={`px-3 py-1.5 bg-white/5 border border-white/10 text-white/65 text-[11px] font-medium hover:bg-white/10 hover:border-cyan-300/40 hover:text-white/90 transition-all duration-300 cursor-default ${
-              visibleTech.includes(index) ? "opacity-100 scale-100" : "opacity-0 scale-90"
-            }`}
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-interface ExperienceCardProps {
+interface ExperienceEntryProps {
   experience: WorkExperienceType;
-  index: number;
 }
 
-const ExperienceCard = ({ experience, index }: ExperienceCardProps) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [headerVisible, setHeaderVisible] = useState(false);
-  const [descriptionVisible, setDescriptionVisible] = useState(false);
-  const cardRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          setTimeout(() => setHeaderVisible(true), 300);
-          setTimeout(() => setDescriptionVisible(true), 550);
-          observer.disconnect();
-        }
-      },
-      {
-        threshold: 0.15,
-        rootMargin: "30px",
-      }
-    );
-
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+const ExperienceEntry = ({ experience }: ExperienceEntryProps) => {
+  const { elementRef, isVisible } = useInView<HTMLElement>();
 
   return (
-    <div
-      ref={cardRef}
-      className={`group relative rounded-2xl border border-white/10 bg-white/[0.03] transition-all duration-500 hover:border-cyan-300/40 hover:bg-white/[0.06] ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+    <article
+      ref={elementRef}
+      className={`grid gap-6 border-t border-white/10 py-10 transition-all duration-500 first:border-t-0 first:pt-0 motion-reduce:transform-none motion-reduce:transition-none md:grid-cols-[9rem_2rem_minmax(0,1fr)] md:gap-6 md:py-12 ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
       }`}
     >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      <div className="absolute inset-y-4 left-0 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+      <div className="md:pt-1">
+        <ExperienceMeta
+          period={experience.period}
+          location={experience.location}
+          type={experience.type}
+        />
+      </div>
 
-      <div className="relative z-10 p-7 sm:p-8 md:p-10">
-        <div className="flex items-start gap-5 mb-6">
-          <ExperienceIcon icon={experience.icon} isVisible={headerVisible} />
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <h3
-                className={`text-xl md:text-2xl font-semibold text-white tracking-tight transition-all duration-500 ${
-                  headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                }`}
-              >
-                {experience.title}
-              </h3>
-              <span className="text-white/20">—</span>
-              <p
-                className={`text-sm md:text-base text-cyan-300/85 font-semibold tracking-wide transition-all duration-500 delay-75 ${
-                  headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                }`}
-              >
-                {experience.company}
-              </p>
-            </div>
-            <MetaInfo
-              period={experience.period}
-              location={experience.location}
-              type={experience.type}
-              isVisible={headerVisible}
-            />
+      <div aria-hidden="true" className="relative hidden justify-center md:flex">
+        <span className="relative z-10 mt-1 h-2.5 w-2.5 border border-cyan-300/70 bg-slate-950" />
+        <span className="absolute bottom-0 top-5 w-px bg-gradient-to-b from-cyan-300/45 via-white/15 to-transparent" />
+      </div>
+
+      <div className="min-w-0">
+        <div className="flex items-start gap-4">
+          <ExperienceIcon icon={experience.icon} />
+          <div>
+            <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+              {experience.title}
+            </h3>
+            <p className="mt-1 font-mono text-sm text-cyan-300/85">{experience.company}</p>
           </div>
         </div>
 
-        <p
-          className={`text-white/60 text-sm md:text-base leading-relaxed mb-6 transition-all duration-500 ${
-            descriptionVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-          }`}
-        >
+        <p className="mt-6 max-w-3xl text-sm leading-7 text-white/60 sm:text-base">
           {experience.description}
         </p>
 
-        <AchievementsList achievements={experience.achievements} isVisible={descriptionVisible} />
+        <div className="mt-7">
+          <h4 className="mb-4 font-mono text-[11px] uppercase tracking-[0.24em] text-white/55">
+            Key Achievements
+          </h4>
+          <ul className="space-y-3 text-sm leading-6 text-white/65">
+            {experience.achievements.map((achievement) => (
+              <li key={achievement} className="grid grid-cols-[0.75rem_minmax(0,1fr)] gap-3">
+                <span aria-hidden="true" className="mt-3 h-px w-2 bg-cyan-300/70" />
+                <span>{achievement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-        <TechnologiesList technologies={experience.technologies} isVisible={descriptionVisible} />
+        <div className="mt-7 border-t border-white/10 pt-5">
+          <h4 className="mb-3 font-mono text-[11px] uppercase tracking-[0.24em] text-white/55">
+            Technologies
+          </h4>
+          <TechnologyTags technologies={experience.technologies} />
+        </div>
       </div>
-    </div>
+    </article>
   );
 };
 
-interface ExperiencesMosaicProps {
-  experiences: WorkExperienceType[];
-}
-
-const ExperiencesMosaic = ({ experiences }: ExperiencesMosaicProps) => (
-  <div className="space-y-6">
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {experiences.map((experience, index) => (
-        <ExperienceCard key={experience.id} experience={experience} index={index} />
-      ))}
-    </div>
-  </div>
-);
-
-const TimelineIndicator = () => (
-  <div className="flex justify-center mt-14">
-    <div className="flex flex-col items-center gap-3">
-      <div className="w-1.5 h-1.5 bg-cyan-300/70"></div>
-      <div className="w-px h-12 bg-gradient-to-b from-cyan-300/50 via-white/10 to-transparent"></div>
-      <div className="w-10 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent"></div>
-    </div>
-  </div>
-);
-
 export default function WorkExperience() {
   return (
-    <section id="work-experience" className="min-h-screen py-20 sm:py-28">
-      <div className="w-full max-w-6xl mx-auto px-6 sm:px-12 text-center mb-10">
-        <SectionHeader />
-      </div>
-
-      <div className="w-full max-w-6xl mx-auto px-6 sm:px-12">
-        <ExperiencesMosaic experiences={WORK_EXPERIENCES} />
-      </div>
-
-      <div className="w-full max-w-6xl mx-auto px-6 sm:px-12">
-        <TimelineIndicator />
+    <section id="work-experience" className="py-20 sm:py-28">
+      <div className="mx-auto w-full max-w-6xl px-6 sm:px-12">
+        <div>
+          {WORK_EXPERIENCES.map((experience) => (
+            <ExperienceEntry key={experience.id} experience={experience} />
+          ))}
+        </div>
       </div>
     </section>
   );

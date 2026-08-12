@@ -39,18 +39,6 @@ export interface WorkExperience {
   description: string;
   achievements: string[];
   technologies: string[];
-  gradient: string;
-}
-
-export interface FormValues {
-  name: string;
-  email: string;
-  message: string;
-}
-
-export interface MathChallenge {
-  question: string;
-  answer: number;
 }
 
 export interface Star {
