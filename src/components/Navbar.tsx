@@ -187,7 +187,7 @@ const Logo = () => (
   <div className="flex-shrink-0 mr-2 sm:mr-4">
     <Link to="hero" smooth={true} duration={SCROLL_DURATION} className="cursor-pointer block">
       <h1 className="font-bold text-white hover:text-cyan-400 transition-colors duration-300 whitespace-nowrap text-[16px] xs:text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl tracking-tight sm:tracking-normal md:tracking-wide lg:tracking-wider">
-        Velkommen til min webportefølje.<span className="text-cyan-400"></span>
+        Velkommen til min webportefølje.
       </h1>
     </Link>
   </div>
@@ -216,7 +216,7 @@ const NavigationItemComponent = ({ item, activeSection }: NavigationItemProps) =
       >
         0{item.id}
       </span>
-      // <span className="lowercase">{item.label}</span>
+      <span className="lowercase">{item.label}</span>
       {activeSection === item.to && (
         <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"></span>
       )}
@@ -311,7 +311,7 @@ const MobileMenuItem = ({ item, index, activeSection, closeMobileMenu }: MobileM
       <span className={activeSection === item.to ? "text-cyan-400" : "text-gray-600"}>
         0{item.id}
       </span>{" "}
-      // <span className="lowercase">{item.label}</span>
+      <span className="lowercase">{item.label}</span>
     </Link>
   </li>
 );

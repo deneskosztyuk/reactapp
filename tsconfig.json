@@ -16,6 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "api"],
-  "exclude": ["node_modules", "build", "src/**/*.js", "api/**/*.js"]
+  "include": ["src"],
+  "exclude": ["node_modules", "build", "src/**/*.js"]
 }
