@@ -164,9 +164,10 @@ interface BeaconLogoProps {
   position: Point;
   active: boolean;
   reducedMotion: boolean;
+  isMobile: boolean;
 }
 
-const BeaconLogo = ({ channel, position, active, reducedMotion }: BeaconLogoProps) => {
+const BeaconLogo = ({ channel, position, active, reducedMotion, isMobile }: BeaconLogoProps) => {
   const { scene } = useGLTF(LOGO_GLTF_PATHS[channel]);
   const logoRef = useRef<Group | null>(null);
   const haloRef = useRef<Mesh | null>(null);
@@ -202,7 +203,9 @@ const BeaconLogo = ({ channel, position, active, reducedMotion }: BeaconLogoProp
         ? 0
         : Math.sin(clock.elapsedTime * 1.2 + phaseOffset) * LOGO_PULSE_AMPLITUDE;
       const activeScale = active ? LOGO_ACTIVE_SCALE : 1;
-      logoRef.current.scale.setScalar(LOGO_BASE_SCALE[channel] * (1 + pulse) * activeScale);
+      logoRef.current.scale.setScalar(
+        LOGO_BASE_SCALE[channel] * (isMobile ? 1.25 : 1) * (1 + pulse) * activeScale
+      );
     }
 
     for (const { material, originalEmissive } of logoMaterials) {
@@ -489,7 +492,7 @@ const Constellation = ({ activeChannel, reducedMotion }: ContactConstellationSce
   const isCompact = aspect < 0.75;
 
   const constellationScale = Math.min(
-    isMobile ? 0.55 : 1.45,
+    isMobile ? 0.7 : 1.45,
     Math.max(0.32, viewportWidth / (CONSTELLATION_BOUNDS_X * 1.28))
   );
 
@@ -559,6 +562,7 @@ const Constellation = ({ activeChannel, reducedMotion }: ContactConstellationSce
               position={position}
               active={activeNode === index}
               reducedMotion={reducedMotion}
+              isMobile={isMobile}
             />
           </Suspense>
         ) : (
