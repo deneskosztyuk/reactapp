@@ -12,7 +12,7 @@ const CONTACT_LINKS = [
     icon: <FaLinkedin />,
     label: "LinkedIn",
     position:
-      "left-[4%] top-[35%] sm:left-[10%] sm:top-[34%] lg:left-[16%] lg:top-[30%]",
+      "left-[4%] top-[21%] sm:left-[10%] sm:top-[34%] lg:left-[16%] lg:top-[24%]",
     alignment: "flex-row",
   },
   {
@@ -21,7 +21,7 @@ const CONTACT_LINKS = [
     icon: <FaGithub />,
     label: "GitHub",
     position:
-      "right-[4%] top-[57%] sm:right-[10%] sm:top-[56%] lg:right-[16%] lg:top-[56%]",
+      "right-[4%] top-[68%] sm:right-[10%] sm:top-[56%] lg:right-[16%] lg:top-[56%]",
     alignment: "flex-row-reverse text-right",
   },
 ];
@@ -43,8 +43,6 @@ export default function Contact() {
 
           <nav aria-label="Contact channels" className="absolute inset-0 z-20">
             {CONTACT_LINKS.map((link) => {
-              const isActive = activeChannel === link.channel;
-
               return (
                 <a
                   key={link.channel}
@@ -58,14 +56,6 @@ export default function Contact() {
                   onBlur={() => setActiveChannel(null)}
                   className={`group absolute inline-flex min-h-11 items-center gap-3 py-2 font-mono text-xs uppercase tracking-[0.14em] text-white/75 transition-colors duration-300 hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 motion-reduce:transition-none ${link.position} ${link.alignment}`}
                 >
-                  <span
-                    aria-hidden="true"
-                    className={`h-3 w-3 rotate-45 border bg-slate-950 transition-all duration-300 motion-reduce:transition-none ${
-                      isActive
-                        ? "scale-125 border-cyan-200 bg-cyan-300 shadow-[0_0_18px_rgba(103,232,249,0.75)]"
-                        : "border-cyan-300/70 shadow-[0_0_10px_rgba(103,232,249,0.35)]"
-                    }`}
-                  />
                   <span className="flex items-center gap-2 border-b border-white/20 pb-1 transition-colors duration-300 group-hover:border-cyan-300/65 group-focus-visible:border-cyan-300/65 motion-reduce:transition-none">
                     <span aria-hidden="true" className="text-base text-cyan-300/85">
                       {link.icon}
