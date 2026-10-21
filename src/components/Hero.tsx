@@ -11,9 +11,8 @@ export default function Hero() {
         cloud.
       </h1>
       <p className="mt-8 max-w-[40rem]">
-        IoT software engineer at Invig in Stavanger, working on Rust services, a Vue front end and
-        the devices that feed them. Previously freelance web development, and PCB production at
-        Jabil. Open to remote work.
+        IoT software engineer in Stavanger, working on Rust services, a Vue front end and the
+        devices that feed them. Previously freelance web development, and PCB production at Jabil.
       </p>
       <ul className="mt-6 flex gap-x-6">
         {PROFILE_LINKS.map((link) => (
