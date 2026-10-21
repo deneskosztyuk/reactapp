@@ -1,4 +1,4 @@
-import { useRef, useState, type KeyboardEvent } from "react";
+import { useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import useReducedMotion from "../lib/useReducedMotion";
 import type { WorkExperience as WorkExperienceType } from "../types";
 
@@ -91,7 +91,18 @@ export default function WorkExperience() {
   const [selected, setSelected] = useState(LAST);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const pulseRef = useRef<HTMLSpanElement | null>(null);
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const panelRefs = useRef<Array<HTMLDivElement | null>>([]);
+  // Role the scroller is animating to after an arrow/marker/key select; scroll sync waits until it arrives.
+  const scrollTargetRef = useRef<number | null>(null);
   const reducedMotion = useReducedMotion();
+
+  // Start on the current role without an animated scroll.
+  useLayoutEffect(() => {
+    const scroller = scrollerRef.current;
+    const panel = panelRefs.current[LAST];
+    if (scroller && panel) scroller.scrollLeft = panel.offsetLeft;
+  }, []);
 
   // Sends a gold pulse along the line from one marker to another; the panel itself switches instantly.
   const sendPulse = (fromIndex: number, toIndex: number) => {
@@ -114,6 +125,33 @@ export default function WorkExperience() {
     if (next !== selected) sendPulse(selected, next);
     setSelected(next);
     if (moveFocus) tabRefs.current[next]?.focus();
+
+    const scroller = scrollerRef.current;
+    const panel = panelRefs.current[next];
+    if (scroller && panel && scroller.scrollLeft !== panel.offsetLeft) {
+      scrollTargetRef.current = next;
+      scroller.scrollTo({ left: panel.offsetLeft, behavior: reducedMotion ? "auto" : "smooth" });
+    }
+  };
+
+  // Swiping the role scroller selects whichever role is nearest its left edge.
+  const handleScroll = () => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const distances = panelRefs.current.map((panel) =>
+      panel ? Math.abs(panel.offsetLeft - scroller.scrollLeft) : Infinity
+    );
+    const nearest = distances.indexOf(Math.min(...distances));
+
+    if (scrollTargetRef.current !== null) {
+      if (nearest === scrollTargetRef.current && distances[nearest] < 2) scrollTargetRef.current = null;
+      return;
+    }
+    if (nearest !== selected) {
+      sendPulse(selected, nearest);
+      setSelected(nearest);
+    }
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -193,16 +231,27 @@ export default function WorkExperience() {
         </button>
       </div>
 
-      {/* All panels share one grid cell so the section keeps the tallest role's height. */}
-      <div className="mt-10 grid">
+      {/* Roles sit side by side in a snapping scroller: swipe on touch, arrows, markers and keys scroll it.
+          Panels stretch to the tallest role, so the section height never jumps. */}
+      <div
+        ref={scrollerRef}
+        onScroll={handleScroll}
+        onPointerDown={() => {
+          scrollTargetRef.current = null;
+        }}
+        className="no-scrollbar relative mt-10 flex snap-x snap-mandatory gap-x-6 overflow-x-auto overscroll-x-contain"
+      >
         {WORK_EXPERIENCES.map((experience, index) => (
           <div
             key={experience.id}
+            ref={(element) => {
+              panelRefs.current[index] = element;
+            }}
             role="tabpanel"
             id={`role-panel-${experience.id}`}
             aria-labelledby={`role-tab-${experience.id}`}
             inert={index !== selected}
-            className={`[grid-area:1/1] ${index === selected ? "" : "invisible"}`}
+            className="w-full flex-none snap-start"
           >
             <ExperienceEntry experience={experience} />
           </div>

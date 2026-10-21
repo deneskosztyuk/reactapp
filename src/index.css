@@ -31,6 +31,15 @@
   }
 }
 
+/* Scrollers driven by their own controls (the Work roles) hide the native bar. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes power-on {
   from {
     clip-path: inset(0 0 100% 0);
