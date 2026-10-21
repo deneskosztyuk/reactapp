@@ -30,3 +30,40 @@
     }
   }
 }
+
+@keyframes power-on {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.board-power-on {
+  animation: power-on 480ms steps(8) both;
+}
+
+/* Project sprites: 4-frame sheets, cycled while the project is hovered or holds keyboard focus.
+   :focus-visible, not :focus-within, so a link that keeps focus after a mouse click does not loop forever. */
+@keyframes sprite-cycle {
+  to {
+    background-position-x: calc(-64px * var(--px));
+  }
+}
+
+@media (hover: hover) {
+  article:hover .project-sprite {
+    animation: sprite-cycle 600ms steps(4) infinite;
+  }
+}
+
+article:has(:focus-visible) .project-sprite {
+  animation: sprite-cycle 600ms steps(4) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-sprite {
+    animation: none !important;
+  }
+}

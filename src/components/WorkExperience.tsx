@@ -1,4 +1,5 @@
 import { useRef, useState, type KeyboardEvent } from "react";
+import useReducedMotion from "../lib/useReducedMotion";
 import type { WorkExperience as WorkExperienceType } from "../types";
 
 // Oldest first: the timeline reads left to right.
@@ -84,12 +85,33 @@ const ExperienceEntry = ({ experience }: ExperienceEntryProps) => (
 const ARROW_CLASS =
   "flex h-11 w-11 flex-none items-center justify-center text-[22px] text-silk disabled:cursor-default disabled:text-trace";
 
+const PULSE_SIZE = 6;
+
 export default function WorkExperience() {
   const [selected, setSelected] = useState(LAST);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const pulseRef = useRef<HTMLSpanElement | null>(null);
+  const reducedMotion = useReducedMotion();
+
+  // Sends a gold pulse along the line from one marker to another; the panel itself switches instantly.
+  const sendPulse = (fromIndex: number, toIndex: number) => {
+    const pulse = pulseRef.current;
+    const from = tabRefs.current[fromIndex];
+    const to = tabRefs.current[toIndex];
+    if (!pulse || !from || !to || reducedMotion) return;
+
+    const centre = (tab: HTMLElement) => tab.offsetLeft + tab.offsetWidth / 2 - PULSE_SIZE / 2;
+    pulse.style.transition = "none";
+    pulse.style.transform = `translateX(${centre(from)}px)`;
+    pulse.style.visibility = "visible";
+    void pulse.offsetWidth; // commit the start position so the next change transitions
+    pulse.style.transition = "transform 300ms steps(10)";
+    pulse.style.transform = `translateX(${centre(to)}px)`;
+  };
 
   const select = (index: number, moveFocus = false) => {
     const next = Math.min(LAST, Math.max(0, index));
+    if (next !== selected) sendPulse(selected, next);
     setSelected(next);
     if (moveFocus) tabRefs.current[next]?.focus();
   };
@@ -121,6 +143,15 @@ export default function WorkExperience() {
             aria-hidden="true"
             className="absolute top-[21px] h-px bg-trace"
             style={{ left: LINE_INSET, right: LINE_INSET }}
+          />
+          <span
+            ref={pulseRef}
+            aria-hidden="true"
+            className="pointer-events-none invisible absolute left-0 top-[19px] bg-gold"
+            style={{ width: PULSE_SIZE, height: PULSE_SIZE }}
+            onTransitionEnd={(event) => {
+              event.currentTarget.style.visibility = "hidden";
+            }}
           />
           {WORK_EXPERIENCES.map((experience, index) => {
             const active = index === selected;

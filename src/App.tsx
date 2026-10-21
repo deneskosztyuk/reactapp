@@ -4,12 +4,15 @@ import Projects from "./components/Projects";
 import WorkExperience from "./components/WorkExperience";
 import Skills from "./components/Skills";
 import Contact from "./components/Contact";
+import ClickSpark from "./components/ClickSpark";
+import BoardBackground from "./components/BoardBackground";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
   return (
     <div className="mx-auto max-w-[60rem] px-6">
+      <BoardBackground />
       <Navbar />
       <main className="space-y-16 md:space-y-24">
         <Hero />
@@ -21,6 +24,7 @@ export default function App() {
       <footer className="mt-16 py-8 text-[15px] text-dim md:mt-24">
         © {new Date().getFullYear()} Denes Kosztyuk
       </footer>
+      <ClickSpark />
       <Analytics />
       <SpeedInsights />
     </div>

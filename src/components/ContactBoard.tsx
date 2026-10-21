@@ -14,7 +14,6 @@ const HEIGHT = 48;
 const TICK_MS = 30;
 
 const COLORS = {
-  board: "#181A1B",
   silk: "#E6E6DF",
   dim: "#9A9C95",
   trace: "#3A3D3F",
@@ -125,7 +124,7 @@ const drawTrace = (ctx: CanvasRenderingContext2D, vertices: Point[], color: stri
 };
 
 const drawBoard = (ctx: CanvasRenderingContext2D, active: ContactChannel | null, state: BoardState) => {
-  fill(ctx, COLORS.board, 0, 0, WIDTH, HEIGHT);
+  ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
   [...ROUTES]
     .sort((a, b) => Number(a.channel === active) - Number(b.channel === active))
@@ -139,7 +138,7 @@ const drawBoard = (ctx: CanvasRenderingContext2D, active: ContactChannel | null,
   fill(ctx, COLORS.outline, 58, 21, 1, 8);
 
   fill(ctx, COLORS.pin, 83, 24, 4, 4);
-  fill(ctx, COLORS.board, 84, 25, 2, 2);
+  ctx.clearRect(84, 25, 2, 2);
 
   fill(ctx, COLORS.chip, 8, 16, 20, 20);
   [19, 25, 31].forEach((y) => fill(ctx, COLORS.pin, 28, y, 2, 2));

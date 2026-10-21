@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import robotSprite from "../assets/sprites/robot.png";
 import satelliteSprite from "../assets/sprites/satellite.png";
 import armSprite from "../assets/sprites/arm.png";
@@ -54,11 +55,19 @@ export default function Projects() {
       <div className="mt-8 grid gap-x-10 gap-y-12 md:grid-cols-2">
         {PROJECT_DATA.map((project) => (
           <article key={project.id} className="flex items-start gap-6">
-            <img
-              src={project.sprite}
-              alt=""
-              className="flex-none"
-              style={{ width: 16 * px, height: 16 * px, imageRendering: "pixelated" }}
+            <span
+              aria-hidden="true"
+              className="project-sprite flex-none"
+              style={
+                {
+                  "--px": px,
+                  width: 16 * px,
+                  height: 16 * px,
+                  backgroundImage: `url(${project.sprite})`,
+                  backgroundSize: `${64 * px}px ${16 * px}px`,
+                  imageRendering: "pixelated",
+                } as CSSProperties
+              }
             />
             <div className="min-w-0 max-w-[40rem]">
               <h3 className="font-medium">{project.title}</h3>
