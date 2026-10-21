@@ -62,7 +62,7 @@ interface ExperienceEntryProps {
 
 const ExperienceEntry = ({ experience }: ExperienceEntryProps) => (
   <article className="grid gap-x-8 gap-y-2 md:grid-cols-[10rem_minmax(0,1fr)]">
-    <p className="text-[15px] text-graphite">
+    <p className="text-[15px] text-dim">
       {experience.period}
       <br />
       {experience.location}
@@ -71,18 +71,18 @@ const ExperienceEntry = ({ experience }: ExperienceEntryProps) => (
       <h3 className="font-medium">{experience.title}</h3>
       <p>{experience.company}</p>
       <p className="mt-3">{experience.description}</p>
-      <ul className="mt-3 list-disc space-y-1 pl-5 marker:text-graphite">
+      <ul className="mt-3 list-disc space-y-1 pl-5 marker:text-dim">
         {experience.achievements.map((achievement) => (
           <li key={achievement}>{achievement}</li>
         ))}
       </ul>
-      <p className="mt-3 text-[15px] text-graphite">{experience.technologies.join(", ")}</p>
+      <p className="mt-3 text-[15px] text-dim">{experience.technologies.join(", ")}</p>
     </div>
   </article>
 );
 
 const ARROW_CLASS =
-  "flex h-11 w-11 flex-none items-center justify-center text-[22px] text-ink disabled:cursor-default disabled:text-rule";
+  "flex h-11 w-11 flex-none items-center justify-center text-[22px] text-silk disabled:cursor-default disabled:text-trace";
 
 export default function WorkExperience() {
   const [selected, setSelected] = useState(LAST);
@@ -119,7 +119,7 @@ export default function WorkExperience() {
         <div role="tablist" aria-label="Roles" className="relative flex flex-1" onKeyDown={handleKeyDown}>
           <span
             aria-hidden="true"
-            className="absolute top-[21px] h-px bg-rule"
+            className="absolute top-[21px] h-px bg-trace"
             style={{ left: LINE_INSET, right: LINE_INSET }}
           />
           {WORK_EXPERIENCES.map((experience, index) => {
@@ -141,9 +141,9 @@ export default function WorkExperience() {
               >
                 <span
                   aria-hidden="true"
-                  className={`h-3 w-3 border ${active ? "border-red bg-red" : "border-ink bg-paper"}`}
+                  className={`h-3 w-3 border ${active ? "border-gold bg-gold" : "border-silk bg-board"}`}
                 />
-                <span className={`text-[15px] ${active ? "text-ink" : "text-graphite"}`}>
+                <span className={`text-[15px] ${active ? "text-silk" : "text-dim"}`}>
                   {experience.period}
                 </span>
               </button>

@@ -4,15 +4,19 @@
 
 @layer base {
   body {
-    @apply bg-paper font-sans text-[18px] leading-[1.6] text-ink;
+    @apply bg-board font-sans text-[18px] leading-[1.6] text-silk;
   }
 
   a {
-    @apply text-red underline underline-offset-4 hover:decoration-2;
+    @apply text-gold underline underline-offset-4 hover:decoration-2;
+  }
+
+  html {
+    color-scheme: dark;
   }
 
   :focus-visible {
-    outline: 2px solid #c1272d;
+    outline: 2px solid #c9a44a;
     outline-offset: 3px;
   }
 

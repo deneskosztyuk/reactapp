@@ -14,12 +14,16 @@ const HEIGHT = 48;
 const TICK_MS = 30;
 
 const COLORS = {
-  paper: "#ECEDEA",
-  ink: "#1C1D1A",
-  graphite: "#5E605B",
-  rule: "#B9BBB5",
-  red: "#C1272D",
-  redPale: "#E9B3B5",
+  board: "#181A1B",
+  silk: "#E6E6DF",
+  dim: "#9A9C95",
+  trace: "#3A3D3F",
+  outline: "#5A5D5F",
+  gold: "#C9A44A",
+  led: "#E5484D",
+  glow: "#7A2C2F",
+  chip: "#2B2D2F",
+  pin: "#A9ADB0",
 };
 
 const TARGETS: Record<ContactChannel, Point> = { linkedin: [114, 16], github: [114, 33] };
@@ -121,54 +125,54 @@ const drawTrace = (ctx: CanvasRenderingContext2D, vertices: Point[], color: stri
 };
 
 const drawBoard = (ctx: CanvasRenderingContext2D, active: ContactChannel | null, state: BoardState) => {
-  fill(ctx, COLORS.paper, 0, 0, WIDTH, HEIGHT);
+  fill(ctx, COLORS.board, 0, 0, WIDTH, HEIGHT);
 
   [...ROUTES]
     .sort((a, b) => Number(a.channel === active) - Number(b.channel === active))
-    .forEach(({ channel, vertices }) => drawTrace(ctx, vertices, channel === active ? COLORS.ink : COLORS.rule));
+    .forEach(({ channel, vertices }) => drawTrace(ctx, vertices, channel === active ? COLORS.gold : COLORS.trace));
 
-  fill(ctx, COLORS.ink, 47, 23, 3, 4);
-  fill(ctx, COLORS.ink, 55, 23, 3, 4);
-  fill(ctx, COLORS.rule, 46, 21, 13, 1);
-  fill(ctx, COLORS.rule, 46, 28, 13, 1);
-  fill(ctx, COLORS.rule, 46, 21, 1, 8);
-  fill(ctx, COLORS.rule, 58, 21, 1, 8);
+  fill(ctx, COLORS.pin, 47, 23, 3, 4);
+  fill(ctx, COLORS.pin, 55, 23, 3, 4);
+  fill(ctx, COLORS.outline, 46, 21, 13, 1);
+  fill(ctx, COLORS.outline, 46, 28, 13, 1);
+  fill(ctx, COLORS.outline, 46, 21, 1, 8);
+  fill(ctx, COLORS.outline, 58, 21, 1, 8);
 
-  fill(ctx, COLORS.ink, 83, 24, 4, 4);
-  fill(ctx, COLORS.paper, 84, 25, 2, 2);
+  fill(ctx, COLORS.pin, 83, 24, 4, 4);
+  fill(ctx, COLORS.board, 84, 25, 2, 2);
 
-  fill(ctx, COLORS.ink, 8, 16, 20, 20);
-  [19, 25, 31].forEach((y) => fill(ctx, COLORS.ink, 28, y, 2, 2));
+  fill(ctx, COLORS.chip, 8, 16, 20, 20);
+  [19, 25, 31].forEach((y) => fill(ctx, COLORS.pin, 28, y, 2, 2));
   [11, 15, 19, 23].forEach((x) => {
-    fill(ctx, COLORS.ink, x, 14, 2, 2);
-    fill(ctx, COLORS.ink, x, 36, 2, 2);
+    fill(ctx, COLORS.pin, x, 14, 2, 2);
+    fill(ctx, COLORS.pin, x, 36, 2, 2);
   });
-  [19, 23, 27, 31].forEach((y) => fill(ctx, COLORS.ink, 6, y, 2, 2));
-  fill(ctx, COLORS.paper, 9, 17, 1, 1);
-  drawText(ctx, "DK", 8 + Math.floor((20 - textWidth("DK")) / 2), 16 + Math.floor((20 - 5) / 2), COLORS.paper);
+  [19, 23, 27, 31].forEach((y) => fill(ctx, COLORS.pin, 6, y, 2, 2));
+  fill(ctx, COLORS.silk, 9, 17, 1, 1);
+  drawText(ctx, "DK", 8 + Math.floor((20 - textWidth("DK")) / 2), 16 + Math.floor((20 - 5) / 2), COLORS.silk);
 
   CHIPS.forEach(({ channel, marking, x, y, pinRows }) => {
-    fill(ctx, COLORS.ink, x, y, 48, 12);
+    fill(ctx, COLORS.chip, x, y, 48, 12);
     const hot = channel === active || state.flash[channel] > 0;
     pinRows.forEach((pinY) => {
-      for (let pinX = 108; pinX <= 146; pinX += 6) fill(ctx, hot ? COLORS.red : COLORS.ink, pinX, pinY, 2, 2);
+      for (let pinX = 108; pinX <= 146; pinX += 6) fill(ctx, hot ? COLORS.led : COLORS.pin, pinX, pinY, 2, 2);
     });
-    fill(ctx, COLORS.paper, x + 1, y + 1, 1, 1);
-    drawText(ctx, marking, x + Math.floor((48 - textWidth(marking)) / 2), y + Math.floor((12 - 5) / 2), COLORS.paper);
+    fill(ctx, COLORS.silk, x + 1, y + 1, 1, 1);
+    drawText(ctx, marking, x + Math.floor((48 - textWidth(marking)) / 2), y + Math.floor((12 - 5) / 2), COLORS.silk);
   });
 
-  drawText(ctx, "U1", 92, 3, COLORS.graphite);
-  drawText(ctx, "U2", 92, 38, COLORS.graphite);
-  drawText(ctx, "R1", 47, 36, COLORS.graphite);
+  drawText(ctx, "U1", 92, 3, COLORS.dim);
+  drawText(ctx, "U2", 92, 38, COLORS.dim);
+  drawText(ctx, "R1", 47, 36, COLORS.dim);
 
   state.electrons.forEach(({ points, step }) => {
     [3, 6].forEach((behind) => {
       const trail = points[step - behind];
-      if (trail) fill(ctx, COLORS.redPale, trail[0], trail[1], 2, 2);
+      if (trail) fill(ctx, COLORS.glow, trail[0], trail[1], 2, 2);
     });
     const [x, y] = points[Math.min(step, points.length - 1)];
-    fill(ctx, COLORS.redPale, x - 1, y - 1, 4, 4);
-    fill(ctx, COLORS.red, x, y, 2, 2);
+    fill(ctx, COLORS.glow, x - 1, y - 1, 4, 4);
+    fill(ctx, COLORS.led, x, y, 2, 2);
   });
 };
 

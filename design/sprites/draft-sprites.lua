@@ -4,9 +4,9 @@
 
 local pc = app.pixelColor
 local INKS = {
-  k = pc.rgba(0x1C, 0x1D, 0x1A, 255), -- ink
-  g = pc.rgba(0xB9, 0xBB, 0xB5, 255), -- rule
-  r = pc.rgba(0xC1, 0x27, 0x2D, 255), -- red
+  k = pc.rgba(0xE6, 0xE6, 0xDF, 255), -- silk
+  g = pc.rgba(0x5A, 0x5D, 0x5F, 255), -- outline grey
+  r = pc.rgba(0xE5, 0x48, 0x4D, 255), -- led
 }
 
 local SPRITES = {

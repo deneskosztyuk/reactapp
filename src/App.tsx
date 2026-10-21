@@ -18,7 +18,7 @@ export default function App() {
         <Skills />
         <Contact />
       </main>
-      <footer className="mt-16 py-8 text-[15px] text-graphite md:mt-24">
+      <footer className="mt-16 py-8 text-[15px] text-dim md:mt-24">
         © {new Date().getFullYear()} Denes Kosztyuk
       </footer>
       <Analytics />

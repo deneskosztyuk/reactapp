@@ -63,7 +63,7 @@ export default function Projects() {
             <div className="min-w-0 max-w-[40rem]">
               <h3 className="font-medium">{project.title}</h3>
               <p className="mt-1">{project.description}</p>
-              <p className="mt-2 text-[15px] text-graphite">{project.technologies.join(", ")}</p>
+              <p className="mt-2 text-[15px] text-dim">{project.technologies.join(", ")}</p>
               <a
                 href={project.githubUrl}
                 target="_blank"

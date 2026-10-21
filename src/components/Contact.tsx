@@ -11,7 +11,7 @@ export default function Contact() {
       <div className="mt-8">
         <ContactBoard reducedMotion={reducedMotion} />
       </div>
-      <p className="mt-4 text-[15px] text-graphite">Tap a chip to open the profile.</p>
+      <p className="mt-4 text-[15px] text-dim">Tap a chip to open the profile.</p>
     </section>
   );
 }
