@@ -20,12 +20,10 @@ export interface TechStackItem {
 export interface Project {
   id: string;
   title: string;
-  subtitle: string;
   description: string;
   technologies: string[];
   githubUrl: string;
-  liveUrl?: string;
-  featured: boolean;
+  sprite: string;
 }
 
 export interface WorkExperience {
@@ -34,8 +32,6 @@ export interface WorkExperience {
   company: string;
   period: string;
   location: string;
-  type: string;
-  icon: ReactNode;
   description: string;
   achievements: string[];
   technologies: string[];

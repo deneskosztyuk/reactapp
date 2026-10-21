@@ -1,14 +1,3 @@
-import type { ReactNode } from "react";
-import {
-  FaBriefcase,
-  FaCalendarAlt,
-  FaCog,
-  FaGlobe,
-  FaMapMarkerAlt,
-  FaMicrochip,
-} from "react-icons/fa";
-import TechnologyTags from "./TechnologyTags";
-import useInView from "../lib/useInView";
 import type { WorkExperience as WorkExperienceType } from "../types";
 
 const WORK_EXPERIENCES: WorkExperienceType[] = [
@@ -18,8 +7,6 @@ const WORK_EXPERIENCES: WorkExperienceType[] = [
     company: "Invig AS",
     period: "2025 – Present",
     location: "Norway",
-    type: "Full-time",
-    icon: <FaMicrochip />,
     description:
       "Developing features and solutions for an Industrial IoT platform enabling large-scale device management and product operations.",
     achievements: [
@@ -32,12 +19,10 @@ const WORK_EXPERIENCES: WorkExperienceType[] = [
   },
   {
     id: "freelance-projects",
-    title: "Software Freelance Contractor",
-    company: "Freelance Contractor",
+    title: "Freelance software engineer",
+    company: "Self-employed",
     period: "2023 – 2024",
     location: "Remote",
-    type: "Contractor",
-    icon: <FaGlobe />,
     description:
       "Delivered custom web apps and software solutions for various clients.",
     achievements: [
@@ -54,131 +39,50 @@ const WORK_EXPERIENCES: WorkExperienceType[] = [
     company: "Jabil Ltd.",
     period: "2014 – 2016",
     location: "Ukraine",
-    type: "Full-time",
-    icon: <FaCog />,
     description:
       "Performed hardware maintenance and calibration at a PCB manufacturing plant.",
     achievements: [
       "Increased production line efficiency by 15% through optimized schedules",
-      "Installed and calibrated >15 autonomous robotic machines",
+      "Installed and calibrated more than 15 autonomous robotic machines",
       "Trained 8 new technicians on RoHS & safety compliance",
     ],
     technologies: ["PCB", "Circuit Production", "IoT", "Embedded Systems", "Robotics"],
   },
 ];
 
-interface ExperienceIconProps {
-  icon: ReactNode;
-}
-
-const ExperienceIcon = ({ icon }: ExperienceIconProps) => (
-  <span
-    aria-hidden="true"
-    className="flex h-10 w-10 flex-none items-center justify-center rounded-md border border-white/10 bg-white/[0.04] text-base text-cyan-300"
-  >
-    {icon}
-  </span>
-);
-
-interface ExperienceMetaProps {
-  period: string;
-  location: string;
-  type: string;
-}
-
-const ExperienceMeta = ({ period, location, type }: ExperienceMetaProps) => (
-  <ul className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.12em] text-white/60 md:block md:space-y-3">
-    <li className="flex items-center gap-2">
-      <FaCalendarAlt aria-hidden="true" className="h-3 w-3 text-cyan-300/70" />
-      <span>{period}</span>
-    </li>
-    <li className="flex items-center gap-2">
-      <FaMapMarkerAlt aria-hidden="true" className="h-3 w-3 text-cyan-300/70" />
-      <span>{location}</span>
-    </li>
-    <li className="flex items-center gap-2">
-      <FaBriefcase aria-hidden="true" className="h-3 w-3 text-cyan-300/70" />
-      <span>{type}</span>
-    </li>
-  </ul>
-);
-
 interface ExperienceEntryProps {
   experience: WorkExperienceType;
 }
 
-const ExperienceEntry = ({ experience }: ExperienceEntryProps) => {
-  const { elementRef, isVisible } = useInView<HTMLElement>();
-
-  return (
-    <article
-      ref={elementRef}
-      className={`grid gap-6 border-t border-white/10 py-10 transition-all duration-500 first:border-t-0 first:pt-0 motion-reduce:transform-none motion-reduce:transition-none md:grid-cols-[9rem_2rem_minmax(0,1fr)] md:gap-6 md:py-12 ${
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
-      }`}
-    >
-      <div className="md:pt-1">
-        <ExperienceMeta
-          period={experience.period}
-          location={experience.location}
-          type={experience.type}
-        />
-      </div>
-
-      <div aria-hidden="true" className="relative hidden justify-center md:flex">
-        <span className="relative z-10 mt-1 h-2.5 w-2.5 border border-cyan-300/70 bg-slate-950" />
-        <span className="absolute bottom-0 top-5 w-px bg-gradient-to-b from-cyan-300/45 via-white/15 to-transparent" />
-      </div>
-
-      <div className="min-w-0">
-        <div className="flex items-start gap-4">
-          <ExperienceIcon icon={experience.icon} />
-          <div>
-            <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
-              {experience.title}
-            </h3>
-            <p className="mt-1 font-mono text-sm text-cyan-300/85">{experience.company}</p>
-          </div>
-        </div>
-
-        <p className="mt-6 max-w-3xl text-sm leading-7 text-white/60 sm:text-base">
-          {experience.description}
-        </p>
-
-        <div className="mt-7">
-          <h4 className="mb-4 font-mono text-[11px] uppercase tracking-[0.24em] text-white/55">
-            Key Achievements
-          </h4>
-          <ul className="space-y-3 text-sm leading-6 text-white/65">
-            {experience.achievements.map((achievement) => (
-              <li key={achievement} className="grid grid-cols-[0.75rem_minmax(0,1fr)] gap-3">
-                <span aria-hidden="true" className="mt-3 h-px w-2 bg-cyan-300/70" />
-                <span>{achievement}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="mt-7 border-t border-white/10 pt-5">
-          <h4 className="mb-3 font-mono text-[11px] uppercase tracking-[0.24em] text-white/55">
-            Technologies
-          </h4>
-          <TechnologyTags technologies={experience.technologies} />
-        </div>
-      </div>
-    </article>
-  );
-};
+const ExperienceEntry = ({ experience }: ExperienceEntryProps) => (
+  <article className="grid gap-x-8 gap-y-2 md:grid-cols-[10rem_minmax(0,1fr)]">
+    <p className="text-[15px] text-graphite">
+      {experience.period}
+      <br />
+      {experience.location}
+    </p>
+    <div className="max-w-[40rem]">
+      <h3 className="font-medium">{experience.title}</h3>
+      <p>{experience.company}</p>
+      <p className="mt-3">{experience.description}</p>
+      <ul className="mt-3 list-disc space-y-1 pl-5 marker:text-graphite">
+        {experience.achievements.map((achievement) => (
+          <li key={achievement}>{achievement}</li>
+        ))}
+      </ul>
+      <p className="mt-3 text-[15px] text-graphite">{experience.technologies.join(", ")}</p>
+    </div>
+  </article>
+);
 
 export default function WorkExperience() {
   return (
-    <section id="work" className="py-20 sm:py-28">
-      <div className="mx-auto w-full max-w-6xl px-6 sm:px-12">
-        <div>
-          {WORK_EXPERIENCES.map((experience) => (
-            <ExperienceEntry key={experience.id} experience={experience} />
-          ))}
-        </div>
+    <section id="work">
+      <h2>Work</h2>
+      <div className="mt-8 space-y-12">
+        {WORK_EXPERIENCES.map((experience) => (
+          <ExperienceEntry key={experience.id} experience={experience} />
+        ))}
       </div>
     </section>
   );
