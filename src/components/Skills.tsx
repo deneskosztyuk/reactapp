@@ -36,7 +36,7 @@ export default function Skills() {
   return (
     <section id="skills">
       <h2>Skills</h2>
-      <div className="mt-6 space-y-5">
+      <div className="mt-6 grid gap-x-10 gap-y-5 md:grid-cols-2">
         {SKILL_GROUPS.map((group) => (
           <div key={group.title} className="max-w-[40rem]">
             <h3 className="font-medium">{group.title}</h3>

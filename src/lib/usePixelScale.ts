@@ -5,7 +5,7 @@ const MAX_CSS_SCALE = 4;
 
 // Device pixels per art pixel; integer so every art pixel covers the same device pixels.
 export function pixelScale(viewportWidth: number, dpr: number): number {
-  const availableWidth = Math.min(viewportWidth - 48, 1024);
+  const availableWidth = Math.min(viewportWidth - 48, 912);
   const fit = Math.floor((availableWidth * dpr) / BOARD_WIDTH);
   return Math.max(1, Math.min(fit, Math.floor(MAX_CSS_SCALE * dpr)));
 }

@@ -9,7 +9,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
   return (
-    <div className="mx-auto max-w-[64rem] px-6">
+    <div className="mx-auto max-w-[60rem] px-6">
       <Navbar />
       <main className="space-y-16 md:space-y-24">
         <Hero />

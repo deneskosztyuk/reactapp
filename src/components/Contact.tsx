@@ -8,10 +8,10 @@ export default function Contact() {
     <section id="contact">
       <h2>Contact</h2>
       <p className="mt-3 max-w-[40rem]">The quickest way to reach me is a message on LinkedIn.</p>
-      <div className="mt-8">
+      <div className="mt-8 flex justify-center">
         <ContactBoard reducedMotion={reducedMotion} />
       </div>
-      <p className="mt-4 text-[15px] text-dim">Tap a chip to open the profile.</p>
+      <p className="mt-4 text-center text-[15px] text-dim">Tap a chip to open the profile.</p>
     </section>
   );
 }

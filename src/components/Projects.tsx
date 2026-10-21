@@ -51,7 +51,7 @@ export default function Projects() {
   return (
     <section id="projects">
       <h2>Projects</h2>
-      <div className="mt-8 space-y-12">
+      <div className="mt-8 grid gap-x-10 gap-y-12 md:grid-cols-2">
         {PROJECT_DATA.map((project) => (
           <article key={project.id} className="flex items-start gap-6">
             <img
