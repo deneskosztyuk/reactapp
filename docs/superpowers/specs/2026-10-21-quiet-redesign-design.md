@@ -136,7 +136,7 @@ The portfolio project and the featured flag are dropped.
   - Via: 4×4 `ink` at (83,24) with 2×2 `paper` center.
   - Designators in `graphite`: "U1" at (92,3), "U2" at (92,38), "R1" at (47,36).
 - Routes (vertex lists, segments at 0°/45°/90°):
-  - To U1: `[[30,19],[70,19],[73,16],[114,16]]` and `[[30,25],[84,25],[92,17],[92,16],[114,16]]`.
+  - To U1: `[[30,19],[70,19],[73,16],[114,16]]` and `[[30,25],[84,25],[93,16],[114,16]]`.
   - To U2: `[[30,31],[60,31],[62,33],[114,33]]` and `[[30,25],[84,25],[92,33],[114,33]]`.
 - Idle traces `rule`; traces of the hovered net `ink`.
 - Electrons: 2×2 `red` head, 1px `red-pale` halo, two `red-pale` trail pixels. Idle: spawn every 16 ticks, max 4, random route. Hover or focus on a link: only that chip's routes, spawn every 7 ticks, max 6; that chip's pins turn `red`. Arrival flashes the destination pins `red` for 8 ticks.

@@ -27,7 +27,7 @@ const TARGETS: Record<ContactChannel, Point> = { linkedin: [114, 16], github: [1
 
 const ROUTE_VERTICES: Array<{ channel: ContactChannel; vertices: Point[] }> = [
   { channel: "linkedin", vertices: [[30, 19], [70, 19], [73, 16], [114, 16]] },
-  { channel: "linkedin", vertices: [[30, 25], [84, 25], [92, 17], [92, 16], [114, 16]] },
+  { channel: "linkedin", vertices: [[30, 25], [84, 25], [93, 16], [114, 16]] },
   { channel: "github", vertices: [[30, 31], [60, 31], [62, 33], [114, 33]] },
   { channel: "github", vertices: [[30, 25], [84, 25], [92, 33], [114, 33]] },
 ];
@@ -40,6 +40,13 @@ if (import.meta.env.DEV) {
       const dx = Math.abs(x - vertices[index][0]);
       const dy = Math.abs(y - vertices[index][1]);
       console.assert(dx === 0 || dy === 0 || dx === dy, "ContactBoard: route segment not at 0/45/90 degrees");
+    });
+    points.slice(2).forEach(([x, y], index) => {
+      const [beforeX, beforeY] = points[index];
+      console.assert(
+        Math.abs(x - beforeX) > 1 || Math.abs(y - beforeY) > 1,
+        `ContactBoard: doubled corner pixel on ${channel} route at ${points[index + 1]}`
+      );
     });
     const [lastX, lastY] = points[points.length - 1];
     console.assert(
