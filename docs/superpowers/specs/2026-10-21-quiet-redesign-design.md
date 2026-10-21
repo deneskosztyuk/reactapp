@@ -180,3 +180,10 @@ The portfolio project and the featured flag are dropped.
 - The `pixellab` Aseprite extension errors in batch mode. Confirm exports still succeed; otherwise run with extensions disabled.
 - Fractional DPR values (1.25, 1.5) need the device-pixel formula above, or pixels will be uneven.
 - Removing three.js deletes recent work on the 3D scene; it stays in git history.
+
+## Revisions (2026-10-21, after first build)
+
+- Intro About paragraph shortened to: "IoT software engineer at Invig in Stavanger, working on Rust services, a Vue front end and the devices that feed them. Previously freelance web development, and PCB production at Jabil. Open to remote work."
+- Work shows one role at a time. A horizontal timeline (oldest left, evenly spaced markers labeled with each period) plus "Previous role" / "Next role" arrow buttons select the role; the current role is selected by default. Markers are tabs (left/right arrow keys move between them). All roles share one grid cell so the section keeps the tallest role's height; switching is instant.
+- Contact: the LinkedIn and GitHub text links are removed. Transparent links over the U1 and U2 chips (chip, pins and designator; hit areas 62×16 and 62×18 art px) open the profiles, are labeled "LinkedIn profile" / "GitHub profile", and drive the board on hover or focus (active = hovered ?? focused). A hint line "Tap a chip to open the profile." sits under the board.
+- Route to U1 through the via is now `[[30,25],[84,25],[93,16],[114,16]]` (removes a doubled corner pixel).
