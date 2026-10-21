@@ -1,25 +1,20 @@
-/* eslint-disable import/no-anonymous-default-export */
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./index.html"],
-  safelist: [
-    "animate-wave"  
-  ],
   theme: {
     extend: {
-      keyframes: {
-        wave: {
-          "0%, 100%": { transform: "rotate(0deg)" },
-          "25%": { transform: "rotate(15deg)" }, 
-          "50%": { transform: "rotate(-10deg)" }, 
-          "75%": { transform: "rotate(15deg)" }
-        },
+      colors: {
+        paper: "#ECEDEA",
+        ink: "#1C1D1A",
+        graphite: "#5E605B",
+        rule: "#B9BBB5",
+        red: "#C1272D",
+        "red-pale": "#E9B3B5",
       },
-      animation: {
-        wave: "wave 1.5s ease-in-out infinite", 
+      fontFamily: {
+        sans: ["Schibsted Grotesk Variable", "system-ui", "sans-serif"],
       },
     },
   },
   plugins: [],
 };
-          

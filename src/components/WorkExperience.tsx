@@ -172,7 +172,7 @@ const ExperienceEntry = ({ experience }: ExperienceEntryProps) => {
 
 export default function WorkExperience() {
   return (
-    <section id="work-experience" className="py-20 sm:py-28">
+    <section id="work" className="py-20 sm:py-28">
       <div className="mx-auto w-full max-w-6xl px-6 sm:px-12">
         <div>
           {WORK_EXPERIENCES.map((experience) => (
