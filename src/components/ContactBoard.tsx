@@ -1,12 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import usePixelScale from "../lib/usePixelScale";
 import { drawText, textWidth } from "../lib/pixelFont";
 import { pixelLine, route, type Point } from "../lib/pixelLine";
 
-export type ContactChannel = "linkedin" | "github";
+type ContactChannel = "linkedin" | "github";
 
 interface ContactBoardProps {
-  activeChannel: ContactChannel | null;
   reducedMotion: boolean;
 }
 
@@ -56,9 +55,39 @@ if (import.meta.env.DEV) {
   });
 }
 
-const CHIPS: Array<{ channel: ContactChannel; marking: string; x: number; y: number; pinRows: number[] }> = [
-  { channel: "linkedin", marking: "LINKEDIN", x: 104, y: 2, pinRows: [0, 14] },
-  { channel: "github", marking: "GITHUB", x: 104, y: 36, pinRows: [34] },
+interface Chip {
+  channel: ContactChannel;
+  marking: string;
+  x: number;
+  y: number;
+  pinRows: number[];
+  href: string;
+  label: string;
+  // Click area in art pixels: chip, pins and designator, at least 16 tall so it stays 24 CSS px at the smallest scale.
+  hit: { x: number; y: number; w: number; h: number };
+}
+
+const CHIPS: Chip[] = [
+  {
+    channel: "linkedin",
+    marking: "LINKEDIN",
+    x: 104,
+    y: 2,
+    pinRows: [0, 14],
+    href: "https://www.linkedin.com/in/deneskosztyuk/",
+    label: "LinkedIn profile",
+    hit: { x: 90, y: 0, w: 62, h: 16 },
+  },
+  {
+    channel: "github",
+    marking: "GITHUB",
+    x: 104,
+    y: 36,
+    pinRows: [34],
+    href: "https://github.com/deneskosztyuk",
+    label: "GitHub profile",
+    hit: { x: 90, y: 30, w: 62, h: 18 },
+  },
 ];
 
 interface Electron {
@@ -164,8 +193,11 @@ const tick = (state: BoardState, active: ContactChannel | null) => {
   state.flash.github = Math.max(0, state.flash.github - 1);
 };
 
-export default function ContactBoard({ activeChannel, reducedMotion }: ContactBoardProps) {
+export default function ContactBoard({ reducedMotion }: ContactBoardProps) {
   const px = usePixelScale();
+  const [hovered, setHovered] = useState<ContactChannel | null>(null);
+  const [focused, setFocused] = useState<ContactChannel | null>(null);
+  const activeChannel = hovered ?? focused;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const activeRef = useRef(activeChannel);
   const stateRef = useRef<BoardState>({ electrons: [], flash: { linkedin: 0, github: 0 }, ticks: 0 });
@@ -232,14 +264,31 @@ export default function ContactBoard({ activeChannel, reducedMotion }: ContactBo
   }, [reducedMotion]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={WIDTH}
-      height={HEIGHT}
-      aria-hidden="true"
-      data-running="false"
-      className="block flex-none"
-      style={{ width: WIDTH * px, height: HEIGHT * px, imageRendering: "pixelated" }}
-    />
+    <div className="relative" style={{ width: WIDTH * px, height: HEIGHT * px }}>
+      <canvas
+        ref={canvasRef}
+        width={WIDTH}
+        height={HEIGHT}
+        aria-hidden="true"
+        data-running="false"
+        className="block"
+        style={{ width: WIDTH * px, height: HEIGHT * px, imageRendering: "pixelated" }}
+      />
+      {CHIPS.map(({ channel, href, label, hit }) => (
+        <a
+          key={channel}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={label}
+          onMouseEnter={() => setHovered(channel)}
+          onMouseLeave={() => setHovered(null)}
+          onFocus={() => setFocused(channel)}
+          onBlur={() => setFocused(null)}
+          className="absolute"
+          style={{ left: hit.x * px, top: hit.y * px, width: hit.w * px, height: hit.h * px }}
+        />
+      ))}
+    </div>
   );
 }
